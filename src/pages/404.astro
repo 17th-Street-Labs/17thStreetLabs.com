@@ -1,0 +1,20 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Icon from "../components/Icon.astro";
+---
+
+<Layout
+  title="Page not found | 17th Street Labs"
+  description="Find your way back to 17th Street Labs."
+  noindex
+>
+  <section class="interior-hero">
+    <div class="section-label"><span>404</span> PAGE NOT FOUND</div>
+    <h1>This page is<br /><em>off the map.</em></h1>
+    <p>The address may have changed. Explore our services or head back home.</p>
+    <div class="hero-actions">
+      <a class="button-primary" href="/">Back to home <Icon name="ArrowRight" size={18} /></a>
+      <a class="button-quiet" href="/services/">Explore services <Icon name="ArrowUpRight" size={18} /></a>
+    </div>
+  </section>
+</Layout>

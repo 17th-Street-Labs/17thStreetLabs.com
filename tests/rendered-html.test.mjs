@@ -87,3 +87,24 @@ test("each route has a distinct descriptive title", async () => {
   }));
   assert.equal(new Set(titles).size, routes.length);
 });
+
+test("sitemap and robots expose all public pages and exclude the error page", async () => {
+  const index = await readFile(path.join(output, "sitemap-index.xml"), "utf8");
+  assert.match(index, /<loc>https:\/\/17thstreetlabs\.com\/sitemap-0\.xml<\/loc>/);
+  const sitemap = await readFile(path.join(output, "sitemap-0.xml"), "utf8");
+  const locations = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(([, value]) => new URL(value));
+  assert.deepEqual(locations.map(normalizeRoute).sort(), routes.map(({ route }) => route).sort());
+  assert.ok(locations.every((url) => url.origin === origin));
+  assert.doesNotMatch(sitemap, /\/404\/?</);
+  const robots = await readFile(path.join(output, "robots.txt"), "utf8");
+  assert.match(robots, /^Sitemap:\s*https:\/\/17thstreetlabs\.com\/sitemap-index\.xml\s*$/im);
+});
+
+test("the static error page is branded, excluded from indexing, and links home", async () => {
+  const html = await readFile(path.join(output, "404.html"), "utf8");
+  assert.match(html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " "), /This page is off the map\./);
+  assert.match(html, /17th Street Labs/);
+  const robots = tags(html, "meta").find((tag) => attribute(tag, "name") === "robots");
+  assert.match(attribute(robots ?? "", "content") ?? "", /\bnoindex\b/);
+  assert.ok(tags(html, "a").some((tag) => attribute(tag, "href") === "/"));
+});

@@ -6,7 +6,8 @@ with browser scripts for interactive controls.
 
 ## Local development
 
-Requires Node.js 22.13 or newer and npm.
+Requires Node.js 24.x and npm. Run `nvm use` if you use nvm; `.nvmrc` selects
+the same Node major version as CI and `package.json`.
 
 ```sh
 npm ci
@@ -53,14 +54,33 @@ project root. The checked-in `vercel.json` selects these settings:
 | Build command | `npm run build` |
 | Output directory | `dist` |
 
-Choose a Node.js version compatible with `package.json`. Connect the production
-domain in the Vercel project after reviewing its preview deployment.
+Select Node.js 24.x in Vercel. Connect the production domain in the Vercel project
+after reviewing its preview deployment. Trailing-slash redirects match Astro's
+generated route URLs. Responses include `X-Content-Type-Options: nosniff` and
+`Referrer-Policy: strict-origin-when-cross-origin`.
 
 This static site requires no Vercel runtime adapter, Cloudflare Worker, or
 server-side environment variables. See the official
 [Astro deployment guide](https://docs.astro.build/en/guides/deploy/vercel/) and
 [Vercel Astro documentation](https://vercel.com/docs/frameworks/frontend/astro).
 Committing this configuration does not deploy the site or change DNS.
+
+Review [Deployment Protection](https://vercel.com/docs/deployment-protection)
+in the Vercel project settings to control access to previews. Vercel adds
+[`X-Robots-Tag: noindex`](https://vercel.com/docs/headers/response-headers)
+to preview deployments by default; this controls indexing, not access.
+
+## Continuous integration
+
+The GitHub Actions workflow runs on pushes and pull requests using Node.js 24.
+It installs locked dependencies, checks types and lint, builds and tests the
+generated HTML, then runs Chromium browser tests. Actions are pinned to commit
+SHAs and the workflow has read-only repository permissions.
+
+This workflow does not automatically gate Vercel production deployments.
+Configure [Vercel Deployment Checks](https://vercel.com/docs/deployment-checks)
+for the CI result in project settings if production promotion must wait for CI,
+and require the check in GitHub branch protection to gate merges.
 
 ## Source provenance
 

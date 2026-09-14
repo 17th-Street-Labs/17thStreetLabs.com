@@ -108,3 +108,32 @@ for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844
     expect(errors).toEqual([]);
   });
 }
+
+test("mobile navigation and conversation links work without JavaScript", async ({ browser }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 844 } });
+  const page = await context.newPage();
+  try {
+    await page.goto("http://127.0.0.1:4322/");
+    const nav = page.getByRole("navigation", { name: "Primary navigation" });
+    await expect(nav).toBeVisible();
+    await nav.getByRole("link", { name: "services", exact: true }).click();
+    await expect(page).toHaveURL(/\/services\/$/);
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("Senior leverage");
+    await nav.getByRole("link", { name: "home", exact: true }).click();
+    await page.getByRole("link", { name: "Bring us the hard problem" }).click();
+    await expect(page).toHaveURL(/\/contact\/$/);
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("hard problem");
+    await expect(page.getByRole("link", { name: "dan@danlevy.net", exact: true })).toBeVisible();
+  } finally {
+    await context.close();
+  }
+});
+
+test("missing routes return a branded 404 and a usable home link", async ({ page }) => {
+  const response = await page.goto("/this-page-does-not-exist/");
+  expect(response?.status()).toBe(404);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(/This page is\s*off the map\./);
+  await page.getByRole("navigation", { name: "Primary navigation" }).getByRole("link", { name: "home", exact: true }).click();
+  await expect(page).toHaveURL("http://127.0.0.1:4322/");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Engineering intelligence");
+});
