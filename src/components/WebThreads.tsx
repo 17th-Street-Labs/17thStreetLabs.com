@@ -362,7 +362,7 @@ const WebThreads: React.FC<WebThreadsProps> = ({
     const ctx = ctxMap.get(container);
     if (!ctx) return;
     const { program } = ctx;
-    const u = program.uniforms as Record<string, { value: number }>;
+    const u = program.uniforms as Record<string, { value: number | boolean | Float32Array }>;
 
     u.uSpeed.value = speed;
     u.uThreadCount.value = Math.round(threadCount);

@@ -134,6 +134,10 @@ const isCurrent = (href: string) =>
         method="post"
         enctype="text/plain"
       >
+        <label class="honeypot" aria-hidden="true">
+          Company
+          <input name="company" tabindex="-1" autocomplete="off" />
+        </label>
         <div class="form-row">
           <label>
             Name
@@ -159,9 +163,10 @@ const isCurrent = (href: string) =>
           <textarea name="context" required rows={5}></textarea>
         </label>
         <button type="submit" class="button button-solid">
-          Open project brief
+          Send project brief
         </button>
-        <small>Opens your email app with a draft you can edit before sending.</small>
+        <p class="form-status" data-form-status role="status" aria-live="polite"></p>
+        <small>Goes straight to Dan. Reply within a business day.</small>
       </form>
     </dialog>
     <script>
@@ -221,22 +226,63 @@ const isCurrent = (href: string) =>
         )
           dialog.close();
       });
+      const mailtoFallback = (data: FormData) => {
+        const lines = [
+          `Name: ${data.get("name") || ""}`,
+          `Email: ${data.get("email") || ""}`,
+          ...(data.get("focus") ? [`Focus: ${data.get("focus")}`] : []),
+          "",
+          String(data.get("context") || ""),
+        ];
+        window.location.href = `mailto:dan@danlevy.net?subject=${encodeURIComponent("17th Street Labs — project brief")}&body=${encodeURIComponent(lines.join("\n"))}`;
+      };
+
       document
         .querySelectorAll<HTMLFormElement>("[data-project-brief]")
-        .forEach((form) =>
-          form.addEventListener("submit", (event) => {
+        .forEach((form) => {
+          const status = form.querySelector<HTMLElement>("[data-form-status]");
+          const button = form.querySelector<HTMLButtonElement>(
+            "button[type=submit]",
+          );
+          const say = (message: string, state: "" | "ok" | "error") => {
+            if (!status) return;
+            status.textContent = message;
+            status.dataset.state = state;
+          };
+
+          form.addEventListener("submit", async (event) => {
             event.preventDefault();
             const data = new FormData(form);
-            const lines = [
-              `Name: ${data.get("name") || ""}`,
-              `Email: ${data.get("email") || ""}`,
-              ...(data.get("focus") ? [`Focus: ${data.get("focus")}`] : []),
-              "",
-              String(data.get("context") || ""),
-            ];
-            window.location.href = `mailto:dan@danlevy.net?subject=${encodeURIComponent("17th Street Labs — project brief")}&body=${encodeURIComponent(lines.join("\n"))}`;
-          }),
-        );
+            if (button) button.disabled = true;
+            say("Sending…", "");
+            data.set("page", window.location.pathname);
+            try {
+              const response = await fetch("/api/contact/", {
+                method: "POST",
+                headers: { "content-type": "application/json" },
+                body: JSON.stringify(Object.fromEntries(data)),
+              });
+              const result = await response
+                .json()
+                .catch(() => ({ ok: false, error: "" }));
+              if (response.ok && result.ok) {
+                form.reset();
+                say("Received. Dan will reply within a business day.", "ok");
+                return;
+              }
+              if (response.status === 400 || response.status === 429) {
+                say(result.error || "Please check the form and try again.", "error");
+                return;
+              }
+              throw new Error(result.error || "send failed");
+            } catch {
+              say("Could not reach us. Opening your email app instead…", "error");
+              mailtoFallback(data);
+            } finally {
+              if (button) button.disabled = false;
+            }
+          });
+        });
     </script>
   </body>
 </html>

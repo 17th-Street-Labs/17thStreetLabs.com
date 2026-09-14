@@ -1410,6 +1410,30 @@ form small {
   color: var(--dim);
   font-size: 0.8rem;
 }
+.honeypot {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.form-status {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--dim);
+}
+.form-status:empty {
+  display: none;
+}
+.form-status[data-state="ok"] {
+  color: var(--accent, currentColor);
+}
+.form-status[data-state="error"] {
+  color: #ff8080;
+}
 
 /* ---------- Dialog ---------- */
 .contact-dialog {

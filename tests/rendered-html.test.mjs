@@ -4,7 +4,8 @@ import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 
-const output = fileURLToPath(new URL("../dist/", import.meta.url));
+// The Vercel adapter emits prerendered pages under dist/client.
+const output = fileURLToPath(new URL("../dist/client/", import.meta.url));
 const origin = "https://17thstreetlabs.com";
 const routes = [
   { route: "/", heading: /We break AI systems\./, content: /ExploitHunter/ },

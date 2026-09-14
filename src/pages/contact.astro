@@ -45,6 +45,10 @@ import Icon from "../components/Icon.astro";
           method="post"
           enctype="text/plain"
         >
+          <label class="honeypot" aria-hidden="true">
+            Company
+            <input name="company" tabindex="-1" autocomplete="off" />
+          </label>
           <div class="form-row">
             <label>
               Name
@@ -65,10 +69,11 @@ import Icon from "../components/Icon.astro";
             ></textarea>
           </label>
           <button class="button button-solid" type="submit">
-            Open project brief
+            Send project brief
             <Icon name="ArrowRight" size={16} />
           </button>
-          <small>Opens your email app with a draft you can edit before sending.</small>
+          <p class="form-status" data-form-status role="status" aria-live="polite"></p>
+          <small>Goes straight to Dan. Reply within a business day.</small>
         </form>
       </div>
     </div>
