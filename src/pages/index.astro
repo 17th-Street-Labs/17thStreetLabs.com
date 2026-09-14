@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Icon from "../components/Icon.astro";
+import Prism from "../components/Prism.astro";
 import { services, proof, findings } from "../data/services";
 const icons: Record<string, string> = {
   engineering: "Braces",
@@ -26,6 +27,7 @@ const log = [
   description="A founder-led AI engineering and security firm in Denver. We build agentic products, attack them before anyone else can, and prove they work with real evaluations."
 >
   <section class="hero">
+    <Prism />
     <div class="wrap hero-inner">
       <p class="chip">Denver · AI engineering, evals, and security</p>
       <h1 class="statement">
@@ -97,10 +99,14 @@ const log = [
   </section>
 
   <div class="ticker" aria-label={`Failure modes we keep finding: ${findings.join(", ")}`}>
-    <span class="ticker-head">failure modes we keep finding</span>
     <span class="ticker-track" aria-hidden="true">
-      {[...findings, ...findings].map((item) => (
-        <span>{item}</span>
+      {[0, 1].map(() => (
+        <>
+          <span class="ticker-head">failure modes we keep finding</span>
+          {findings.map((item) => (
+            <span>{item}</span>
+          ))}
+        </>
       ))}
     </span>
   </div>

@@ -113,6 +113,20 @@ textarea {
   background-clip: text;
   color: transparent;
 }
+.hero .statement .glow-text {
+  background: linear-gradient(
+    95deg,
+    #c9b6ff 0%,
+    #8fb0ff 25%,
+    #7ff0ff 50%,
+    #b6ffc9 70%,
+    #ffe58a 88%,
+    #ffb3b3 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
 .section-title {
   font-weight: 600;
   letter-spacing: -0.03em;
@@ -386,9 +400,29 @@ textarea {
   overflow: hidden;
   isolation: isolate;
 }
+.hero-gl {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: -1;
+  width: 100%;
+  height: min(100%, 60rem);
+  mask-image: linear-gradient(#000 55%, transparent 95%);
+  -webkit-mask-image: linear-gradient(#000 55%, transparent 95%);
+  display: block;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+  pointer-events: none;
+}
+.hero.has-gl .hero-gl {
+  opacity: 1;
+}
+.hero.has-gl::before {
+  opacity: 0;
+}
 .hero::before {
-  /* the beam */
+  /* the beam (CSS fallback when WebGL is unavailable) */
   content: "";
+  transition: opacity 1.2s ease;
   position: absolute;
   z-index: -1;
   left: 50%;
@@ -417,6 +451,7 @@ textarea {
   pointer-events: none;
 }
 .hero-inner {
+  position: relative;
   display: grid;
   justify-items: center;
   text-align: center;
@@ -425,6 +460,12 @@ textarea {
 .hero .lede {
   text-align: center;
   max-width: 44em;
+  color: #b3bccf;
+}
+.hero .statement,
+.hero .lede,
+.hero .chip {
+  text-shadow: 0 2px 24px rgba(5, 6, 12, 0.7);
 }
 .hero-actions {
   display: flex;
@@ -667,17 +708,17 @@ textarea {
   mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
 }
-.ticker-head {
-  display: inline-block;
-  padding-right: 2rem;
-  color: var(--blue-2);
-}
 .ticker-track {
   display: inline-flex;
   animation: ticker 70s linear infinite;
+  will-change: transform;
 }
 .ticker-track span {
   padding-right: 2.5rem;
+}
+.ticker-track .ticker-head {
+  color: var(--blue-2);
+  font-weight: 700;
 }
 .ticker-track span::after {
   content: "";
@@ -743,6 +784,7 @@ textarea {
 /* ---------- Cards ---------- */
 .card {
   position: relative;
+  display: block;
   padding: 1.6rem;
   border: 1px solid var(--line);
   border-radius: var(--r);
@@ -1477,6 +1519,16 @@ form small {
   .menu-button {
     display: grid;
   }
+  html:not([data-js]) .topbar {
+    position: static;
+  }
+  html:not([data-js]) .topbar-inner {
+    height: auto;
+    min-height: 3.6rem;
+    flex-wrap: wrap;
+    padding-block: 0.5rem;
+    border-radius: 24px;
+  }
   html:not([data-js]) .topbar nav {
     display: flex;
     position: static;
@@ -1485,6 +1537,8 @@ form small {
     background: none;
     border: 0;
     padding: 0;
+    margin-left: 0;
+    width: 100%;
   }
   html:not([data-js]) .menu-button {
     display: none;
