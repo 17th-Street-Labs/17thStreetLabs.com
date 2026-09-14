@@ -1,17 +1,44 @@
 <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="blue" x1="8" y1="4" x2="56" y2="62" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#83a5ff"/>
-      <stop offset="1" stop-color="#4265df"/>
+    <linearGradient id="tile" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#151a2c"/>
+      <stop offset="0.5" stop-color="#0b0e1a"/>
+      <stop offset="1" stop-color="#04050b"/>
     </linearGradient>
-    <mask id="numerals" maskUnits="userSpaceOnUse" x="0" y="0" width="64" height="64">
-      <rect width="64" height="64" fill="white"/>
-      <!-- Outlined numerals keep the negative space independent of fonts. -->
-      <path d="M10 28 21 21H27V49H20V30L14 34ZM33 22H55V28L43 49H35L47 29H33Z" fill="black"/>
-    </mask>
+    <linearGradient id="sheen" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ffffff" stop-opacity="0.10"/>
+      <stop offset="0.45" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ffffff" stop-opacity="0.42"/>
+      <stop offset="0.5" stop-color="#7ea0ff" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.06"/>
+    </linearGradient>
+    <linearGradient id="silver" x1="14" y1="10" x2="52" y2="54" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ffffff"/>
+      <stop offset="0.5" stop-color="#d9deea"/>
+      <stop offset="1" stop-color="#9aa3b8"/>
+    </linearGradient>
+    <linearGradient id="liquid" x1="0" y1="43" x2="0" y2="53.5" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5f8bff"/>
+      <stop offset="1" stop-color="#2748e6"/>
+    </linearGradient>
+    <!-- The flask silhouette doubles as the numeral "1". -->
+    <path id="flask" d="M13.5 10.5H25.5C26.3 10.5 27 11.2 27 12S26.3 13.5 25.5 13.5H23V29.4L32.6 47C34.2 50 32.1 53.5 28.7 53.5H10.3C6.9 53.5 4.8 50 6.4 47L16 29.4V13.5H13.5C12.7 13.5 12 12.8 12 12S12.7 10.5 13.5 10.5Z"/>
+    <clipPath id="flask-clip"><use href="#flask"/></clipPath>
   </defs>
-  <rect x="2" y="2" width="60" height="60" rx="15" fill="url(#blue)" mask="url(#numerals)"/>
-  <!-- The flask sits in front of the cutout: open lip, narrow neck, sloped body. -->
-  <path d="M26 10H38M28 10V24L17.5 46.5C16.3 49.1 18.2 52 21 52H43C45.8 52 47.7 49.1 46.5 46.5L36 24V10" stroke="#f5f8ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M23 39H41" stroke="#f5f8ff" stroke-width="1.5" stroke-linecap="round"/>
+
+  <rect width="64" height="64" rx="14" fill="url(#tile)"/>
+  <rect width="64" height="64" rx="14" fill="url(#sheen)"/>
+  <rect x="0.5" y="0.5" width="63" height="63" rx="13.5" stroke="url(#edge)"/>
+
+  <!-- "1" as flask -->
+  <use href="#flask" fill="url(#silver)"/>
+  <g clip-path="url(#flask-clip)">
+    <rect x="0" y="43" width="40" height="12" fill="url(#liquid)"/>
+    <rect x="0" y="43" width="40" height="0.75" fill="#b9ccff"/>
+  </g>
+
+  <!-- "7" -->
+  <path d="M35 10.5H58V17.5L45.2 53.5H36.6L48.6 18H35Z" fill="url(#silver)"/>
 </svg>

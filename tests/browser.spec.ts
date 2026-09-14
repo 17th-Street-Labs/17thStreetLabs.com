@@ -74,22 +74,27 @@ test("services accordion exposes one step at a time and supports keyboard activa
 });
 
 test("contact form validates required fields and email without opening an email app", async ({ page }) => {
+  await page.route("**/api/contact/", (route) =>
+    route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ ok: true }) }),
+  );
   await page.goto("/contact/");
   const form = page.locator("main form");
   const name = form.getByRole("textbox", { name: "Name", exact: true });
   const email = form.getByRole("textbox", { name: "Work email" });
   const context = form.getByRole("textbox", { name: "What is at stake?" });
-  await form.getByRole("button", { name: "Open project brief" }).click();
+  const submit = form.getByRole("button", { name: "Send project brief" });
+  await submit.click();
   await expect(name).toBeFocused();
   await name.fill("Test Person");
   await email.fill("invalid-email");
   await context.fill("Evaluate our agent's permission boundaries.");
-  await form.getByRole("button", { name: "Open project brief" }).click();
+  await submit.click();
   await expect(email).toBeFocused();
   expect(await email.evaluate((input: HTMLInputElement) => input.validity.typeMismatch)).toBe(true);
   await email.fill("test@example.com");
   expect(await form.evaluate((element: HTMLFormElement) => element.checkValidity())).toBe(true);
-  await expect(form).toContainText("Opens your email app with a draft you can edit before sending.");
+  await submit.click();
+  await expect(form).toContainText("Received. Dan will reply within a business day.");
   await expect(page).toHaveURL(/\/contact\/$/);
 });
 

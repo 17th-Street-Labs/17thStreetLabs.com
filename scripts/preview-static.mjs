@@ -41,13 +41,14 @@ async function resolvePath(urlPath) {
 
 const server = createServer(async (req, res) => {
   const urlPath = decodeURIComponent(new URL(req.url, "http://localhost").pathname);
-  const filePath = (await resolvePath(urlPath)) ?? (await resolvePath("/404"));
+  const matchedPath = await resolvePath(urlPath);
+  const filePath = matchedPath ?? (await resolvePath("/404"));
   if (!filePath) {
     res.writeHead(404).end("Not found");
     return;
   }
   const body = await readFile(filePath);
-  res.writeHead(filePath.includes("/404") && filePath !== (await resolvePath(urlPath)) ? 404 : 200, {
+  res.writeHead(matchedPath ? 200 : 404, {
     "Content-Type": types[extname(filePath)] ?? "application/octet-stream",
   });
   res.end(body);
