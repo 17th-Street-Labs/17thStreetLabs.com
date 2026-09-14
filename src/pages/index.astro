@@ -1,0 +1,192 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Icon from "../components/Icon.astro";
+import { services } from "../data/services";
+const words = [
+  "AGENTIC SYSTEMS",
+  "AI SECURITY",
+  "EVALUATION",
+  "ASSURANCE",
+  "PRODUCT ENGINEERING",
+];
+---
+
+<Layout
+  title="17th Street Labs | AI Engineering, Evals & Security"
+  description="Founder-led AI product engineering, evaluation systems, and offensive and defensive AI security for consequential systems."
+>
+  <section class="hero-section">
+    <div class="hero-copy">
+      <div class="status-pill">
+        <span /> Booking select Q4 engagements
+      </div>
+      <h1 class="split-heading">
+        <span>Engineering intelligence.</span>
+        <span>
+          Securing <em>agency.</em>
+        </span>
+      </h1>
+      <p>
+        We design, attack, evaluate, and ship consequential AI systems for
+        leaders who need more than a convincing prototype.
+      </p>
+      <div class="hero-actions">
+        <a href="/contact/" data-contact-dialog class="magnetic button-primary">
+          Bring us the hard problem <Icon name="ArrowUpRight" size={18} />
+        </a>
+        <a class="magnetic button-quiet" href="/services/">
+          Explore capabilities <Icon name="ArrowRight" size={18} />
+        </a>
+      </div>
+    </div>
+    <div class="prism-object" aria-hidden="true">
+      <div class="prism-core">
+        <span>17</span>
+      </div>
+      <div class="orbit orbit-one">
+        <i />
+      </div>
+      <div class="orbit orbit-two">
+        <i />
+      </div>
+      <div class="orbit orbit-three">
+        <i />
+      </div>
+      <span class="signal-label l1">EVAL / 99.7</span>
+      <span class="signal-label l2">CONTROL / ACTIVE</span>
+      <span class="signal-label l3">AGENT / 07</span>
+    </div>
+    <div class="hero-index">
+      <span>INDEPENDENT AI LAB + ADVISORY</span>
+      <span>DENVER · WORKING GLOBALLY</span>
+    </div>
+  </section>
+  <div
+    class="marquee"
+    aria-label="AGENTIC SYSTEMS, AI SECURITY, EVALUATION, ASSURANCE, PRODUCT ENGINEERING"
+  >
+    <div aria-hidden="true">
+      {[...words, ...words].map((word) => (
+        <span>
+          {word}
+          <i>✦</i>
+        </span>
+      ))}
+    </div>
+  </div>
+  <section class="premise-section">
+    <div class="section-label">
+      <span>01</span> THE PREMISE
+    </div>
+    <div>
+      <h2>
+        Agency changes
+        <br />
+        the risk model.
+      </h2>
+      <p>
+        When software can plan, choose tools, spend resources, and act on
+        someone’s behalf, every abstraction becomes a trust boundary. We help
+        teams make those boundaries explicit, testable, and resilient.
+      </p>
+      <a class="text-link" href="/services/">
+        How we work <Icon name="ArrowUpRight" size={16} />
+      </a>
+    </div>
+  </section>
+  <section class="capability-section">
+    <div class="section-heading">
+      <div class="section-label">
+        <span>02</span> CAPABILITIES
+      </div>
+      <h2>Four ways into the problem.</h2>
+    </div>
+    <div class="bento-grid">
+      {services.map((service, index) => (
+        <article class:list={["spotlight-card", { featured: index === 0 }]}>
+          <div class="card-top">
+            <span>{service.number}</span>
+            <b>{service.tag}</b>
+          </div>
+          <div class="card-icon">
+            {index === 1 ? (
+              <Icon name="ShieldCheck" />
+            ) : index === 2 ? (
+              <Icon name="Sparkles" />
+            ) : (
+              <Icon name="Braces" />
+            )}
+          </div>
+          <h3>{service.title}</h3>
+          <p>{service.detail}</p>
+          <a href="/services/" aria-label={`Learn about ${service.title}`}>
+            <Icon name="ArrowUpRight" />
+          </a>
+        </article>
+      ))}
+    </div>
+  </section>
+  <section class="research-feature">
+    <div class="research-visual" aria-hidden="true">
+      <div class="scan-grid" />
+      <span class="scan-line" />
+      <div class="finding f1">
+        <i />
+        prompt boundary
+      </div>
+      <div class="finding f2">
+        <i />
+        tool escalation
+      </div>
+      <div class="finding f3">
+        <i />
+        evidence captured
+      </div>
+    </div>
+    <div class="research-copy">
+      <div class="section-label">
+        <span>03</span> FIELD WORK
+      </div>
+      <span class="micro">OPEN-SOURCE SECURITY RESEARCH</span>
+      <h2>ExploitHunter</h2>
+      <p>
+        A local-first offensive-security and agent-evaluation lab for studying
+        how models discover, validate, and communicate findings across
+        long-running attack workflows.
+      </p>
+      <div class="research-stats">
+        <div>
+          <b>412M+</b>
+          <span>evaluated tokens</span>
+        </div>
+        <div>
+          <b>173</b>
+          <span>model profiles</span>
+        </div>
+        <div>
+          <b>4,835</b>
+          <span>evaluation rows</span>
+        </div>
+      </div>
+      <ul>
+        <li>Deterministic and LLM judges</li>
+        <li>Trajectory, evidence, cost, and tool telemetry</li>
+        <li>Reproducible regression gates</li>
+      </ul>
+      <a href="https://exploithunter.app" target="_blank" rel="noreferrer">
+        Explore the research <Icon name="ArrowUpRight" size={17} />
+      </a>
+    </div>
+  </section>
+  <section class="closing-cta">
+    <span class="micro">THE NEXT SYSTEM</span>
+    <h2>
+      Make it ambitious.
+      <br />
+      <em>Make it defensible.</em>
+    </h2>
+    <a href="/contact/" data-contact-dialog class="magnetic button-primary">
+      Start a conversation <Icon name="ArrowUpRight" size={18} />
+    </a>
+  </section>
+</Layout>

@@ -1,7 +1,8 @@
 # 17th Street Labs
 
-The 17th Street Labs consultancy website, imported with its original Git history
-from [Sites](https://seventeenth-street-labs-concepts.justsml.chatgpt.site).
+The 17th Street Labs consultancy website, built with Astro 7 and native CSS.
+Astro generates static HTML for the home, services, about, and contact pages,
+with browser scripts for interactive controls.
 
 ## Local development
 
@@ -12,38 +13,66 @@ npm ci
 npm run dev
 ```
 
-Open the local URL printed by Vite. Edit `app/page.tsx` for content and
-interactions, `app/globals.css` for styling, and `app/layout.tsx` for metadata.
-The contact forms open an email draft in the visitor's mail application.
+Open the local URL printed by Astro. Pages live in `src/pages/`, shared
+layouts in `src/layouts/`, components in `src/components/`, and styling in
+`src/styles/`. The routes are `/`, `/services/`, `/about/`, and `/contact/`.
+
+Contact forms open an email draft in the visitor's mail application. The site
+does not receive or store submissions, and it needs no email-service secrets.
 
 ```sh
-npm run build
+npm run check
+npm run lint
 npm test
+npm run build
+npm run preview
 ```
 
-The project uses React, Vinext, Vite, and Tailwind. Production builds emit a
-Cloudflare Worker and client assets in `dist/`; this is not a GitHub Pages
-static export. The original Linux-specific helper scripts remain in `scripts/`
-for reference; the npm commands use the tools directly to support macOS too.
+`check` validates Astro and TypeScript sources. `test` checks the generated
+site. `build` writes the deployable static site to `dist/`; `preview` serves
+that build locally.
 
-## GitHub
-
-The original source remote is named `sites`. Add your GitHub repository as
-`origin`, then push the branch:
+For browser validation, install Chromium on the first run, then test a fresh
+production build:
 
 ```sh
-git remote add origin https://github.com/OWNER/REPOSITORY.git
-git push -u origin main
+npx playwright install chromium
+npm run build
+npm run test:browser
 ```
 
-The Sites project association is retained in `.openai/hosting.json`. This import
-does not redeploy the site. Dependencies, build output, local runtime state, and
-`.env` files are ignored. No source-repository credentials are stored in Git.
+## Deploy to Vercel
 
-## Import validation
+Import this Git repository into Vercel and use the repository root as the
+project root. The checked-in `vercel.json` selects these settings:
 
-The locked dependency install and production build passed on macOS with Node
-24.14.1. The inherited test suite has three passing tests and two failing starter
-assertions: a removed `codex-preview` metadata tag and unused scrollbar utility
-CSS. These assertions have been preserved for follow-up; `npm test` currently
-exits with a failure.
+| Setting | Value |
+| --- | --- |
+| Framework preset | Astro |
+| Install command | `npm ci` |
+| Build command | `npm run build` |
+| Output directory | `dist` |
+
+Choose a Node.js version compatible with `package.json`. Connect the production
+domain in the Vercel project after reviewing its preview deployment.
+
+This static site requires no Vercel runtime adapter, Cloudflare Worker, or
+server-side environment variables. See the official
+[Astro deployment guide](https://docs.astro.build/en/guides/deploy/vercel/) and
+[Vercel Astro documentation](https://vercel.com/docs/frameworks/frontend/astro).
+Committing this configuration does not deploy the site or change DNS.
+
+## Source provenance
+
+The website was imported with its original Git history from
+[Sites](https://seventeenth-street-labs-concepts.justsml.chatgpt.site). The original
+source remote is named `sites`, and `.openai/hosting.json` retains the original
+hosting association as historical metadata. The Astro build does not use the
+Sites runtime or hosting association.
+
+The Astro migration replaces Next.js/Vinext and removes the unused starter
+component catalog, Cloudflare runtime, and database scaffolding. Their original
+source remains available in Git history.
+
+Dependencies, build output, local runtime state, and `.env` files are ignored.
+No source-repository credentials are stored in Git.

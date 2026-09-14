@@ -1,0 +1,87 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Icon from "../components/Icon.astro";
+import { services } from "../data/services";
+---
+
+<Layout
+  title="Services | 17th Street Labs"
+  description="AI product engineering, AI security, evaluations and reliability, and hands-on technical advisory."
+>
+  <section class="interior-hero">
+    <div class="section-label">
+      <span>01</span> SERVICES
+    </div>
+    <h1>
+      Senior leverage,
+      <br />
+      <em>at the fault line.</em>
+    </h1>
+    <p>
+      We enter where capability, uncertainty, and consequence meet. Every
+      engagement is led hands-on by senior practitioners.
+    </p>
+  </section>
+  <section class="service-list">
+    {services.map((service) => (
+      <article class="spotlight-card service-row">
+        <span class="service-number">{service.number}</span>
+        <div>
+          <span class="micro">{service.tag}</span>
+          <h2>{service.title}</h2>
+        </div>
+        <div>
+          <p>{service.detail}</p>
+          <b>{service.outcome}</b>
+        </div>
+        <Icon name="ArrowUpRight" />
+      </article>
+    ))}
+  </section>
+  <section class="engagement-model">
+    <div class="section-label">
+      <span>02</span> ENGAGEMENT MODEL
+    </div>
+    <div>
+      <h2>Clarity before ceremony.</h2>
+      <div class="engagement-accordion">
+        <details name="engagement" data-slot="accordion-item" open>
+          <summary data-slot="accordion-trigger">
+            01 · Frame the consequential question
+            <Icon name="ChevronDown" size={16} />
+          </summary>
+          <div data-slot="accordion-content">
+            We identify the decision, failure mode, or capability that matters.
+            Success criteria are explicit before implementation expands.
+          </div>
+        </details>
+        <details name="engagement" data-slot="accordion-item">
+          <summary data-slot="accordion-trigger">
+            02 · Build the smallest credible proof
+            <Icon name="ChevronDown" size={16} />
+          </summary>
+          <div data-slot="accordion-content">
+            Architecture, research, and evaluation proceed together. Evidence
+            arrives early enough to change direction.
+          </div>
+        </details>
+        <details name="engagement" data-slot="accordion-item">
+          <summary data-slot="accordion-trigger">
+            03 · Harden what survives contact
+            <Icon name="ChevronDown" size={16} />
+          </summary>
+          <div data-slot="accordion-content">
+            We pressure-test the system, turn findings into controls, and
+            transfer the operating capability to your team.
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+  <section class="closing-cta compact">
+    <h2>Need a precise engagement?</h2>
+    <a class="magnetic button-primary" href="/contact/">
+      Tell us what is stuck <Icon name="ArrowRight" size={18} />
+    </a>
+  </section>
+</Layout>

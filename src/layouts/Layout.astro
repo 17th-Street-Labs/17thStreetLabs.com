@@ -1,0 +1,290 @@
+---
+import "../styles/globals.css";
+import Icon from "../components/Icon.astro";
+interface Props {
+  title: string;
+  description: string;
+}
+const { title, description } = Astro.props;
+const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
+const links = [
+  { name: "home", href: "/" },
+  { name: "services", href: "/services/" },
+  { name: "about", href: "/about/" },
+  { name: "contact", href: "/contact/" },
+];
+const canonical = new URL(
+  Astro.url.pathname,
+  Astro.site ?? "https://17thstreetlabs.com",
+);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <script is:inline>
+      document.documentElement.dataset.js = "true";
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta name="theme-color" content="#08060e" />
+  </head>
+  <body>
+    <div class="prism-site">
+      <a class="skip-link" href="#main-content">
+        Skip to content
+      </a>
+      <div class="light-rays" aria-hidden="true">
+        <i></i>
+        <i></i>
+        <i></i>
+        <i></i>
+        <i></i>
+      </div>
+      <header class="topbar">
+        <a class="brand" href="/">
+          <span class="brand-mark" aria-hidden="true">
+            <i>1</i>
+            <i>7</i>
+            <b></b>
+          </span>
+          <span>17th Street Labs</span>
+        </a>
+        <nav id="primary-navigation" aria-label="Primary navigation">
+          {links.map(({ name, href }) => (
+            <a
+              href={href}
+              class:list={{
+                active: currentPath === (href.replace(/\/$/, "") || "/"),
+              }}
+              aria-current={
+                currentPath === (href.replace(/\/$/, "") || "/")
+                  ? "page"
+                  : undefined
+              }
+            >
+              {name}
+            </a>
+          ))}
+        </nav>
+        <a href="/contact/" class="magnetic header-cta" data-contact-dialog>
+          Start a conversation <Icon name="ArrowUpRight" size={15} />
+        </a>
+        <button
+          class="menu-button"
+          aria-label="Toggle navigation"
+          aria-expanded="false"
+          aria-controls="primary-navigation"
+        >
+          <span class="menu-open-icon">
+            <Icon name="Menu" />
+          </span>
+          <span class="menu-close-icon" hidden>
+            <Icon name="X" />
+          </span>
+        </button>
+      </header>
+      <main id="main-content" class="page-wrap">
+        <slot />
+      </main>
+      <footer>
+        <div>
+          <a class="brand" href="/">
+            <span class="brand-mark" aria-hidden="true">
+              <i>1</i>
+              <i>7</i>
+              <b></b>
+            </span>
+            <span>17th Street Labs</span>
+          </a>
+          <p>
+            Engineering intelligence.
+            <br />
+            Securing agency.
+          </p>
+        </div>
+        <nav class="footer-nav" aria-label="Footer navigation">
+          {links.map(({ name, href }) => (
+            <a href={href}>{name}</a>
+          ))}
+        </nav>
+        <div class="footer-meta">
+          <span>AI SYSTEMS · EVALS · SECURITY</span>
+          <span>DENVER · WORKING GLOBALLY</span>
+          <span>© 2026 17TH STREET LABS LLC</span>
+        </div>
+      </footer>
+      <dialog
+        class="contact-dialog"
+        aria-labelledby="dialog-title"
+        aria-describedby="dialog-description"
+      >
+        <button class="dialog-close" aria-label="Close conversation form">
+          <Icon name="X" size={20} />
+        </button>
+        <span class="micro">NEW ENGAGEMENT</span>
+        <h2 id="dialog-title" data-slot="dialog-title">
+          What hard problem are you carrying?
+        </h2>
+        <p id="dialog-description" data-slot="dialog-description">
+          Give us the useful version: what you are building, what is uncertain,
+          and what happens if it fails.
+        </p>
+        <form
+          data-project-brief
+          action="mailto:dan@danlevy.net?subject=17th%20Street%20Labs%20%E2%80%94%20project%20brief"
+          method="post"
+          enctype="text/plain"
+        >
+          <div class="form-row">
+            <label>
+              Name
+              <input
+                name="name"
+                required
+                autocomplete="name"
+                placeholder="Your name"
+              />
+            </label>
+            <label>
+              Work email
+              <input
+                name="email"
+                required
+                type="email"
+                autocomplete="email"
+                placeholder="you@company.com"
+              />
+            </label>
+          </div>
+          <label>
+            Focus
+            <select name="focus">
+              <option value="" disabled selected>
+                Select an area
+              </option>
+              <option>AI product engineering</option>
+              <option>AI security</option>
+              <option>Evals &amp; reliability</option>
+              <option>Technical advisory</option>
+            </select>
+          </label>
+          <label>
+            Context
+            <textarea
+              name="context"
+              required
+              rows={5}
+              placeholder="What are you building?"
+            ></textarea>
+          </label>
+          <button type="submit" class="submit-button">
+            Open project brief <Icon name="ArrowUpRight" size={17} />
+          </button>
+          <small>Opens your email app with a draft for you to send.</small>
+        </form>
+      </dialog>
+    </div>
+    <script>
+      const menu = document.querySelector<HTMLButtonElement>(".menu-button");
+      const nav = document.querySelector<HTMLElement>("#primary-navigation");
+      const setMenu = (open: boolean) => {
+        menu?.setAttribute("aria-expanded", String(open));
+        nav?.classList.toggle("open", open);
+        document
+          .querySelector<HTMLElement>(".menu-open-icon")
+          ?.toggleAttribute("hidden", open);
+        document
+          .querySelector<HTMLElement>(".menu-close-icon")
+          ?.toggleAttribute("hidden", !open);
+      };
+      menu?.addEventListener("click", () =>
+        setMenu(menu.getAttribute("aria-expanded") !== "true"),
+      );
+      document.addEventListener("keydown", (event) => {
+        if (
+          event.key === "Escape" &&
+          menu?.getAttribute("aria-expanded") === "true"
+        ) {
+          setMenu(false);
+          menu.focus();
+        }
+      });
+      const dialog =
+        document.querySelector<HTMLDialogElement>(".contact-dialog");
+      document
+        .querySelectorAll<HTMLAnchorElement>("[data-contact-dialog]")
+        .forEach((link) =>
+          link.addEventListener("click", (event) => {
+            if (
+              !dialog ||
+              event.metaKey ||
+              event.ctrlKey ||
+              event.shiftKey ||
+              event.altKey
+            )
+              return;
+            event.preventDefault();
+            dialog.showModal();
+          }),
+        );
+      dialog
+        ?.querySelector(".dialog-close")
+        ?.addEventListener("click", () => dialog.close());
+      dialog?.addEventListener("click", (event) => {
+        if (event.target !== dialog) return;
+        const rect = dialog.getBoundingClientRect();
+        if (
+          event.clientX < rect.left ||
+          event.clientX > rect.right ||
+          event.clientY < rect.top ||
+          event.clientY > rect.bottom
+        )
+          dialog.close();
+      });
+      document
+        .querySelectorAll<HTMLFormElement>("[data-project-brief]")
+        .forEach((form) =>
+          form.addEventListener("submit", (event) => {
+            event.preventDefault();
+            const data = new FormData(form);
+            const lines = [
+              `Name: ${data.get("name") || ""}`,
+              `Email: ${data.get("email") || ""}`,
+              ...(data.get("focus") ? [`Focus: ${data.get("focus")}`] : []),
+              "",
+              String(data.get("context") || ""),
+            ];
+            window.location.href = `mailto:dan@danlevy.net?subject=${encodeURIComponent("17th Street Labs — project brief")}&body=${encodeURIComponent(lines.join("\n"))}`;
+          }),
+        );
+      document.querySelectorAll<HTMLElement>(".magnetic").forEach((element) => {
+        element.addEventListener("mousemove", (event) => {
+          if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+          const r = element.getBoundingClientRect();
+          element.style.transform = `translate(${(event.clientX - r.left - r.width / 2) * 0.14}px, ${(event.clientY - r.top - r.height / 2) * 0.14}px)`;
+        });
+        element.addEventListener("mouseleave", () => {
+          element.style.transform = "";
+        });
+      });
+      document
+        .querySelectorAll<HTMLElement>(".spotlight-card")
+        .forEach((element) =>
+          element.addEventListener("mousemove", (event) => {
+            const rect = element.getBoundingClientRect();
+            element.style.setProperty("--mx", `${event.clientX - rect.left}px`);
+            element.style.setProperty("--my", `${event.clientY - rect.top}px`);
+          }),
+        );
+    </script>
+  </body>
+</html>
