@@ -1,5 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import Icon from "../components/Icon.astro";
 import { proof } from "../data/services";
 ---
 
@@ -7,9 +8,9 @@ import { proof } from "../data/services";
   title="About | 17th Street Labs"
   description="Meet the founders and operating principles behind 17th Street Labs, an independent AI engineering and security research firm in Denver."
 >
-  <section class="page-hero ground-black">
+  <section class="page-hero">
     <div class="wrap">
-      <p class="kicker">About</p>
+      <p class="chip">About</p>
       <h1 class="statement">Experience without the institution.</h1>
       <p class="lede">
         17th Street Labs is a founder-led AI engineering and security research
@@ -19,7 +20,7 @@ import { proof } from "../data/services";
     </div>
   </section>
 
-  <section class="band ground-white">
+  <section class="band">
     <div class="wrap">
       <dl class="proof">
         {proof.map(({ value, label }) => (
@@ -32,48 +33,59 @@ import { proof } from "../data/services";
     </div>
   </section>
 
-  <section class="band ground-grey">
+  <section class="band">
     <div class="wrap">
       <div class="band-head">
-        <h2 class="section-title">Founders</h2>
-        <p>Two people, one firm. You get both on every engagement.</p>
+        <p class="chip">Founders</p>
+        <h2 class="section-title">Two people, one firm.</h2>
+        <p>You get both on every engagement.</p>
       </div>
       <div class="founders">
-        <article class="founder">
-          <h3>Marina Levy</h3>
-          <p class="role">Co-founder, chief executive officer</p>
-          <p class="bio">
-            Marina sets the operating direction for 17th Street Labs. She
-            shapes ambitious technical work into focused engagements with a
-            clear scope, a steady cadence, and an outcome we can be held to. If
-            an engagement is going well, that is usually her doing.
-          </p>
+        <article class="card founder">
+          <span class="avatar" aria-hidden="true">ML</span>
+          <div>
+            <h3>Marina Levy</h3>
+            <p class="role">Co-founder, chief executive officer</p>
+            <p class="bio">
+              Marina sets the operating direction for 17th Street Labs. She
+              shapes ambitious technical work into focused engagements with a
+              clear scope, a steady cadence, and an outcome we can be held to. If
+              an engagement is going well, that is usually her doing.
+            </p>
+          </div>
         </article>
-        <article class="founder">
-          <h3>Dan Levy</h3>
-          <p class="role">Co-founder, principal AI engineer</p>
-          <p class="bio">
-            Engineer, educator, founder, and technical leader with more than
-            twenty-five years across production systems, developer platforms,
-            AI applications, evaluation infrastructure, and offensive and
-            defensive AI security. He grew one platform organization from six
-            engineers to sixty and shipped systems used by fifty million
-            people. He still writes the code on every engagement.
-          </p>
-          <a class="text-link" href="mailto:dan@danlevy.net">dan@danlevy.net</a>
+        <article class="card founder">
+          <span class="avatar" aria-hidden="true">DL</span>
+          <div>
+            <h3>Dan Levy</h3>
+            <p class="role">Co-founder, principal AI engineer</p>
+            <p class="bio">
+              Engineer, educator, founder, and technical leader with more than
+              twenty-five years across production systems, developer platforms,
+              AI applications, evaluation infrastructure, and offensive and
+              defensive AI security. He grew one platform organization from six
+              engineers to sixty and shipped systems used by fifty million
+              people. He still writes the code on every engagement.
+            </p>
+            <a class="text-link" href="mailto:dan@danlevy.net">
+              dan@danlevy.net <Icon name="ArrowUpRight" size={16} />
+            </a>
+          </div>
         </article>
       </div>
     </div>
   </section>
 
-  <section class="band ground-white">
+  <section class="band">
     <div class="wrap">
       <div class="band-head">
+        <p class="chip">Principles</p>
         <h2 class="section-title">How we think</h2>
         <p>Three convictions that show up in every piece of work.</p>
       </div>
       <div class="principles">
-        <div>
+        <div class="card">
+          <span class="card-icon"><Icon name="Gauge" /></span>
           <h3>Evidence over theater</h3>
           <p>
             A fluent demo is not a reliable system. We design measurement that
@@ -81,7 +93,8 @@ import { proof } from "../data/services";
             auditors.
           </p>
         </div>
-        <div>
+        <div class="card">
+          <span class="card-icon"><Icon name="ShieldCheck" /></span>
           <h3>Security is architecture</h3>
           <p>
             Permissions, boundaries, data flows, and failure recovery belong in
@@ -89,7 +102,8 @@ import { proof } from "../data/services";
             news.
           </p>
         </div>
-        <div>
+        <div class="card">
+          <span class="card-icon"><Icon name="Zap" /></span>
           <h3>Capability has to transfer</h3>
           <p>
             The engagement pays off when your team leaves with sharper systems
@@ -100,12 +114,17 @@ import { proof } from "../data/services";
     </div>
   </section>
 
-  <section class="band closing ground-blue">
+  <section class="band">
     <div class="wrap">
-      <h2 class="statement">Work with us.</h2>
-      <div class="closing-row">
+      <div class="closing">
+        <h2 class="statement">Work with us.</h2>
         <p>Send the problem, not a pitch. We will tell you if we can help.</p>
-        <a class="button button-solid" href="/contact/">Start a conversation</a>
+        <div class="hero-actions">
+          <a class="button button-solid" href="/contact/">
+            Start a conversation
+            <Icon name="ArrowRight" size={16} />
+          </a>
+        </div>
       </div>
     </div>
   </section>

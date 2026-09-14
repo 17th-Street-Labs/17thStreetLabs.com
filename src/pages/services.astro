@@ -1,15 +1,22 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import Icon from "../components/Icon.astro";
 import { services } from "../data/services";
+const icons: Record<string, string> = {
+  engineering: "Braces",
+  security: "ShieldCheck",
+  evals: "Gauge",
+  advisory: "Compass",
+};
 ---
 
 <Layout
   title="Services | 17th Street Labs"
   description="AI product engineering, AI security, evaluations and reliability, and hands-on technical advisory from senior practitioners."
 >
-  <section class="page-hero ground-black">
+  <section class="page-hero">
     <div class="wrap">
-      <p class="kicker">Services</p>
+      <p class="chip">Services</p>
       <h1 class="statement">Senior hands on the hard part.</h1>
       <p class="lede">
         We enter where capability, uncertainty, and consequence meet. Every
@@ -18,12 +25,13 @@ import { services } from "../data/services";
     </div>
   </section>
 
-  <section class="band ground-white">
+  <section class="band">
     <div class="wrap">
       <div class="detail">
         {services.map((service) => (
-          <article id={service.slug}>
+          <article id={service.slug} class="card">
             <div>
+              <span class="card-icon"><Icon name={icons[service.slug]} /></span>
               <h2>{service.title}</h2>
               <span class="outcome">{service.outcome}</span>
             </div>
@@ -42,9 +50,10 @@ import { services } from "../data/services";
     </div>
   </section>
 
-  <section class="band ground-grey">
+  <section class="band">
     <div class="wrap">
       <div class="band-head">
+        <p class="chip">Process</p>
         <h2 class="section-title">How we work</h2>
         <p>Clarity before ceremony. Open a step to see what it means in practice.</p>
       </div>
@@ -90,12 +99,17 @@ import { services } from "../data/services";
     </div>
   </section>
 
-  <section class="band closing ground-blue">
+  <section class="band">
     <div class="wrap">
-      <h2 class="statement">Not sure which one you need?</h2>
-      <div class="closing-row">
+      <div class="closing">
+        <h2 class="statement">Not sure which one you need?</h2>
         <p>Describe the problem. We will tell you honestly whether we are the right fit.</p>
-        <a class="button button-solid" href="/contact/">Tell us what is stuck</a>
+        <div class="hero-actions">
+          <a class="button button-solid" href="/contact/">
+            Tell us what is stuck
+            <Icon name="ArrowRight" size={16} />
+          </a>
+        </div>
       </div>
     </div>
   </section>

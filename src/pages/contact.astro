@@ -1,14 +1,15 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import Icon from "../components/Icon.astro";
 ---
 
 <Layout
   title="Contact | 17th Street Labs"
   description="Start a conversation with 17th Street Labs about your AI engineering, security, or evaluation challenge."
 >
-  <section class="page-hero ground-black">
+  <section class="page-hero">
     <div class="wrap">
-      <p class="kicker">Contact</p>
+      <p class="chip">Contact</p>
       <h1 class="statement">Bring the hard problem.</h1>
       <p class="lede">
         Tell us what you are building, where confidence breaks down, and what a
@@ -18,7 +19,7 @@ import Layout from "../layouts/Layout.astro";
     </div>
   </section>
 
-  <section class="band ground-white">
+  <section class="band">
     <div class="wrap contact">
       <div class="contact-aside">
         <dl>
@@ -36,7 +37,7 @@ import Layout from "../layouts/Layout.astro";
           </div>
         </dl>
       </div>
-      <div class="contact-panel">
+      <div class="panel contact-panel">
         <h2>Three useful sentences are enough.</h2>
         <form
           data-project-brief
@@ -65,6 +66,7 @@ import Layout from "../layouts/Layout.astro";
           </label>
           <button class="button button-solid" type="submit">
             Open project brief
+            <Icon name="ArrowRight" size={16} />
           </button>
           <small>Opens your email app with a draft you can edit before sending.</small>
         </form>
