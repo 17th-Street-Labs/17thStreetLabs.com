@@ -96,3 +96,26 @@ source remains available in Git history.
 
 Dependencies, build output, local runtime state, and `.env` files are ignored.
 No source-repository credentials are stored in Git.
+
+## Contact form → Telegram
+
+The contact CTAs (header button, hero/footer buttons, and `/contact/`) all open
+the same project-brief form, which POSTs JSON to `/api/contact/`
+(`src/pages/api/contact.ts`). That endpoint validates the submission and pushes
+it to Telegram via `sendMessage`. If the endpoint is unreachable the form falls
+back to the previous `mailto:` draft, so the CTA never dead-ends.
+
+Required environment variables (see `.env.example`):
+
+| Variable | How to get it |
+| --- | --- |
+| `TELEGRAM_BOT_TOKEN` | Message [@BotFather](https://t.me/BotFather), `/newbot`, copy the token. |
+| `TELEGRAM_CHAT_ID` | Add the bot to a private channel or group (as admin for channels), post one message, then `curl "https://api.telegram.org/bot<TOKEN>/getUpdates"` and read `result[].message.chat.id`. Channel ids look like `-1001234567890`. |
+
+Set both in Vercel project settings for Preview and Production. Without them the
+endpoint returns `503` and the form falls back to email.
+
+The endpoint is the only server-rendered route; every page stays prerendered.
+Abuse controls are a hidden honeypot field and a per-instance in-memory rate
+limit (5 submissions per IP per 10 minutes) — best effort, since serverless
+instances do not share memory.

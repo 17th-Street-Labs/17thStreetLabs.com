@@ -47,8 +47,12 @@ const json = (body: unknown, status: number) =>
   });
 
 export const POST: APIRoute = async ({ request, clientAddress }) => {
-  const token = import.meta.env.TELEGRAM_BOT_TOKEN;
-  const chatId = import.meta.env.TELEGRAM_CHAT_ID;
+  // import.meta.env covers dev and build-time vars; process.env covers runtime
+  // values set in the Vercel dashboard after the build.
+  const token =
+    import.meta.env.TELEGRAM_BOT_TOKEN ?? process.env.TELEGRAM_BOT_TOKEN;
+  const chatId =
+    import.meta.env.TELEGRAM_CHAT_ID ?? process.env.TELEGRAM_CHAT_ID;
 
   let data: FormData;
   try {
