@@ -2,6 +2,7 @@
 import danHeadshot from "../images/headshots/dan-avatar.png";
 import marinaHeadshot from "../images/headshots/Marina-Levy-Headshot.png";
 import kyleHeadshot from "../images/headshots/kyle-coberly-headshot.jpg";
+import Avatar from "../components/Avatar.astro";
 import Layout from "../layouts/Layout.astro";
 import Icon from "../components/Icon.astro";
 import HeroThreads from "../components/HeroThreads.astro";
@@ -24,15 +25,15 @@ const log = [
 ---
 
 <Layout
-  title="17th Street Labs | Make AI actually work."
-  description="AI-native engineering for products that have to work in the real world. We build, evaluate, and improve intelligent products and agentic systems, from evals and model architecture to production reliability and AI security."
+  title="17th Street Labs | AI engineering, measured."
+  description="17th Street Labs builds, evaluates, and improves intelligent products and agentic systems: evals, model architecture, production reliability, and AI security."
 >
   <section class="hero">
     <HeroThreads />
     <div class="wrap hero-inner">
       <p class="chip">AI-native engineering</p>
       <h1 class="statement">
-        Make AI actually work.
+        AI engineering, measured.
         <span class="statement-sub">
           Not in the demo. Not on the benchmark. <span class="glow-text">In the real world.</span>
         </span>
@@ -386,9 +387,7 @@ const log = [
       </div>
       <div class="founders">
         <div class="card founder">
-          <span class="avatar avatar-portrait avatar-marina">
-            <img src={marinaHeadshot.src} alt="Marina Levy" width={800} height={800} loading="lazy" decoding="async" />
-          </span>
+          <Avatar src={marinaHeadshot} alt="Marina Levy" zoom={1.9} class="avatar-marina" />
           <div>
             <h3>Marina Levy</h3>
             <p class="role">Co-founder, chief executive</p>
@@ -400,9 +399,7 @@ const log = [
           </div>
         </div>
         <div class="card founder">
-          <span class="avatar avatar-portrait">
-            <img src={danHeadshot.src} alt="Dan" width={danHeadshot.width} height={danHeadshot.height} loading="lazy" decoding="async" />
-          </span>
+          <Avatar src={danHeadshot} alt="Dan" />
           <div>
             <h3>Dan</h3>
             <p class="role">Founding Engineer</p>
@@ -414,9 +411,7 @@ const log = [
           </div>
         </div>
         <div class="card founder">
-          <span class="avatar avatar-portrait">
-            <img src={kyleHeadshot.src} alt="Kyle" width={kyleHeadshot.width} height={kyleHeadshot.height} loading="lazy" decoding="async" />
-          </span>
+          <Avatar src={kyleHeadshot} alt="Kyle" />
           <div>
             <h3>Kyle Coberly</h3>
             <p class="role">Head of Research</p>

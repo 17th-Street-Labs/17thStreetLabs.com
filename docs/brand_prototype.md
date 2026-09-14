@@ -492,6 +492,296 @@ That is the difference between an impressive prototype and a system you can trus
 
 ---
 
+# 13b. Homepage Direction E — APPROVED
+
+> **Status: approved copy** (2026-09-13). Full top-to-bottom homepage flow. Use verbatim; line breaks are intentional.
+
+### AI that survives contact with reality.
+
+Building something impressive is one thing.
+
+Putting it in front of real users, real data, real edge cases, real budgets, and real consequences?
+
+**That’s where things get interesting.**
+
+17th Street Labs is an AI engineering studio that builds, evaluates, and improves intelligent products and agentic systems.
+
+We help teams turn ambitious AI into systems they can trust when it matters.
+
+**[WORK WITH US]**
+
+---
+
+### When the demo ends, engineering starts.
+
+The agent that worked beautifully yesterday suddenly takes a completely different path.
+
+Your “improved” prompt fixes one problem and creates three new ones.
+
+Your eval says everything is fine.
+
+Your users disagree.
+
+And somehow you're spending HOW MUCH on tokens?
+
+Welcome to production AI.
+
+This is where we work.
+
+---
+
+### We build the engineering around the intelligence.
+
+#### AI Evals & Reliability
+
+If you can't measure whether your AI is getting better, you're mostly guessing.
+
+We build eval systems, judges, benchmarks, regression tests, trajectory evals, and adversarial scenarios that measure what your system actually does.
+
+Not just whether it produced a nice answer once.
+
+Whether it behaves correctly again.
+
+And again.
+
+And when things get weird.
+
+---
+
+#### Agentic Systems
+
+Agents can research, reason, use tools, write code, inspect results, delegate work, and run tasks in parallel.
+
+Great.
+
+Now make 20 of them work together without creating a tiny digital circus.
+
+We architect agentic systems around the actual work:
+
+Context.
+
+Tools.
+
+Orchestration.
+
+Parallelism.
+
+Memory.
+
+Feedback.
+
+Verification.
+
+Because giving an agent more autonomy is easy.
+
+**Knowing it did the right thing is the harder part.**
+
+---
+
+#### AI-Native Products
+
+The next generation of software won't be the last generation with a chatbot glued to the side.
+
+We help teams rethink products around AI as a **first-class citizen**.
+
+Products that understand language.
+
+See.
+
+Listen.
+
+Remember.
+
+Use tools.
+
+React to what's happening.
+
+And replace complicated interfaces with something radically simpler:
+
+**Tell it what you want.**
+
+The question isn't “where can we add AI?”
+
+It's:
+
+**What would we build differently if intelligence had been there from the beginning?**
+
+---
+
+#### Model Strategy
+
+You probably don't need the biggest model for everything.
+
+We benchmark frontier, open-source, specialized, and local models against the job they're actually being asked to do.
+
+Then we optimize for what matters:
+
+**Capability. Cost. Speed. Privacy. Reliability.**
+
+Sometimes you need the frontier model.
+
+Sometimes a tiny local model gets the job done for a fraction of the cost.
+
+Sometimes the smartest architecture is knowing when not to use the smartest model.
+
+---
+
+#### AI Security
+
+AI changes the economics of attacking software.
+
+An agent doesn't get tired.
+
+It doesn't get bored.
+
+It can generate another hypothesis.
+
+Try another path.
+
+Run another test.
+
+Then do it 500 times in parallel.
+
+We research and build AI-native approaches to offensive and defensive security, including automated vulnerability discovery, adversarial testing, proactive monitoring, and high-scale experimentation.
+
+Because the attackers are getting agents too.
+
+---
+
+### Stop guessing. Start measuring.
+
+AI has an uncomfortable habit.
+
+It can look better without actually becoming more reliable.
+
+A prompt change fixes one behavior and quietly breaks another.
+
+A judge gives different answers to the same test.
+
+A smarter model performs worse because the architecture was built around something smaller.
+
+A workflow succeeds nine times and spectacularly fails on number ten.
+
+So we test the behavior that matters.
+
+Change something.
+
+Test it again.
+
+Compare it to the baseline.
+
+And keep going.
+
+**That's eval-driven development.**
+
+Less “feels better.”
+
+More “prove it.”
+
+---
+
+### Bigger isn't always smarter.
+
+We've spent a lot of time testing what different models can actually do.
+
+And we've found something slightly inconvenient for the companies selling the expensive ones:
+
+You don't always need them.
+
+Small and local models can be astonishingly capable when they're given the right harness, tools, context, and architecture.
+
+They can also be dramatically cheaper.
+
+And for sensitive work, local inference gives you something even more valuable:
+
+**Your data stays yours.**
+
+No third-party endpoint.
+
+No sending highly sensitive work somewhere you don't control.
+
+No crossing your fingers and hoping the privacy policy covers it.
+
+The model matters.
+
+**The system around it matters more than most people realize.**
+
+---
+
+### The future of software has fewer buttons.
+
+For decades, software asked humans to learn how computers wanted to work.
+
+Menus.
+
+Settings.
+
+Forms.
+
+Tabs.
+
+Buttons for buttons that reveal more buttons.
+
+AI gives us the chance to reverse that relationship.
+
+Tell the software what you want.
+
+Show it something.
+
+Let it observe what happened.
+
+Give it memory.
+
+Let it use tools.
+
+Let it adapt.
+
+The most interesting AI products won't be old software with a chatbot attached.
+
+They'll be products designed from the beginning around intelligence as a **first-class citizen**.
+
+We help build those.
+
+---
+
+### We don't sell AI theater.
+
+We build things.
+
+We benchmark them.
+
+We break them.
+
+We measure what happened.
+
+We fix them.
+
+Then we try to break them again.
+
+17th Street Labs works in the messy territory between:
+
+**“Holy shit, this is possible.”**
+
+and
+
+**“Yes, we can trust this in the real world.”**
+
+---
+
+### Got an AI problem that's getting weird?
+
+Good.
+
+Those are usually the interesting ones.
+
+**17th Street Labs**
+
+AI-native engineering for products that have to survive contact with reality.
+
+**[LET'S TALK]**
+
+---
+
 # 14. Website Section: Production AI
 
 ## AI gets weird when it leaves the prototype.
@@ -1095,6 +1385,14 @@ The product that needs more than another chat window.
 
 Strongest:
 
+**AI that survives contact with reality.**
+
+**AI-native engineering for products that have to survive contact with reality.**
+
+**When the demo ends, engineering starts.**
+
+Older (retired from the site, “actually work” framing):
+
 **Make AI actually work.**
 
 **AI-native engineering for the real world.**
@@ -1220,7 +1518,9 @@ Use this as the current hierarchy:
 
 ### Brand promise
 
-**Make AI actually work.**
+**AI that survives contact with reality.**
+
+(Previously “Make AI actually work.” Retired: it implies AI is broken rather than saying what we do.)
 
 ### Category
 
@@ -1249,6 +1549,10 @@ Use this as the current hierarchy:
 ### CTA
 
 **Bring us the hard problem.**
+
+### Full-page reference draft
+
+See Homepage Direction E (section 13b).
 
 ---
 

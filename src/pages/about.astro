@@ -2,6 +2,7 @@
 import danHeadshot from "../images/headshots/dan-avatar.png";
 import marinaHeadshot from "../images/headshots/Marina-Levy-Headshot.png";
 import kyleHeadshot from "../images/headshots/kyle-coberly-headshot.jpg";
+import Avatar from "../components/Avatar.astro";
 import Layout from "../layouts/Layout.astro";
 import Icon from "../components/Icon.astro";
 import { proof } from "../data/services";
@@ -14,11 +15,11 @@ import { proof } from "../data/services";
   <section class="page-hero">
     <div class="wrap">
       <p class="chip">About</p>
-      <h1 class="statement">Demos are easy. We ship the part that has to work.</h1>
+      <h1 class="statement">The demo is the easy part.</h1>
       <p class="lede">
-        17th Street Labs is an applied AI engineering studio. We take systems
-        from “it works in the demo” to “it works in production,” and we prove
-        it with measurements.
+        17th Street Labs is an applied AI engineering studio. We build evals,
+        agents, and architectures for production, and we measure everything
+        we ship.
       </p>
     </div>
   </section>
@@ -45,9 +46,7 @@ import { proof } from "../data/services";
       </div>
       <div class="founders">
         <article class="card founder">
-          <span class="avatar avatar-portrait avatar-marina">
-            <img src={marinaHeadshot.src} alt="Marina Levy" width={800} height={800} loading="lazy" decoding="async" />
-          </span>
+          <Avatar src={marinaHeadshot} alt="Marina Levy" zoom={1.9} class="avatar-marina" />
           <div>
             <h3>Marina Levy</h3>
             <p class="role">Co-founder, chief executive officer</p>
@@ -59,9 +58,7 @@ import { proof } from "../data/services";
           </div>
         </article>
         <article class="card founder">
-          <span class="avatar avatar-portrait">
-            <img src={danHeadshot.src} alt="Dan" width={danHeadshot.width} height={danHeadshot.height} loading="lazy" decoding="async" />
-          </span>
+          <Avatar src={danHeadshot} alt="Dan" />
           <div>
             <h3>Dan</h3>
             <p class="role">Founding Engineer</p>
@@ -74,9 +71,7 @@ import { proof } from "../data/services";
           </div>
         </article>
         <article class="card founder">
-          <span class="avatar avatar-portrait">
-            <img src={kyleHeadshot.src} alt="Kyle" width={kyleHeadshot.width} height={kyleHeadshot.height} loading="lazy" decoding="async" />
-          </span>
+          <Avatar src={kyleHeadshot} alt="Kyle" />
           <div>
             <h3>Kyle Coberly</h3>
             <p class="role">Head of Research</p>

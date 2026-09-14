@@ -8,9 +8,9 @@ import { fileURLToPath } from "node:url";
 const output = fileURLToPath(new URL("../dist/client/", import.meta.url));
 const origin = "https://17thstreetlabs.com";
 const routes = [
-  { route: "/", heading: /Make AI actually work\./, content: /ExploitHunter/ },
+  { route: "/", heading: /AI engineering, measured\./, content: /ExploitHunter/ },
   { route: "/services", heading: /The interesting part starts after the demo\./, content: /How we work/ },
-  { route: "/about", heading: /holy shit, this is possible/, content: /Marina Levy/ },
+  { route: "/about", heading: /The demo is the easy part\./, content: /Marina Levy/ },
   { route: "/contact", heading: /Start a project\./, content: /Three sentences is plenty\./ },
 ];
 
