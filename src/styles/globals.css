@@ -1,6 +1,4 @@
 @import "tailwindcss";
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
 
 /* Self-hosted, latin-only variable subsets. Serving these from our own origin
    removes two third-party preconnects plus a render-blocking stylesheet

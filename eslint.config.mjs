@@ -15,4 +15,12 @@ export default tseslint.config(
     files: ["**/*.{js,mjs,ts}"],
     languageOptions: { globals: { console: "readonly", process: "readonly", URL: "readonly", document: "readonly", window: "readonly", HTMLElement: "readonly", HTMLDialogElement: "readonly", HTMLFormElement: "readonly", HTMLButtonElement: "readonly", FormData: "readonly", matchMedia: "readonly", requestAnimationFrame: "readonly" } },
   },
+  {
+    // The perf harness ships browser code inside page.evaluate() callbacks,
+    // so these files legitimately reference page-context globals.
+    files: ["scripts/perf-*.mjs"],
+    languageOptions: {
+      globals: { performance: "readonly", PerformanceObserver: "readonly" },
+    },
+  },
 );
