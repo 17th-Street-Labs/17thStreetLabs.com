@@ -6,32 +6,35 @@ import Layout from "../layouts/Layout.astro";
   title="Contact | 17th Street Labs"
   description="Start a conversation with 17th Street Labs about your AI engineering, security, or evaluation challenge."
 >
-  <section class="page-hero page-hero-compact">
-    <div class="container">
-      <h1>Bring the hard problem.</h1>
+  <section class="page-hero ground-black">
+    <div class="wrap">
+      <p class="kicker">Contact</p>
+      <h1 class="statement">Bring the hard problem.</h1>
       <p class="lede">
         Tell us what you are building, where confidence breaks down, and what a
-        meaningful result would change. No forms that go to a queue: this goes
+        meaningful result would change. Nothing here goes to a queue. It goes
         to Dan.
       </p>
     </div>
   </section>
 
-  <section class="section">
-    <div class="container contact-grid">
+  <section class="band ground-white">
+    <div class="wrap contact">
       <div class="contact-aside">
-        <h2>Direct</h2>
-        <p>
-          Prefer email? Write to{" "}
-          <a href="mailto:dan@danlevy.net">dan@danlevy.net</a>.
-        </p>
-        <h2>Who replies</h2>
-        <p>
-          Dan Levy, principal AI engineer, and Marina Levy, chief executive.
-          You will hear back within a business day.
-        </p>
-        <h2>Where</h2>
-        <p>Denver, Colorado. We work with teams in any time zone.</p>
+        <dl>
+          <div>
+            <dt>Email</dt>
+            <dd><a href="mailto:dan@danlevy.net">dan@danlevy.net</a></dd>
+          </div>
+          <div>
+            <dt>Who replies</dt>
+            <dd>Dan Levy, principal AI engineer, and Marina Levy, chief executive. Within a business day.</dd>
+          </div>
+          <div>
+            <dt>Where</dt>
+            <dd>Denver, Colorado. We work with teams in any time zone.</dd>
+          </div>
+        </dl>
       </div>
       <div class="contact-panel">
         <h2>Three useful sentences are enough.</h2>
@@ -41,14 +44,16 @@ import Layout from "../layouts/Layout.astro";
           method="post"
           enctype="text/plain"
         >
-          <label>
-            Name
-            <input name="name" autocomplete="name" required />
-          </label>
-          <label>
-            Work email
-            <input name="email" autocomplete="email" required type="email" />
-          </label>
+          <div class="form-row">
+            <label>
+              Name
+              <input name="name" autocomplete="name" required />
+            </label>
+            <label>
+              Work email
+              <input name="email" autocomplete="email" required type="email" />
+            </label>
+          </div>
           <label>
             What is at stake?
             <textarea
@@ -58,7 +63,7 @@ import Layout from "../layouts/Layout.astro";
               placeholder="The system, the uncertainty, and the consequence."
             ></textarea>
           </label>
-          <button class="button button-primary" type="submit">
+          <button class="button button-solid" type="submit">
             Open project brief
           </button>
           <small>Opens your email app with a draft you can edit before sending.</small>

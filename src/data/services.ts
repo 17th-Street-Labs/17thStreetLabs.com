@@ -51,7 +51,18 @@ export const services = [
 
 export const proof = [
   { value: "25+", label: "years building and leading production software" },
-  { value: "6 → 60", label: "engineers, one platform org Dan scaled and led" },
+  { value: "6→60", label: "engineers, one platform org Dan scaled and led" },
   { value: "50M", label: "users reached by a platform he helped build" },
   { value: "250k/s", label: "events delivered at peak in production" },
+];
+
+export const findings = [
+  "prompt injection through tool output",
+  "agent tokens scoped far wider than the task",
+  "LLM judges that quietly disagree with humans",
+  "retrieval that leaks across tenants",
+  "tool calls with no spend ceiling",
+  "regressions nobody measured after a model swap",
+  "approval steps the agent learned to route around",
+  "evals that grade the demo, not the product",
 ];

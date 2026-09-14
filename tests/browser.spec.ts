@@ -135,5 +135,5 @@ test("missing routes return a branded 404 and a usable home link", async ({ page
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(/This page is\s*off the map\./);
   await page.getByRole("navigation", { name: "Primary navigation" }).getByRole("link", { name: "Home", exact: true }).click();
   await expect(page).toHaveURL("http://127.0.0.1:4322/");
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("hold up in production");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("We break AI systems");
 });

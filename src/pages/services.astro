@@ -7,9 +7,10 @@ import { services } from "../data/services";
   title="Services | 17th Street Labs"
   description="AI product engineering, AI security, evaluations and reliability, and hands-on technical advisory from senior practitioners."
 >
-  <section class="page-hero">
-    <div class="container">
-      <h1>Senior hands on the hard part.</h1>
+  <section class="page-hero ground-black">
+    <div class="wrap">
+      <p class="kicker">Services</p>
+      <h1 class="statement">Senior hands on the hard part.</h1>
       <p class="lede">
         We enter where capability, uncertainty, and consequence meet. Every
         engagement is led hands-on by the founders, not handed to a bench.
@@ -17,19 +18,19 @@ import { services } from "../data/services";
     </div>
   </section>
 
-  <section class="section">
-    <div class="container">
-      <div class="service-detail-list">
+  <section class="band ground-white">
+    <div class="wrap">
+      <div class="detail">
         {services.map((service) => (
-          <article class="service-detail" id={service.slug}>
-            <div class="service-detail-head">
+          <article id={service.slug}>
+            <div>
               <h2>{service.title}</h2>
-              <p class="outcome">{service.outcome}</p>
+              <span class="outcome">{service.outcome}</span>
             </div>
-            <div class="service-detail-body">
+            <div class="detail-body">
               <p>{service.summary}</p>
               <h3>A good fit when</h3>
-              <ul class="plain-list">
+              <ul class="marks">
                 {service.fits.map((fit) => (
                   <li>{fit}</li>
                 ))}
@@ -41,29 +42,31 @@ import { services } from "../data/services";
     </div>
   </section>
 
-  <section class="section section-tint">
-    <div class="container section-grid">
-      <div class="section-intro">
-        <h2>How we work</h2>
+  <section class="band ground-grey">
+    <div class="wrap">
+      <div class="band-head">
+        <h2 class="section-title">How we work</h2>
         <p>Clarity before ceremony. Open a step to see what it means in practice.</p>
       </div>
-      <div class="engagement-accordion">
+      <div class="accordion">
         <details name="engagement" data-slot="accordion-item" open>
           <summary data-slot="accordion-trigger">
-            <span class="step-index">1</span>
-            Frame the question that matters
+            <span class="idx">01</span>
+            <span>Frame the question that matters</span>
+            <span class="plus" aria-hidden="true"></span>
           </summary>
           <div data-slot="accordion-content">
             We identify the decision, failure mode, or capability at stake and
-            write down success criteria before implementation expands. This is
-            usually a one to two week, fixed-fee piece of work with a written
+            write down success criteria before implementation expands. Usually
+            a one to two week, fixed-fee piece of work with a written
             recommendation at the end.
           </div>
         </details>
         <details name="engagement" data-slot="accordion-item">
           <summary data-slot="accordion-trigger">
-            <span class="step-index">2</span>
-            Build the smallest credible proof
+            <span class="idx">02</span>
+            <span>Build the smallest credible proof</span>
+            <span class="plus" aria-hidden="true"></span>
           </summary>
           <div data-slot="accordion-content">
             Architecture, research, and evaluation proceed together. You get
@@ -73,8 +76,9 @@ import { services } from "../data/services";
         </details>
         <details name="engagement" data-slot="accordion-item">
           <summary data-slot="accordion-trigger">
-            <span class="step-index">3</span>
-            Harden what survives, then hand it over
+            <span class="idx">03</span>
+            <span>Harden what survives, then hand it over</span>
+            <span class="plus" aria-hidden="true"></span>
           </summary>
           <div data-slot="accordion-content">
             We pressure-test the system, turn findings into controls and
@@ -86,11 +90,13 @@ import { services } from "../data/services";
     </div>
   </section>
 
-  <section class="closing">
-    <div class="container">
-      <h2>Not sure which one you need?</h2>
-      <p>Describe the problem. We will tell you honestly whether we are the right fit.</p>
-      <a class="button button-primary" href="/contact/">Tell us what is stuck</a>
+  <section class="band closing ground-blue">
+    <div class="wrap">
+      <h2 class="statement">Not sure which one you need?</h2>
+      <div class="closing-row">
+        <p>Describe the problem. We will tell you honestly whether we are the right fit.</p>
+        <a class="button button-solid" href="/contact/">Tell us what is stuck</a>
+      </div>
     </div>
   </section>
 </Layout>

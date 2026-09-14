@@ -7,9 +7,10 @@ import { proof } from "../data/services";
   title="About | 17th Street Labs"
   description="Meet the founders and operating principles behind 17th Street Labs, an independent AI engineering and security research firm in Denver."
 >
-  <section class="page-hero">
-    <div class="container">
-      <h1>Experience without the institution.</h1>
+  <section class="page-hero ground-black">
+    <div class="wrap">
+      <p class="kicker">About</p>
+      <h1 class="statement">Experience without the institution.</h1>
       <p class="lede">
         17th Street Labs is a founder-led AI engineering and security research
         firm. Small by design, direct by default, and built for work where
@@ -18,9 +19,9 @@ import { proof } from "../data/services";
     </div>
   </section>
 
-  <section class="section">
-    <div class="container">
-      <dl class="proof-strip">
+  <section class="band ground-white">
+    <div class="wrap">
+      <dl class="proof">
         {proof.map(({ value, label }) => (
           <div>
             <dt>{value}</dt>
@@ -31,32 +32,32 @@ import { proof } from "../data/services";
     </div>
   </section>
 
-  <section class="section section-tint">
-    <div class="container section-grid">
-      <div class="section-intro">
-        <h2>Founders</h2>
+  <section class="band ground-grey">
+    <div class="wrap">
+      <div class="band-head">
+        <h2 class="section-title">Founders</h2>
         <p>Two people, one firm. You get both on every engagement.</p>
       </div>
-      <div class="founder-pair founder-pair-long">
+      <div class="founders">
         <article class="founder">
           <h3>Marina Levy</h3>
           <p class="role">Co-founder, chief executive officer</p>
-          <p>
+          <p class="bio">
             Marina sets the operating direction for 17th Street Labs. She
             shapes ambitious technical work into focused engagements with a
-            clear scope, a steady cadence, and an outcome we can be held to.
-            If an engagement is going well, that is usually her doing.
+            clear scope, a steady cadence, and an outcome we can be held to. If
+            an engagement is going well, that is usually her doing.
           </p>
         </article>
         <article class="founder">
           <h3>Dan Levy</h3>
           <p class="role">Co-founder, principal AI engineer</p>
-          <p>
+          <p class="bio">
             Engineer, educator, founder, and technical leader with more than
             twenty-five years across production systems, developer platforms,
             AI applications, evaluation infrastructure, and offensive and
             defensive AI security. He grew one platform organization from six
-            engineers to sixty and has shipped systems used by fifty million
+            engineers to sixty and shipped systems used by fifty million
             people. He still writes the code on every engagement.
           </p>
           <a class="text-link" href="mailto:dan@danlevy.net">dan@danlevy.net</a>
@@ -65,10 +66,10 @@ import { proof } from "../data/services";
     </div>
   </section>
 
-  <section class="section">
-    <div class="container section-grid">
-      <div class="section-intro">
-        <h2>How we think</h2>
+  <section class="band ground-white">
+    <div class="wrap">
+      <div class="band-head">
+        <h2 class="section-title">How we think</h2>
         <p>Three convictions that show up in every piece of work.</p>
       </div>
       <div class="principles">
@@ -99,11 +100,13 @@ import { proof } from "../data/services";
     </div>
   </section>
 
-  <section class="closing">
-    <div class="container">
-      <h2>Work with us.</h2>
-      <p>Send the problem, not a pitch. We will tell you if we can help.</p>
-      <a class="button button-primary" href="/contact/">Start a conversation</a>
+  <section class="band closing ground-blue">
+    <div class="wrap">
+      <h2 class="statement">Work with us.</h2>
+      <div class="closing-row">
+        <p>Send the problem, not a pitch. We will tell you if we can help.</p>
+        <a class="button button-solid" href="/contact/">Start a conversation</a>
+      </div>
     </div>
   </section>
 </Layout>
