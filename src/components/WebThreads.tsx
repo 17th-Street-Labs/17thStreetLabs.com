@@ -312,13 +312,39 @@ const WebThreads: React.FC<WebThreadsProps> = ({
     canvas.addEventListener('mouseenter', onMouseEnter);
     canvas.addEventListener('mouseleave', onMouseLeave);
 
+    // Pointer velocity briefly accelerates the animation clock.
+    // `boost` is the raw impulse; `speed` eases toward it so the ramp up
+    // and the deceleration both feel smooth rather than stepped.
+    let boost = 0;
+    let speed = 1;
+    let lastPointer: [number, number, number] | null = null;
+    const onPointerVelocity = (e: PointerEvent) => {
+      const now = performance.now();
+      if (lastPointer) {
+        const dt = Math.max(now - lastPointer[2], 1);
+        const dist = Math.hypot(e.clientX - lastPointer[0], e.clientY - lastPointer[1]);
+        const velocity = dist / dt; // px per ms
+        boost = Math.min(boost + velocity * 0.35, 6);
+      }
+      lastPointer = [e.clientX, e.clientY, now];
+    };
+    window.addEventListener('pointermove', onPointerVelocity, { passive: true });
+
     let raf = 0;
     let isVisible = true;
     let isPageVisible = !document.hidden;
-    const t0 = performance.now();
+    let lastFrame = performance.now();
+    let clock = 0;
 
     const loop = (t: number) => {
-      (program.uniforms.iTime as { value: number }).value = (t - t0) * 0.001;
+      const dt = Math.min(t - lastFrame, 100);
+      lastFrame = t;
+      // Impulse decays with a ~450ms half-life; speed follows it with a
+      // ~250ms time constant, giving a soft attack and long, even tail.
+      boost *= Math.exp(-dt / 650);
+      speed += (1 + boost - speed) * (1 - Math.exp(-dt / 250));
+      clock += dt * 0.001 * speed;
+      (program.uniforms.iTime as { value: number }).value = clock;
       currentMouse[0] += 0.05 * (targetMouse[0] - currentMouse[0]);
       currentMouse[1] += 0.05 * (targetMouse[1] - currentMouse[1]);
       currentActive += 0.05 * (targetActive - currentActive);
@@ -364,6 +390,7 @@ const WebThreads: React.FC<WebThreadsProps> = ({
       ro.disconnect();
       io.disconnect();
       document.removeEventListener('visibilitychange', onVisibility);
+      window.removeEventListener('pointermove', onPointerVelocity);
       canvas.removeEventListener('mousemove', onMouseMove);
       canvas.removeEventListener('mouseenter', onMouseEnter);
       canvas.removeEventListener('mouseleave', onMouseLeave);
