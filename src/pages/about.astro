@@ -1,4 +1,6 @@
 ---
+import danHeadshot from "../images/headshots/dan-avatar.png";
+import marinaHeadshot from "../images/headshots/Marina-Levy-Headshot.png";
 import Layout from "../layouts/Layout.astro";
 import Icon from "../components/Icon.astro";
 import { proof } from "../data/services";
@@ -6,7 +8,7 @@ import { proof } from "../data/services";
 
 <Layout
   title="About | 17th Street Labs"
-  description="Meet the founders and operating principles behind 17th Street Labs, an independent AI engineering and security research firm in Denver."
+  description="Meet the team and operating principles behind 17th Street Labs, an independent AI engineering and security research firm in Denver."
 >
   <section class="page-hero">
     <div class="wrap">
@@ -36,13 +38,15 @@ import { proof } from "../data/services";
   <section class="band">
     <div class="wrap">
       <div class="band-head">
-        <p class="chip">Founders</p>
-        <h2 class="section-title">Two people, one firm.</h2>
-        <p>You get both on every engagement.</p>
+        <p class="chip">Team</p>
+        <h2 class="section-title">Senior people, one firm.</h2>
+        <p>The people you meet are the people who do the work.</p>
       </div>
       <div class="founders">
         <article class="card founder">
-          <span class="avatar" aria-hidden="true">ML</span>
+          <span class="avatar avatar-portrait avatar-marina">
+            <img src={marinaHeadshot.src} alt="Marina Levy" width={800} height={800} loading="lazy" decoding="async" />
+          </span>
           <div>
             <h3>Marina Levy</h3>
             <p class="role">Co-founder, chief executive officer</p>
@@ -55,21 +59,29 @@ import { proof } from "../data/services";
           </div>
         </article>
         <article class="card founder">
-          <span class="avatar" aria-hidden="true">DL</span>
+          <span class="avatar avatar-portrait">
+            <img src={danHeadshot.src} alt="Dan" width={danHeadshot.width} height={danHeadshot.height} loading="lazy" decoding="async" />
+          </span>
           <div>
-            <h3>Dan Levy</h3>
-            <p class="role">Co-founder, principal AI engineer</p>
+            <h3>Dan</h3>
+            <p class="role">Founding Engineer</p>
+          </div>
+        </article>
+        <article class="card founder">
+          <span class="avatar" aria-hidden="true">KC</span>
+          <div>
+            <h3>Kyle Coberly</h3>
+            <p class="role">Staff engineer, AI-forward systems</p>
             <p class="bio">
-              Engineer, educator, founder, and technical leader with more than
-              twenty-five years across production systems, developer platforms,
-              AI applications, evaluation infrastructure, and offensive and
-              defensive AI security. He grew one platform organization from six
-              engineers to sixty and shipped systems used by fifty million
-              people. He still writes the code on every engagement.
+              Software, product, and systems engineer with a parallel career as
+              an educator. At Urban Sky he designed and shipped the flight
+              simulation and training engine, stood up the company-wide testing
+              stack, and built the tooling that lets AI agents work in parallel
+              across every company app. At Sunrun he led a six-engineer squad
+              through a rescue rewrite of the sales-pipeline tool. Adjunct
+              professor at the University of Denver and a seven-time Pluralsight
+              Elite Instructor.
             </p>
-            <a class="text-link" href="mailto:dan@danlevy.net">
-              dan@danlevy.net <Icon name="ArrowUpRight" size={16} />
-            </a>
           </div>
         </article>
       </div>

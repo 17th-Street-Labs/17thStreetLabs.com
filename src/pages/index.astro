@@ -1,4 +1,6 @@
 ---
+import danHeadshot from "../images/headshots/dan-avatar.png";
+import marinaHeadshot from "../images/headshots/Marina-Levy-Headshot.png";
 import Layout from "../layouts/Layout.astro";
 import Icon from "../components/Icon.astro";
 import HeroThreads from "../components/HeroThreads.astro";
@@ -30,10 +32,13 @@ const log = [
       <p class="chip">AI engineering, evals, and security</p>
       <h1 class="statement">
         We find the root cause
+        <span class="statement-sub">
+          before your users, attackers, and, most importantly, <span class="glow-text">your boss.</span>
+        </span>
       </h1>
       <p class="lede">
-        before your users, attackers, and, most
-        importantly, <span class="glow-text">your boss.</span>
+        We build agentic systems, attack them before anyone else can, and
+        prove they hold with evaluations you can put in CI.
       </p>
       <div class="hero-actions">
         <a href="/contact/" data-contact-dialog class="button button-solid">
@@ -230,26 +235,15 @@ const log = [
   <section class="band">
     <div class="wrap">
       <div class="band-head">
-        <p class="chip">Founders</p>
+        <p class="chip">Team</p>
         <h2 class="section-title">Who you work with</h2>
         <p>The people you meet are the people who do the work.</p>
       </div>
       <div class="founders">
         <div class="card founder">
-          <span class="avatar" aria-hidden="true">DL</span>
-          <div>
-            <h3>Dan Levy</h3>
-            <p class="role">Co-founder, principal AI engineer</p>
-            <p class="bio">
-              Twenty-five years across production systems, developer platforms,
-              AI applications, evaluation infrastructure, and offensive and
-              defensive AI security. Grew one platform org from six engineers to
-              sixty. Still writes the code on every engagement.
-            </p>
-          </div>
-        </div>
-        <div class="card founder">
-          <span class="avatar" aria-hidden="true">ML</span>
+          <span class="avatar avatar-portrait avatar-marina">
+            <img src={marinaHeadshot.src} alt="Marina Levy" width={800} height={800} loading="lazy" decoding="async" />
+          </span>
           <div>
             <h3>Marina Levy</h3>
             <p class="role">Co-founder, chief executive</p>
@@ -257,6 +251,28 @@ const log = [
               Runs the firm and the shape of every engagement: scope, cadence,
               and the measurable outcome we are accountable for. Keeps ambitious
               technical work pointed at what the client actually needs.
+            </p>
+          </div>
+        </div>
+        <div class="card founder">
+          <span class="avatar avatar-portrait">
+            <img src={danHeadshot.src} alt="Dan" width={danHeadshot.width} height={danHeadshot.height} loading="lazy" decoding="async" />
+          </span>
+          <div>
+            <h3>Dan</h3>
+            <p class="role">Founding Engineer</p>
+          </div>
+        </div>
+        <div class="card founder">
+          <span class="avatar" aria-hidden="true">KC</span>
+          <div>
+            <h3>Kyle Coberly</h3>
+            <p class="role">Staff engineer, AI-forward systems</p>
+            <p class="bio">
+              Staff software engineer and educator. Built a flight simulation and
+              training engine, stood up company-wide testing stacks, and led a
+              six-engineer rescue of a delayed enterprise rewrite. Graduate
+              faculty at the University of Denver.
             </p>
           </div>
         </div>
@@ -274,15 +290,14 @@ const log = [
       <div class="closing">
         <h2 class="statement">Tell us what is at stake.</h2>
         <p>
-          Send a few honest sentences. You will hear back from Dan, usually
-          within a business day, with a straight answer about whether we can help.
+          Send a few honest sentences. You will hear back from an engineer,
+          usually within a business day, with a straight answer about whether we can help.
         </p>
         <div class="hero-actions">
           <a href="/contact/" data-contact-dialog class="button button-solid">
             Start a conversation
             <Icon name="ArrowRight" size={16} />
           </a>
-          <a class="button button-line" href="mailto:dan@danlevy.net">dan@danlevy.net</a>
         </div>
       </div>
     </div>

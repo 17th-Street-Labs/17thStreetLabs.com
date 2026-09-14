@@ -18,8 +18,8 @@ Open the local URL printed by Astro. Pages live in `src/pages/`, shared
 layouts in `src/layouts/`, components in `src/components/`, and styling in
 `src/styles/`. The routes are `/`, `/services/`, `/about/`, and `/contact/`.
 
-Contact forms open an email draft in the visitor's mail application. The site
-does not receive or store submissions, and it needs no email-service secrets.
+Contact forms POST to `/api/contact/`, which forwards the brief to a Telegram
+bot. No email address is published anywhere on the site.
 
 ```sh
 npm run check
@@ -102,8 +102,8 @@ No source-repository credentials are stored in Git.
 The contact CTAs (header button, hero/footer buttons, and `/contact/`) all open
 the same project-brief form, which POSTs JSON to `/api/contact/`
 (`src/pages/api/contact.ts`). That endpoint validates the submission and pushes
-it to Telegram via `sendMessage`. If the endpoint is unreachable the form falls
-back to the previous `mailto:` draft, so the CTA never dead-ends.
+it to Telegram via `sendMessage`. Without JavaScript the form posts directly to
+the same endpoint.
 
 Required environment variables (see `.env.example`):
 
@@ -113,7 +113,7 @@ Required environment variables (see `.env.example`):
 | `TELEGRAM_CHAT_ID` | Add the bot to a private channel or group (as admin for channels), post one message, then `curl "https://api.telegram.org/bot<TOKEN>/getUpdates"` and read `result[].message.chat.id`. Channel ids look like `-1001234567890`. |
 
 Set both in Vercel project settings for Preview and Production. Without them the
-endpoint returns `503` and the form falls back to email.
+endpoint returns `503` and the form shows an error.
 
 The endpoint is the only server-rendered route; every page stays prerendered.
 Abuse controls are a hidden honeypot field and a per-instance in-memory rate

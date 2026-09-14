@@ -102,7 +102,7 @@ const isCurrent = (href: string) =>
         </nav>
         <div class="footer-contact">
           <span class="footer-col-title">Reach us</span>
-          <a href="mailto:dan@danlevy.net">dan@danlevy.net</a>
+          <a href="/contact/" data-contact-dialog>Send a project brief</a>
           <a href="https://exploithunter.app" target="_blank" rel="noreferrer">
             ExploitHunter, our open-source research
           </a>
@@ -126,13 +126,12 @@ const isCurrent = (href: string) =>
       </h2>
       <p id="dialog-description" data-slot="dialog-description">
         A few honest sentences are enough: what you are building, what is
-        uncertain, and what happens if it fails. Dan reads every message.
+        uncertain, and what happens if it fails. An engineer reads every message.
       </p>
       <form
         data-project-brief
-        action="mailto:dan@danlevy.net?subject=17th%20Street%20Labs%20%E2%80%94%20project%20brief"
+        action="/api/contact/"
         method="post"
-        enctype="text/plain"
       >
         <label class="honeypot" aria-hidden="true">
           Company
@@ -166,7 +165,7 @@ const isCurrent = (href: string) =>
           Send project brief
         </button>
         <p class="form-status" data-form-status role="status" aria-live="polite"></p>
-        <small>Goes straight to Dan. Reply within a business day.</small>
+        <small>Goes straight to the team. Reply within a business day.</small>
       </form>
     </dialog>
     <script>
@@ -226,17 +225,6 @@ const isCurrent = (href: string) =>
         )
           dialog.close();
       });
-      const mailtoFallback = (data: FormData) => {
-        const lines = [
-          `Name: ${data.get("name") || ""}`,
-          `Email: ${data.get("email") || ""}`,
-          ...(data.get("focus") ? [`Focus: ${data.get("focus")}`] : []),
-          "",
-          String(data.get("context") || ""),
-        ];
-        window.location.href = `mailto:dan@danlevy.net?subject=${encodeURIComponent("17th Street Labs — project brief")}&body=${encodeURIComponent(lines.join("\n"))}`;
-      };
-
       document
         .querySelectorAll<HTMLFormElement>("[data-project-brief]")
         .forEach((form) => {
@@ -267,7 +255,7 @@ const isCurrent = (href: string) =>
                 .catch(() => ({ ok: false, error: "" }));
               if (response.ok && result.ok) {
                 form.reset();
-                say("Received. Dan will reply within a business day.", "ok");
+                say("Received. We will reply within a business day.", "ok");
                 return;
               }
               if (response.status === 400 || response.status === 429) {
@@ -276,8 +264,7 @@ const isCurrent = (href: string) =>
               }
               throw new Error(result.error || "send failed");
             } catch {
-              say("Could not reach us. Opening your email app instead…", "error");
-              mailtoFallback(data);
+              say("Could not send right now. Please try again in a moment.", "error");
             } finally {
               if (button) button.disabled = false;
             }

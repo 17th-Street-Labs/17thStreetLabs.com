@@ -14,7 +14,7 @@ import Icon from "../components/Icon.astro";
       <p class="lede">
         Tell us what you are building, where confidence breaks down, and what a
         meaningful result would change. Nothing here goes to a queue. It goes
-        to Dan.
+        to the engineers who would do the work.
       </p>
     </div>
   </section>
@@ -24,12 +24,8 @@ import Icon from "../components/Icon.astro";
       <div class="contact-aside">
         <dl>
           <div>
-            <dt>Email</dt>
-            <dd><a href="mailto:dan@danlevy.net">dan@danlevy.net</a></dd>
-          </div>
-          <div>
             <dt>Who replies</dt>
-            <dd>Dan Levy, principal AI engineer, and Marina Levy, chief executive. Within a business day.</dd>
+            <dd>A senior engineer on the team, not a sales desk. Within a business day.</dd>
           </div>
           <div>
             <dt>Where</dt>
@@ -41,9 +37,8 @@ import Icon from "../components/Icon.astro";
         <h2>Three useful sentences are enough.</h2>
         <form
           data-project-brief
-          action="mailto:dan@danlevy.net?subject=17th%20Street%20Labs%20%E2%80%94%20project%20brief"
+          action="/api/contact/"
           method="post"
-          enctype="text/plain"
         >
           <label class="honeypot" aria-hidden="true">
             Company
@@ -73,7 +68,7 @@ import Icon from "../components/Icon.astro";
             <Icon name="ArrowRight" size={16} />
           </button>
           <p class="form-status" data-form-status role="status" aria-live="polite"></p>
-          <small>Goes straight to Dan. Reply within a business day.</small>
+          <small>Goes straight to the team. Reply within a business day.</small>
         </form>
       </div>
     </div>

@@ -41,7 +41,7 @@ test("mobile navigation toggles, dismisses with Escape, and reaches a page", asy
 test("every home conversation CTA opens an accessible dialog and restores focus", async ({ page }) => {
   await page.goto("/");
   const triggers = page.locator("[data-contact-dialog]");
-  expect(await triggers.count()).toBe(3);
+  expect(await triggers.count()).toBe(4);
   const dialog = page.getByRole("dialog", { name: "What hard problem are you carrying?" });
   for (let index = 0; index < await triggers.count(); index++) {
     const trigger = triggers.nth(index);
@@ -94,7 +94,7 @@ test("contact form validates required fields and email without opening an email 
   await email.fill("test@example.com");
   expect(await form.evaluate((element: HTMLFormElement) => element.checkValidity())).toBe(true);
   await submit.click();
-  await expect(form).toContainText("Received. Dan will reply within a business day.");
+  await expect(form).toContainText("Received. We will reply within a business day.");
   await expect(page).toHaveURL(/\/contact\/$/);
 });
 
@@ -128,7 +128,7 @@ test("mobile navigation and conversation links work without JavaScript", async (
     await page.getByRole("link", { name: "Bring us the hard problem" }).click();
     await expect(page).toHaveURL(/\/contact\/$/);
     await expect(page.getByRole("heading", { level: 1 })).toContainText("hard problem");
-    await expect(page.getByRole("main").getByRole("link", { name: "dan@danlevy.net", exact: true })).toBeVisible();
+    await expect(page.getByRole("main").locator("form[data-project-brief]")).toHaveAttribute("action", "/api/contact/");
   } finally {
     await context.close();
   }

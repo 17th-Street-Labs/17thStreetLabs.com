@@ -19,24 +19,18 @@
       <stop offset="0.5" stop-color="#d9deea"/>
       <stop offset="1" stop-color="#9aa3b8"/>
     </linearGradient>
-    <linearGradient id="liquid" x1="0" y1="43" x2="0" y2="53.5" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#5f8bff"/>
-      <stop offset="1" stop-color="#2748e6"/>
-    </linearGradient>
-    <!-- The flask silhouette doubles as the numeral "1". -->
-    <path id="flask" d="M13 10.5H26C26.8 10.5 27.5 11.2 27.5 12S26.8 13.5 26 13.5H23.5V29.4L33 47C34.6 50 32.5 53.5 29.1 53.5H9.9C6.5 53.5 4.4 50 6 47L15.5 29.4V13.5H13C12.2 13.5 11.5 12.8 11.5 12S12.2 10.5 13 10.5Z"/>
-    <clipPath id="flask-clip"><use href="#flask"/></clipPath>
+    <!-- Flask outline: open lip, straight neck, flared body. -->
+    <path id="flask" d="M14 11H28M17.5 11V28L8 48.5C6.9 50.9 8.6 53.5 11.2 53.5H36.8C39.4 53.5 41.1 50.9 40 48.5L30.5 28V11"/>
+    <!-- Solid numeral 7 sits in front of the flask. -->
+    <path id="seven" d="M35 10.5H58V17.5L45.2 53.5H36.6L48.6 18H35Z"/>
   </defs>
 
   <rect width="64" height="64" rx="14" fill="url(#tile)"/>
   <rect width="64" height="64" rx="14" fill="url(#sheen)"/>
 
-  <!-- "1" as flask -->
-  <use href="#flask" fill="url(#silver)"/>
-  <g clip-path="url(#flask-clip)">
-    <rect x="0" y="43" width="40" height="12" fill="url(#liquid)"/>
-  </g>
+  <use href="#flask" stroke="url(#silver)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M13 44H35" stroke="#5f8bff" stroke-width="2" stroke-linecap="round"/>
 
-  <!-- "7" -->
-  <path d="M35 10.5H58V17.5L45.2 53.5H36.6L48.6 18H35Z" fill="url(#silver)"/>
+  <use href="#seven" fill="#0b0e1a" stroke="#0b0e1a" stroke-width="5" stroke-linejoin="round"/>
+  <use href="#seven" fill="url(#silver)"/>
 </svg>

@@ -111,11 +111,11 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     );
     if (!response.ok) {
       console.error("contact: telegram rejected the message", response.status, await response.text());
-      return json({ ok: false, error: "Delivery failed. Email us directly." }, 502);
+      return json({ ok: false, error: "Delivery failed. Please try again shortly." }, 502);
     }
   } catch (error) {
     console.error("contact: telegram request failed", error);
-    return json({ ok: false, error: "Delivery failed. Email us directly." }, 502);
+    return json({ ok: false, error: "Delivery failed. Please try again shortly." }, 502);
   }
 
   return json({ ok: true }, 200);
