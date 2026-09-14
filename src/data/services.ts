@@ -51,9 +51,9 @@ export const services = [
 
 export const proof = [
   { value: "25+", label: "years building and leading production software" },
-  { value: "6→60", label: "engineers, one platform org Dan scaled and led" },
-  { value: "50M", label: "users reached by a platform he helped build" },
-  { value: "250k/s", label: "events delivered at peak in production" },
+  { value: "13", label: "agentic systems under management" },
+  { value: "22", label: "security audits" },
+  { value: "4wk", label: "average turnaround" },
 ];
 
 export const findings = [
