@@ -31,8 +31,10 @@
   --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
   --gutter: clamp(1.25rem, 4vw, 3rem);
   --max: 76rem;
-  --r: 18px;
-  --r-lg: 26px;
+  /* topbar padding-top + topbar-inner height; the hero backdrop reaches up by this much */
+  --topbar-space: 4.5rem;
+  --r: 4px;
+  --r-lg: 6px;
   --shadow-blue:
     0 0 0 1px rgba(125, 160, 255, 0.35),
     0 10px 30px -10px rgba(61, 109, 255, 0.7),
@@ -59,7 +61,7 @@
   --chart-3: oklch(0.439 0 0);
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
+  --radius: 0.25rem;
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.205 0 0);
@@ -121,7 +123,7 @@ textarea {
 :focus-visible {
   outline: 2px solid var(--blue-2);
   outline-offset: 3px;
-  border-radius: 6px;
+  border-radius: 3px;
 }
 ::selection {
   background: var(--blue);
@@ -197,7 +199,7 @@ textarea {
   gap: 0.55rem;
   padding: 0.35rem 0.85rem 0.35rem 0.6rem;
   border: 1px solid var(--line-2);
-  border-radius: 999px;
+  border-radius: 2px;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
   font-size: 0.8rem;
   font-weight: 500;
@@ -262,7 +264,7 @@ textarea {
   padding: 0.6rem 1rem;
   background: var(--blue);
   color: #fff;
-  border-radius: 8px;
+  border-radius: 2px;
 }
 .skip-link:focus {
   top: 1rem;
@@ -278,7 +280,7 @@ textarea {
   min-height: 2.9rem;
   padding: 0.75rem 1.35rem;
   border: 1px solid transparent;
-  border-radius: 999px;
+  border-radius: 2px;
   font-weight: 500;
   font-size: 0.95rem;
   line-height: 1;
@@ -367,12 +369,52 @@ textarea {
   display: flex;
   align-items: center;
   gap: 1.5rem;
+  position: relative;
+  border-radius: 4px;
+}
+/* The glass lives on a pseudo-element so the edge mask fades the panel,
+   not the brand and CTA sitting on top of it. */
+.topbar-inner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
   border: 1px solid var(--line);
-  border-radius: 999px;
-  background: rgba(9, 12, 22, 0.72);
-  backdrop-filter: blur(18px) saturate(140%);
-  -webkit-backdrop-filter: blur(18px) saturate(140%);
-  box-shadow: 0 10px 40px -20px rgba(0, 0, 0, 0.8);
+  border-radius: inherit;
+  /* frosted glass: let the hero color through, blurred, with a faint lit top edge */
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.045),
+    rgba(255, 255, 255, 0.02) 40%,
+    rgba(9, 12, 22, 0.22)
+  );
+  backdrop-filter: blur(26px) saturate(180%);
+  -webkit-backdrop-filter: blur(26px) saturate(180%);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.03),
+    0 10px 40px -20px rgba(0, 0, 0, 0.8);
+  /* the glass dissolves at the left and right edges over a short, crisp ramp */
+  mask-image: linear-gradient(
+    90deg,
+    transparent 0,
+    #000 4%,
+    #000 96%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent 0,
+    #000 4%,
+    #000 96%,
+    transparent 100%
+  );
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .topbar-inner::before {
+    background: rgba(9, 12, 22, 0.86);
+  }
 }
 .brand {
   display: inline-flex;
@@ -399,7 +441,7 @@ textarea {
   font-weight: 500;
   font-size: 0.9rem;
   padding: 0.45rem 0.85rem;
-  border-radius: 999px;
+  border-radius: 2px;
   color: var(--muted);
   transition:
     color 0.15s,
@@ -424,7 +466,7 @@ textarea {
   width: 2.5rem;
   height: 2.5rem;
   border: 1px solid var(--line-2);
-  border-radius: 999px;
+  border-radius: 3px;
   background: rgba(255, 255, 255, 0.04);
   place-items: center;
   cursor: pointer;
@@ -440,15 +482,17 @@ textarea {
 .hero {
   position: relative;
   padding-block: clamp(5rem, 11vw, 8.5rem) clamp(3rem, 6vw, 5rem);
-  overflow: hidden;
+  /* clip sideways only, so the threads can reach up behind the sticky topbar */
+  overflow-x: clip;
+  overflow-y: visible;
   isolation: isolate;
 }
 .hero-gl {
   position: absolute;
-  inset: 0 0 auto;
+  inset: calc(-1 * var(--topbar-space)) 0 auto;
   z-index: -1;
   width: 100%;
-  height: min(100%, 60rem);
+  height: min(100% + var(--topbar-space), 60rem);
   mask-image: linear-gradient(#000 55%, transparent 95%);
   -webkit-mask-image: linear-gradient(#000 55%, transparent 95%);
   display: block;
@@ -651,7 +695,7 @@ textarea {
 .console-log .tag {
   display: inline-block;
   padding: 0 0.45rem;
-  border-radius: 6px;
+  border-radius: 2px;
   font-size: 0.7rem;
   line-height: 1.5rem;
   text-align: center;
@@ -735,7 +779,7 @@ textarea {
 }
 .bar {
   height: 0.4rem;
-  border-radius: 999px;
+  border-radius: 1px;
   background: rgba(255, 255, 255, 0.07);
   overflow: hidden;
 }
@@ -873,7 +917,7 @@ a.card:hover,
   place-items: center;
   width: 2.6rem;
   height: 2.6rem;
-  border-radius: 12px;
+  border-radius: 3px;
   border: 1px solid var(--line-2);
   background: linear-gradient(180deg, rgba(126, 160, 255, 0.2), rgba(126, 160, 255, 0.04));
   color: var(--blue-3);
@@ -1005,7 +1049,7 @@ a.card:hover,
 .stats > div {
   padding: 0.9rem 1rem;
   border: 1px solid var(--line);
-  border-radius: 12px;
+  border-radius: 3px;
   background: rgba(255, 255, 255, 0.025);
 }
 .stats dt {
@@ -1069,7 +1113,7 @@ a.card:hover,
   place-items: center;
   width: 2.6rem;
   height: 2.6rem;
-  border-radius: 50%;
+  border-radius: 3px;
   border: 1px solid rgba(126, 160, 255, 0.5);
   background: radial-gradient(circle at 50% 30%, rgba(126, 160, 255, 0.35), rgba(126, 160, 255, 0.05));
   box-shadow: 0 0 24px -6px rgba(126, 160, 255, 0.8);
@@ -1112,7 +1156,7 @@ a.card:hover,
   place-items: center;
   width: 3.4rem;
   height: 3.4rem;
-  border-radius: 50%;
+  border-radius: 3px;
   border: 1px solid var(--line-2);
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0) 60%),
@@ -1125,7 +1169,6 @@ a.card:hover,
   width: 6rem;
   height: 6rem;
   overflow: hidden;
-  box-shadow: 0 0 0 4px rgba(126, 160, 255, 0.08);
 }
 .avatar-portrait img {
   display: block;
@@ -1209,7 +1252,7 @@ a.card:hover,
 }
 .accordion details {
   border: 1px solid var(--line);
-  border-radius: 14px;
+  border-radius: 4px;
   background: linear-gradient(180deg, var(--panel-2), var(--panel));
   transition: border-color 0.2s;
 }
@@ -1239,7 +1282,7 @@ a.card:hover,
   position: relative;
   width: 1.5rem;
   height: 1.5rem;
-  border-radius: 50%;
+  border-radius: 3px;
   border: 1px solid var(--line-2);
 }
 .accordion .plus::before,
@@ -1357,7 +1400,7 @@ a.card:hover,
 .contact-aside dl > div {
   padding: 1.2rem 1.35rem;
   border: 1px solid var(--line);
-  border-radius: 14px;
+  border-radius: 4px;
   background: linear-gradient(180deg, var(--panel-2), var(--panel));
 }
 .contact-aside dt {
@@ -1407,7 +1450,7 @@ form textarea {
   width: 100%;
   padding: 0.75rem 0.95rem;
   border: 1px solid var(--line-2);
-  border-radius: 12px;
+  border-radius: 3px;
   background: rgba(0, 0, 0, 0.35);
   color: var(--text);
   font-size: 0.97rem;
@@ -1509,7 +1552,7 @@ form small {
   width: 2.25rem;
   height: 2.25rem;
   border: 1px solid var(--line-2);
-  border-radius: 50%;
+  border-radius: 3px;
   background: rgba(255, 255, 255, 0.04);
   display: grid;
   place-items: center;
@@ -1597,7 +1640,7 @@ form small {
     top: calc(100% + 0.6rem);
     padding: 0.6rem;
     border: 1px solid var(--line-2);
-    border-radius: 20px;
+    border-radius: 6px;
     background: rgba(9, 12, 22, 0.94);
     backdrop-filter: blur(18px);
     flex-direction: column;
@@ -1627,7 +1670,7 @@ form small {
     min-height: 3.6rem;
     flex-wrap: wrap;
     padding-block: 0.5rem;
-    border-radius: 24px;
+    border-radius: 6px;
   }
   html:not([data-js]) .topbar nav {
     display: flex;

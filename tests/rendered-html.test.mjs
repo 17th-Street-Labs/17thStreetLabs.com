@@ -11,7 +11,7 @@ const routes = [
   { route: "/", heading: /Make AI actually work\./, content: /ExploitHunter/ },
   { route: "/services", heading: /The interesting part starts after the demo\./, content: /How we work/ },
   { route: "/about", heading: /holy shit, this is possible/, content: /Marina Levy/ },
-  { route: "/contact", heading: /Bring us the hard problem\./, content: /Three honest sentences are enough\./ },
+  { route: "/contact", heading: /Start a project\./, content: /Three sentences is plenty\./ },
 ];
 
 function attribute(tag, name) {

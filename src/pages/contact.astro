@@ -5,18 +5,18 @@ import Icon from "../components/Icon.astro";
 
 <Layout
   title="Contact | 17th Street Labs"
-  description="Bring 17th Street Labs the AI problem nobody knows how to solve: the agent that works 90% of the time, the eval nobody trusts, the workflow that costs a fortune."
+  description="Send 17th Street Labs the AI problem nobody knows how to solve: the agent that works 90% of the time, the eval nobody trusts, the workflow that costs a fortune."
 >
   <section class="page-hero">
     <div class="wrap">
       <p class="chip">Contact</p>
-      <h1 class="statement">Bring us the hard problem.</h1>
+      <h1 class="statement">Start a project.</h1>
       <p class="lede">
         The agent that works 90% of the time. The eval nobody trusts. The
         workflow that costs a fortune. The product that needs more than another
         chat window. The sensitive data you do not want anywhere near a
-        third-party model. We like those. Nothing here goes to a queue. It goes
-        to the engineers who would do the work.
+        third-party model. That is the work we want. Nothing here goes to a
+        queue. It goes to the engineers who would do the work.
       </p>
     </div>
   </section>
@@ -36,7 +36,7 @@ import Icon from "../components/Icon.astro";
         </dl>
       </div>
       <div class="panel contact-panel">
-        <h2>Three honest sentences are enough.</h2>
+        <h2>Three sentences is plenty.</h2>
         <form
           data-project-brief
           action="/api/contact/"
@@ -57,12 +57,12 @@ import Icon from "../components/Icon.astro";
             </label>
           </div>
           <label>
-            What is at stake?
+            What are you building?
             <textarea
               name="context"
               required
               rows={7}
-              placeholder="What you built, what it does on the tenth run, and what that costs you."
+              placeholder="What the system does, where it fails, and what that failure costs."
             ></textarea>
           </label>
           <button class="button button-solid" type="submit">

@@ -13,7 +13,7 @@ test("navigation uses real routes and supports browser history and direct visits
   await page.reload();
   await expect(page.getByRole("heading", { level: 1 })).toContainText("interesting part starts after the demo");
   await page.goto("/contact/");
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("hard problem");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Start a project");
   await expect(page.getByRole("navigation", { name: "Primary navigation" }).getByRole("link", { name: "Contact", exact: true })).toHaveAttribute("aria-current", "page");
 });
 
@@ -42,7 +42,7 @@ test("every home conversation CTA opens an accessible dialog and restores focus"
   await page.goto("/");
   const triggers = page.locator("[data-contact-dialog]");
   expect(await triggers.count()).toBe(4);
-  const dialog = page.getByRole("dialog", { name: "What hard problem are you carrying?" });
+  const dialog = page.getByRole("dialog", { name: "Tell us what you are building." });
   for (let index = 0; index < await triggers.count(); index++) {
     const trigger = triggers.nth(index);
     await trigger.click();
@@ -81,7 +81,7 @@ test("contact form validates required fields and email without opening an email 
   const form = page.locator("main form");
   const name = form.getByRole("textbox", { name: "Name", exact: true });
   const email = form.getByRole("textbox", { name: "Work email" });
-  const context = form.getByRole("textbox", { name: "What is at stake?" });
+  const context = form.getByRole("textbox", { name: "What are you building?" });
   const submit = form.getByRole("button", { name: "Send project brief" });
   await submit.click();
   await expect(name).toBeFocused();
@@ -125,9 +125,9 @@ test("mobile navigation and conversation links work without JavaScript", async (
     await expect(page).toHaveURL(/\/services\/$/);
     await expect(page.getByRole("heading", { level: 1 })).toContainText("interesting part starts after the demo");
     await nav.getByRole("link", { name: "Home", exact: true }).click();
-    await page.getByRole("link", { name: "Bring us the hard problem" }).click();
+    await page.getByRole("link", { name: "Start a project" }).first().click();
     await expect(page).toHaveURL(/\/contact\/$/);
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("hard problem");
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("Start a project");
     await expect(page.getByRole("main").locator("form[data-project-brief]")).toHaveAttribute("action", "/api/contact/");
   } finally {
     await context.close();
