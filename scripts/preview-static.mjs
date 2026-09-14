@@ -40,18 +40,24 @@ async function resolvePath(urlPath) {
 }
 
 const server = createServer(async (req, res) => {
-  const urlPath = decodeURIComponent(new URL(req.url, "http://localhost").pathname);
-  const matchedPath = await resolvePath(urlPath);
-  const filePath = matchedPath ?? (await resolvePath("/404"));
-  if (!filePath) {
-    res.writeHead(404).end("Not found");
-    return;
+  try {
+    const urlPath = decodeURIComponent(new URL(req.url, "http://localhost").pathname);
+    const matchedPath = await resolvePath(urlPath);
+    const filePath = matchedPath ?? (await resolvePath("/404"));
+    if (!filePath) {
+      res.writeHead(404).end("Not found");
+      return;
+    }
+    const body = await readFile(filePath);
+    res.writeHead(matchedPath ? 200 : 404, {
+      "Content-Type": types[extname(filePath)] ?? "application/octet-stream",
+    });
+    res.end(body);
+  } catch (error) {
+    console.error("preview-static request error:", error);
+    if (!res.headersSent) res.writeHead(500);
+    res.end("Internal server error");
   }
-  const body = await readFile(filePath);
-  res.writeHead(matchedPath ? 200 : 404, {
-    "Content-Type": types[extname(filePath)] ?? "application/octet-stream",
-  });
-  res.end(body);
 });
 
 server.listen(port, host, () => {

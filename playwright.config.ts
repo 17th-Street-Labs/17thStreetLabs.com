@@ -11,7 +11,6 @@ export default defineConfig({
     baseURL: "http://127.0.0.1:4322",
     browserName: "chromium",
     reducedMotion: "reduce",
-    trace: "retain-on-failure",
   },
   webServer: {
     command: "node scripts/preview-static.mjs --host 127.0.0.1 --port 4322",
