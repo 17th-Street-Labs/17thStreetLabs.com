@@ -1,7 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Icon from "../components/Icon.astro";
-import Prism from "../components/Prism.astro";
+import HeroThreads from "../components/HeroThreads.astro";
 import { services, proof, findings } from "../data/services";
 const icons: Record<string, string> = {
   engineering: "Braces",
@@ -27,7 +27,7 @@ const log = [
   description="A founder-led AI engineering and security firm in Denver. We build agentic products, attack them before anyone else can, and prove they work with real evaluations."
 >
   <section class="hero">
-    <Prism />
+    <HeroThreads />
     <div class="wrap hero-inner">
       <p class="chip">Denver · AI engineering, evals, and security</p>
       <h1 class="statement">
