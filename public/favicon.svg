@@ -1,29 +1,6 @@
 <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <!-- Flask: lip caps both walls, straight neck, flared body. -->
-    <path id="flask" d="M15 11H32M17.5 11V28L8 48.5C6.9 50.9 8.6 53.5 11.2 53.5H36.8C39.4 53.5 41.1 50.9 40 48.5L30.5 28V11"/>
-    <!-- Inner volume of the body, used to clip the reagent so it never crosses the glass. -->
-    <path id="flask-inner" d="M19.1 28L9.8 48.4C9.2 49.8 10.2 51.2 11.6 51.2H36.4C37.8 51.2 38.8 49.8 38.2 48.4L28.9 28Z"/>
-    <!-- Solid numeral 7 sits in front of the flask. -->
-    <path id="seven" d="M35 10.5H57.5V17.8L44 53.5H35.6L48.2 18H35Z"/>
-
-    <clipPath id="clip-inner"><use href="#flask-inner"/></clipPath>
-
-    <linearGradient id="reagent" x1="9" y1="40" x2="39" y2="52" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#3d6dff"/>
-      <stop offset="1" stop-color="#61d6ff"/>
-    </linearGradient>
-  </defs>
-
-  <rect width="64" height="64" rx="14" fill="#090c16"/>
-
-  <g transform="translate(32 32) scale(0.88) translate(-32 -32)">
-    <rect x="6" y="40.5" width="36" height="14" fill="url(#reagent)" clip-path="url(#clip-inner)"/>
-
-    <use href="#flask" stroke="#eef1f8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-
-    <!-- Knock the ground out behind the 7 so it reads clean over the flask. -->
-    <use href="#seven" fill="#090c16" stroke="#090c16" stroke-width="5" stroke-linejoin="round"/>
-    <use href="#seven" fill="#eef1f8"/>
-  </g>
+  <rect width="64" height="64" fill="#302338"/>
+  <path d="M8 15L17 6H27V58H16V20H8V15Z" fill="#D9ED91"/>
+  <path d="M31 6H59V17H44L31 30V6Z" fill="#D9ED91"/>
+  <path d="M59 21V34L35 58H22L59 21Z" fill="#D9ED91"/>
 </svg>

@@ -2,18 +2,18 @@ import { expect, test } from "@playwright/test";
 
 test("navigation uses real routes and supports browser history and direct visits", async ({ page }) => {
   await page.goto("/");
-  await page.getByRole("navigation", { name: "Primary navigation" }).getByRole("link", { name: "Services", exact: true }).click();
+  await page.getByRole("navigation", { name: "Primary navigation" }).getByRole("link", { name: "What We Do", exact: true }).click();
   await expect(page).toHaveURL(/\/services\/$/);
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("interesting part starts after the demo");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("engineering around the intelligence");
   await page.getByRole("navigation", { name: "Primary navigation" }).getByRole("link", { name: "About", exact: true }).click();
   await expect(page).toHaveURL(/\/about\/$/);
   await expect(page.getByRole("heading", { name: "Marina Levy" })).toBeVisible();
   await page.goBack();
   await expect(page).toHaveURL(/\/services\/$/);
   await page.reload();
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("interesting part starts after the demo");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("engineering around the intelligence");
   await page.goto("/contact/");
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("Start a project");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Got an AI problem");
   await expect(page.getByRole("navigation", { name: "Primary navigation" }).getByRole("link", { name: "Contact", exact: true })).toHaveAttribute("aria-current", "page");
 });
 
@@ -121,13 +121,13 @@ test("mobile navigation and conversation links work without JavaScript", async (
     await page.goto("http://127.0.0.1:4322/");
     const nav = page.getByRole("navigation", { name: "Primary navigation" });
     await expect(nav).toBeVisible();
-    await nav.getByRole("link", { name: "Services", exact: true }).click();
+    await nav.getByRole("link", { name: "What We Do", exact: true }).click();
     await expect(page).toHaveURL(/\/services\/$/);
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("interesting part starts after the demo");
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("engineering around the intelligence");
     await nav.getByRole("link", { name: "Home", exact: true }).click();
-    await page.getByRole("link", { name: "Start a project" }).first().click();
+    await page.getByRole("link", { name: "Start a conversation" }).first().click();
     await expect(page).toHaveURL(/\/contact\/$/);
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("Start a project");
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("Got an AI problem");
     await expect(page.getByRole("main").locator("form[data-project-brief]")).toHaveAttribute("action", "/api/contact/");
   } finally {
     await context.close();
@@ -140,5 +140,5 @@ test("missing routes return a branded 404 and a usable home link", async ({ page
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(/This page is\s*off the map\./);
   await page.getByRole("navigation", { name: "Primary navigation" }).getByRole("link", { name: "Home", exact: true }).click();
   await expect(page).toHaveURL("http://127.0.0.1:4322/");
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("AI engineering, measured");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Send us the hard one");
 });

@@ -10,7 +10,8 @@ const { title, description, noindex = false } = Astro.props;
 const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
 const links = [
   { name: "Home", href: "/" },
-  { name: "Services", href: "/services/" },
+  { name: "What We Do", href: "/services/" },
+  { name: "Our Thinking", href: "/#thinking" },
   { name: "About", href: "/about/" },
   { name: "Contact", href: "/contact/" },
 ];
@@ -40,7 +41,7 @@ const isCurrent = (href: string) =>
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
-    <meta name="theme-color" content="#05060c" />
+    <meta name="theme-color" content="#302338" />
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to content</a>
@@ -87,9 +88,8 @@ const isCurrent = (href: string) =>
             <span class="brand-name">17th Street Labs</span>
           </a>
           <p>
-            Applied AI engineering for intelligent products and agentic
-            systems. We make probabilistic systems measurable. From Denver,
-            New York City, and Boston.
+            AI-native engineering for products that have to survive contact
+            with reality.
           </p>
         </div>
         <nav class="footer-nav" aria-label="Footer navigation">
