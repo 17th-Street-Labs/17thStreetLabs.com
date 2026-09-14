@@ -51,20 +51,26 @@ void main() {
   float aspect = u_res.x / u_res.y;
   // origin at top-center; y grows downward
   vec2 q = vec2((uv.x - 0.5) * aspect, 1.0 - uv.y);
-  q.x += (u_mouse.x - 0.5) * 0.06;          // gentle parallax
   float t = u_time * 0.12;
 
   // apex glow: the point where light enters
   float apex = exp(-dot(q, q) * 34.0);
 
   // beam cone: angle from apex, fanning out downward
-  float ang = atan(q.x, max(q.y, 0.001));   // -pi/2..pi/2, 0 = straight down
+  // the beam swings slowly around its anchor point at the top edge
+  float tilt = 0.14 * sin(u_time * 0.21) + 0.05 * sin(u_time * 0.53 + 2.0);
+  tilt += (u_mouse.x - 0.5) * 0.08;
+  vec2 dir = vec2(sin(tilt), cos(tilt));
+  vec2 side = vec2(dir.y, -dir.x);
+  float along = dot(q, dir);
+  float across = dot(q, side);
+  float ang = atan(across, max(along, 0.001)); // 0 = along the beam axis
   float spread = 0.46 + 0.06 * sin(t * 0.7);
   float cone = smoothstep(spread, 0.0, abs(ang));
 
   // dispersion: hue follows the angle across the cone, widens with depth
   float hue = 0.5 + ang / spread * 0.5;
-  hue += (fbm(vec2(q.y * 2.5, t * 0.4)) - 0.5) * 0.15;
+  hue += (fbm(vec2(along * 2.5, t * 0.4)) - 0.5) * 0.15;
   hue += t * 0.35;                           // slow roll through the spectrum
   hue = fract(hue);
   vec3 col = spectrum(hue);
@@ -72,19 +78,19 @@ void main() {
   // shine: a soft bright band sweeping across the cone every few seconds
   float sweepPos = fract(t * 0.55) * 2.6 - 1.3;          // -1.3 .. 1.3 across the cone
   float sweep = exp(-pow((ang / spread - sweepPos) * 3.2, 2.0));
-  sweep *= smoothstep(0.0, 0.25, q.y);                    // not at the apex
+  sweep *= smoothstep(0.0, 0.25, along);                    // not at the apex
   // breathing: the whole beam swells and eases
   float breath = 0.85 + 0.15 * sin(u_time * 0.9) * sin(u_time * 0.37 + 1.3);
 
   // rays: streaks along the angle, drifting slowly
-  float rays = fbm(vec2(ang * 9.0 + t * 0.3, q.y * 1.4 - t * 0.35));
+  float rays = fbm(vec2(ang * 9.0 + t * 0.3, along * 1.4 - t * 0.35));
   rays = pow(smoothstep(0.35, 0.95, rays), 1.6);
-  float rays2 = fbm(vec2(ang * 22.0 - t * 0.5, q.y * 3.0 + t * 0.2));
+  float rays2 = fbm(vec2(ang * 22.0 - t * 0.5, along * 3.0 + t * 0.2));
   rays2 = pow(smoothstep(0.5, 1.0, rays2), 2.0);
 
   // depth falloff: the beam is white at the apex and pure color lower down
-  float depth = clamp(q.y * 1.35, 0.0, 1.0);
-  float fall = exp(-q.y * 3.0);
+  float depth = clamp(along * 1.35, 0.0, 1.0);
+  float fall = exp(-max(along, 0.0) * 3.0);
   vec3 white = vec3(1.0);
   vec3 beam = mix(white, col, smoothstep(0.01, 0.12, depth));
   float I = cone * fall * breath * (0.28 + 0.95 * rays + 0.45 * rays2 + 0.9 * sweep);
