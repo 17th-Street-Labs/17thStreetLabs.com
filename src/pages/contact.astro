@@ -5,15 +5,17 @@ import Icon from "../components/Icon.astro";
 
 <Layout
   title="Contact | 17th Street Labs"
-  description="Start a conversation with 17th Street Labs about your AI engineering, security, or evaluation challenge."
+  description="Bring 17th Street Labs the AI problem nobody knows how to solve: the agent that works 90% of the time, the eval nobody trusts, the workflow that costs a fortune."
 >
   <section class="page-hero">
     <div class="wrap">
       <p class="chip">Contact</p>
-      <h1 class="statement">Bring the hard problem.</h1>
+      <h1 class="statement">Bring us the hard problem.</h1>
       <p class="lede">
-        Tell us what you are building, where confidence breaks down, and what a
-        meaningful result would change. Nothing here goes to a queue. It goes
+        The agent that works 90% of the time. The eval nobody trusts. The
+        workflow that costs a fortune. The product that needs more than another
+        chat window. The sensitive data you do not want anywhere near a
+        third-party model. We like those. Nothing here goes to a queue. It goes
         to the engineers who would do the work.
       </p>
     </div>
@@ -25,7 +27,7 @@ import Icon from "../components/Icon.astro";
         <dl>
           <div>
             <dt>Who replies</dt>
-            <dd>A senior engineer on the team, not a sales desk. Within a business day.</dd>
+            <dd>An engineer who builds this stuff, not a sales desk. Within a business day.</dd>
           </div>
           <div>
             <dt>Where</dt>
@@ -34,7 +36,7 @@ import Icon from "../components/Icon.astro";
         </dl>
       </div>
       <div class="panel contact-panel">
-        <h2>Three useful sentences are enough.</h2>
+        <h2>Three honest sentences are enough.</h2>
         <form
           data-project-brief
           action="/api/contact/"
@@ -60,7 +62,7 @@ import Icon from "../components/Icon.astro";
               name="context"
               required
               rows={7}
-              placeholder="The system, the uncertainty, and the consequence."
+              placeholder="What you built, what it does on the tenth run, and what that costs you."
             ></textarea>
           </label>
           <button class="button button-solid" type="submit">

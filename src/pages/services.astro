@@ -3,24 +3,27 @@ import Layout from "../layouts/Layout.astro";
 import Icon from "../components/Icon.astro";
 import { services } from "../data/services";
 const icons: Record<string, string> = {
-  engineering: "Braces",
-  security: "ShieldCheck",
   evals: "Gauge",
-  advisory: "Compass",
+  agents: "Braces",
+  products: "Sparkles",
+  security: "ShieldCheck",
 };
 ---
 
 <Layout
   title="Services | 17th Street Labs"
-  description="AI product engineering, AI security, evaluations and reliability, and hands-on technical advisory from senior practitioners."
+  description="Evals and reliability, agentic systems, AI-native products and model strategy, and AI security. The engineering layer around modern AI, from people who build it, break it, and measure it."
 >
   <section class="page-hero">
     <div class="wrap">
       <p class="chip">Services</p>
-      <h1 class="statement">Senior hands on the hard part.</h1>
+      <h1 class="statement">The interesting part starts after the demo.</h1>
       <p class="lede">
-        We enter where capability, uncertainty, and consequence meet. Every
-        engagement is led hands-on by the founders, not handed to a bench.
+        You already know how to call an LLM. The hard part is everything
+        around the call: evaluation, architecture, context, tools, memory,
+        retries, parallelism, observability, regressions, costs, and failure
+        handling. That is the work, and the people you meet are the people who
+        do it.
       </p>
     </div>
   </section>
@@ -55,44 +58,45 @@ const icons: Record<string, string> = {
       <div class="band-head">
         <p class="chip">Process</p>
         <h2 class="section-title">How we work</h2>
-        <p>Clarity before ceremony. Open a step to see what it means in practice.</p>
+        <p>Measure it. Test it. Break it. Compare it to baseline. Prove the fix worked. Open a step to see what that means in practice.</p>
       </div>
       <div class="accordion">
         <details name="engagement" data-slot="accordion-item" open>
           <summary data-slot="accordion-trigger">
             <span class="idx">01</span>
-            <span>Frame the question that matters</span>
+            <span>Name the failure that matters</span>
             <span class="plus" aria-hidden="true"></span>
           </summary>
           <div data-slot="accordion-content">
-            We identify the decision, failure mode, or capability at stake and
-            write down success criteria before implementation expands. Usually
-            a one to two week, fixed-fee piece of work with a written
-            recommendation at the end.
+            We find out what the 10% actually looks like: the decision, failure
+            mode, or capability at stake, and what “working” means in numbers
+            rather than vibes. Usually a one to two week, fixed-fee piece of
+            work with a baseline measurement and a written recommendation.
           </div>
         </details>
         <details name="engagement" data-slot="accordion-item">
           <summary data-slot="accordion-trigger">
             <span class="idx">02</span>
-            <span>Build the smallest credible proof</span>
+            <span>Change something. Measure it again.</span>
             <span class="plus" aria-hidden="true"></span>
           </summary>
           <div data-slot="accordion-content">
-            Architecture, research, and evaluation proceed together. You get
-            working software and measured results early enough to change
-            direction while it is still cheap to do so.
+            Architecture, research, and evals move together. Every change is
+            compared to baseline so you know what improved, what broke, and
+            why, early enough to change direction while it is still cheap.
           </div>
         </details>
         <details name="engagement" data-slot="accordion-item">
           <summary data-slot="accordion-trigger">
             <span class="idx">03</span>
-            <span>Harden what survives, then hand it over</span>
+            <span>Prove it holds, then hand it over</span>
             <span class="plus" aria-hidden="true"></span>
           </summary>
           <div data-slot="accordion-content">
             We pressure-test the system, turn findings into controls and
-            regression gates, and transfer the operating capability to your
-            team. The goal is that you do not need us for the next change.
+            regression gates you can run in CI, and transfer the operating
+            capability to your team. You should not need us for the next
+            change. You should be able to measure it yourself.
           </div>
         </details>
       </div>
@@ -102,11 +106,11 @@ const icons: Record<string, string> = {
   <section class="band">
     <div class="wrap">
       <div class="closing">
-        <h2 class="statement">Not sure which one you need?</h2>
-        <p>Describe the problem. We will tell you honestly whether we are the right fit.</p>
+        <h2 class="statement">Got a weird AI problem?</h2>
+        <p>Describe it. We will tell you honestly whether we are the right people to make it work.</p>
         <div class="hero-actions">
           <a class="button button-solid" href="/contact/">
-            Tell us what is stuck
+            Show us what is breaking
             <Icon name="ArrowRight" size={16} />
           </a>
         </div>

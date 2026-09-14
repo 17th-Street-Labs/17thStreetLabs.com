@@ -8,10 +8,10 @@ import { fileURLToPath } from "node:url";
 const output = fileURLToPath(new URL("../dist/client/", import.meta.url));
 const origin = "https://17thstreetlabs.com";
 const routes = [
-  { route: "/", heading: /We find the root cause/, content: /ExploitHunter/ },
-  { route: "/services", heading: /Senior hands on the hard part\./, content: /How we work/ },
-  { route: "/about", heading: /Experience without/, content: /Marina Levy/ },
-  { route: "/contact", heading: /Bring the hard problem\./, content: /Three useful sentences are enough\./ },
+  { route: "/", heading: /Make AI actually work\./, content: /ExploitHunter/ },
+  { route: "/services", heading: /The interesting part starts after the demo\./, content: /How we work/ },
+  { route: "/about", heading: /holy shit, this is possible/, content: /Marina Levy/ },
+  { route: "/contact", heading: /Bring us the hard problem\./, content: /Three honest sentences are enough\./ },
 ];
 
 function attribute(tag, name) {

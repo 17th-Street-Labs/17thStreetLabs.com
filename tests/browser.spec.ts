@@ -4,14 +4,14 @@ test("navigation uses real routes and supports browser history and direct visits
   await page.goto("/");
   await page.getByRole("navigation", { name: "Primary navigation" }).getByRole("link", { name: "Services", exact: true }).click();
   await expect(page).toHaveURL(/\/services\/$/);
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("Senior hands");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("interesting part starts after the demo");
   await page.getByRole("navigation", { name: "Primary navigation" }).getByRole("link", { name: "About", exact: true }).click();
   await expect(page).toHaveURL(/\/about\/$/);
   await expect(page.getByRole("heading", { name: "Marina Levy" })).toBeVisible();
   await page.goBack();
   await expect(page).toHaveURL(/\/services\/$/);
   await page.reload();
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("Senior hands");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("interesting part starts after the demo");
   await page.goto("/contact/");
   await expect(page.getByRole("heading", { level: 1 })).toContainText("hard problem");
   await expect(page.getByRole("navigation", { name: "Primary navigation" }).getByRole("link", { name: "Contact", exact: true })).toHaveAttribute("aria-current", "page");
@@ -123,7 +123,7 @@ test("mobile navigation and conversation links work without JavaScript", async (
     await expect(nav).toBeVisible();
     await nav.getByRole("link", { name: "Services", exact: true }).click();
     await expect(page).toHaveURL(/\/services\/$/);
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("Senior hands");
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("interesting part starts after the demo");
     await nav.getByRole("link", { name: "Home", exact: true }).click();
     await page.getByRole("link", { name: "Bring us the hard problem" }).click();
     await expect(page).toHaveURL(/\/contact\/$/);
@@ -140,5 +140,5 @@ test("missing routes return a branded 404 and a usable home link", async ({ page
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(/This page is\s*off the map\./);
   await page.getByRole("navigation", { name: "Primary navigation" }).getByRole("link", { name: "Home", exact: true }).click();
   await expect(page).toHaveURL("http://127.0.0.1:4322/");
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("We find the root cause");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Make AI actually work");
 });
