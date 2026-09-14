@@ -1,3 +1,4 @@
+import { spawnSync } from 'node:child_process';
 import { createServer } from "node:http";
 import { readFile, stat } from "node:fs/promises";
 import { extname, join, normalize } from "node:path";
@@ -42,6 +43,20 @@ async function resolvePath(urlPath) {
 const server = createServer(async (req, res) => {
   try {
     const urlPath = decodeURIComponent(new URL(req.url, "http://localhost").pathname);
+    if (urlPath.startsWith('/api/')) {
+      const chunks = [];
+      for await (const chunk of req) chunks.push(chunk);
+      const target = new URL(req.url, 'http://127.0.0.1:4350');
+      const headers = { ...req.headers };
+      delete headers.host;
+      // The backend compares Origin to its request URL.
+      if (headers.origin === `http://${req.headers.host}`) headers.origin = target.origin;
+      const upstream = await fetch(target, { method: req.method, headers,
+        body: ['GET', 'HEAD'].includes(req.method) ? undefined : Buffer.concat(chunks) });
+      res.writeHead(upstream.status, Object.fromEntries(upstream.headers));
+      res.end(Buffer.from(await upstream.arrayBuffer()));
+      return;
+    }
     const matchedPath = await resolvePath(urlPath);
     const filePath = matchedPath ?? (await resolvePath("/404"));
     if (!filePath) {
@@ -60,6 +75,13 @@ const server = createServer(async (req, res) => {
   }
 });
 
+// Astro serves the private endpoints; this preview keeps serving the built pages.
+try {
+  await fetch('http://127.0.0.1:4350/api/lab-access/', {signal: AbortSignal.timeout(1000)});
+} catch {
+  const started = spawnSync(process.execPath, ['node_modules/astro/bin/astro.mjs', 'dev', '--host', '127.0.0.1', '--port', '4350'], {cwd: join(import.meta.dirname, '..'), stdio: 'inherit'});
+  if (started.status !== 0) throw new Error('Could not start the local reader backend.');
+}
 server.listen(port, host, () => {
   console.log(`Serving dist/client at http://${host}:${port}`);
 });

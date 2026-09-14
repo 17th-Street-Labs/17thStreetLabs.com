@@ -1,109 +1,91 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Icon from "../components/Icon.astro";
+import ServiceIllustration from "../components/ServiceIllustration.astro";
 import { services } from "../data/services";
-const icons: Record<string, string> = {
-  evals: "Gauge",
-  agents: "Braces",
-  products: "Sparkles",
-  models: "Compass",
-  security: "ShieldCheck",
-};
 ---
 
 <Layout
-  title="Services | 17th Street Labs"
-  description="AI Evals & Reliability, Agentic Systems, AI-Native Products, Model Strategy, and AI Security. We build the engineering around the intelligence."
+  title="What We Do | 17th Street Labs"
+  description="Serious engineering. A little imagination helps. AI evaluations, agentic systems, AI-native products, model strategy, and security."
 >
-  <section class="page-hero">
-    <div class="wrap">
-      <p class="chip">Services</p>
-      <h1 class="statement">We build the engineering around the intelligence.</h1>
-      <p class="lede">The agent. The eval. The token bill. Let’s figure it out.</p>
-    </div>
-  </section>
-
-  <section class="band">
-    <div class="wrap">
-      <div class="detail">
-        {services.map((service) => (
-          <article id={service.slug} class="card">
-            <div>
-              <span class="card-icon"><Icon name={icons[service.slug]} /></span>
-              <h2>{service.title}</h2>
-              <span class="outcome">{service.outcome}</span>
-            </div>
-            <div class="detail-body">
-              {service.paragraphs.map((paragraph) => (<p set:html={paragraph} />))}
-            </div>
-          </article>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <section class="band">
-    <div class="wrap">
-      <div class="band-head">
-        <p class="chip">Process</p>
-        <h2 class="section-title">How we work</h2>
-        <p>Find the failure. Fix it. Prove it.</p>
-      </div>
-      <div class="accordion">
-        <details name="engagement" data-slot="accordion-item" open>
-          <summary data-slot="accordion-trigger">
-            <span class="idx">01</span>
-            <span>Name the failure that matters</span>
-            <span class="plus" aria-hidden="true"></span>
-          </summary>
-          <div data-slot="accordion-content">
-            We find out what the 10% actually looks like: the decision, failure
-            mode, or capability at stake, and what “working” means in numbers
-            rather than vibes. Usually a one to two week, fixed-fee piece of
-            work with a baseline measurement and a written recommendation.
+  <div class="editions">
+    <header class="editions-hero wrap">
+      <p class="eyebrow">What we do</p>
+      <h1>Serious engineering.<br /><span>A little imagination helps.</span></h1>
+    </header>
+    <section class="edition-grid wrap" aria-label="Our AI engineering services">
+      {services.map((service, index) => (
+        <article id={service.slug} class={`edition edition-${index}`}>
+          <div class="edition-label">
+            <h2><span aria-hidden="true">0{index + 1} / </span>{service.title}</h2>
           </div>
-        </details>
-        <details name="engagement" data-slot="accordion-item">
-          <summary data-slot="accordion-trigger">
-            <span class="idx">02</span>
-            <span>Change something. Measure it again.</span>
-            <span class="plus" aria-hidden="true"></span>
-          </summary>
-          <div data-slot="accordion-content">
-            Architecture, research, and evals move together. Every change is
-            compared to baseline so you know what improved, what broke, and
-            why, early enough to change direction while it is still cheap.
+          <ServiceIllustration index={index} />
+          <div class="edition-copy">
+            <p class="edition-hook">{service.outcome}</p>
+            <p class="edition-description">{service.paragraphs[0]}</p>
           </div>
-        </details>
-        <details name="engagement" data-slot="accordion-item">
-          <summary data-slot="accordion-trigger">
-            <span class="idx">03</span>
-            <span>Prove it holds, then hand it over</span>
-            <span class="plus" aria-hidden="true"></span>
-          </summary>
-          <div data-slot="accordion-content">
-            We pressure-test the system, turn findings into controls and
-            regression gates you can run in CI, and transfer the operating
-            capability to your team. You should not need us for the next
-            change. You should be able to measure it yourself.
-          </div>
-        </details>
-      </div>
-    </div>
-  </section>
-
-  <section class="band">
-    <div class="wrap">
-      <div class="closing">
-        <h2 class="statement">Got an AI problem that's getting weird?</h2>
-        <p>Good. Those are usually the interesting ones.</p>
-        <div class="hero-actions">
-          <a class="button button-solid" href="/contact/">
-            Let's talk
-            <Icon name="ArrowRight" size={16} />
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
+        </article>
+      ))}
+      <aside class="edition edition-contact">
+        <p class="edition-kicker">The next hard one</p>
+        <h2>Yours?</h2>
+        <a href="/contact/" data-contact-dialog>Let’s talk <Icon name="ArrowUpRight" size={24} /></a>
+        <p>A few sentences is plenty.</p>
+      </aside>
+    </section>
+    <section class="edition-process wrap" aria-labelledby="process-title">
+      <h2 id="process-title">How we work</h2>
+      <p>Question <span aria-hidden="true">→</span> Build <span aria-hidden="true">→</span> Test <span aria-hidden="true">→</span> Handover</p>
+    </section>
+  </div>
 </Layout>
+
+<style>
+  .editions { background: var(--bg); color: var(--text); }
+  .editions-hero { padding-block: 9rem 3rem; }
+  .editions-hero h1 { margin-top: 1.25rem; font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 650; letter-spacing: -.055em; line-height: 1.05; }
+  .editions-hero h1 span { color: #dcec91; }
+  .edition-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; padding-bottom: 2.5rem; }
+  .edition { padding: 1.5rem; min-width: 0; display: flex; flex-direction: column; background: var(--tile); color: #302338; scroll-margin-top: 6rem; }
+  .edition-0 { --tile: #dcec91; }
+  .edition-1 { --tile: #c8bad5; }
+  .edition-2 { --tile: #f6f4ee; }
+  .edition-3 { --tile: #ddd8cb; }
+  .edition-4 { --tile: #b7cbc4; }
+  .edition-label { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
+  .edition-label h2, .edition-kicker { font-family: var(--mono); font-size: .68rem; font-weight: 400; line-height: 1.5; letter-spacing: .01em; }
+  .edition-copy { margin-top: auto; }
+  .edition-hook { font-size: clamp(1.6rem, 2.35vw, 2.2rem); font-weight: 650; letter-spacing: -.05em; line-height: 1.08; }
+  .edition-description { font-size: .85rem; line-height: 1.5; margin-top: .8rem; max-width: 34ch; }
+  .edition-contact { position: relative; background: #382a40; color: var(--text); border: 1px solid #dcec91; box-shadow: 4px 4px 0 #dcec9133; transition: transform 180ms ease, box-shadow 180ms ease; }
+  .edition-contact:focus-within { transform: translateY(-5px); box-shadow: 4px 9px 0 #dcec9155; }
+  @media (hover: hover) {
+    .edition-contact:hover { transform: translateY(-5px); box-shadow: 4px 9px 0 #dcec9155; }
+    .edition-contact:hover :global(svg) { transform: translate(2px, -2px); }
+  }
+  .edition-contact :global(svg) { transition: transform 180ms ease; }
+  .edition-contact>a::after { content: ""; position: absolute; inset: 0; }
+  @media (prefers-reduced-motion: reduce) {
+    .edition-contact, .edition-contact :global(svg) { transition: none; }
+    .edition-contact:hover, .edition-contact:focus-within, .edition-contact:hover :global(svg) { transform: none; }
+  }
+  .edition-kicker { text-transform: uppercase; letter-spacing: .08em; }
+  .edition-contact h2 { font-size: clamp(4rem, 7.5vw, 7rem); letter-spacing: -.06em; color: #dcec91; line-height: 1.1; margin-top: auto; padding-top: 2rem; }
+  .edition-contact>a { display: flex; align-items: center; justify-content: space-between; font-size: 1.5rem; padding: .8rem 1rem; margin-top: 1.25rem; background: #dcec91; color: #302338; }
+  .edition-contact>p:last-child { font-size: .85rem; margin-top: .8rem; }
+  .edition-process { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 1.8rem; border-top: 1px solid #ffffff30; }
+  .edition-process h2 { font: .68rem var(--mono); text-transform: uppercase; letter-spacing: .08em; }
+  .edition-process p { font-size: .85rem; }
+  .edition-process span { padding-inline: .5rem; }
+  .edition a:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+  @media (max-width: 62rem) { .edition-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 36rem) {
+    .editions-hero { padding-block: 7.5rem 2rem; }
+    .editions-hero h1 { font-size: clamp(2rem, 8.8vw, 3rem); }
+    .edition-grid { grid-template-columns: minmax(0, 1fr); }
+    .edition-hook { font-size: 2rem; }
+    .edition-contact { min-height: 17rem; }
+    .edition-process { align-items: flex-start; flex-direction: column; }
+  }
+</style>

@@ -1,0 +1,16 @@
+---
+interface Props { index: number }
+const { index } = Astro.props;
+const illustrations = [
+  "<svg viewBox=\"0 0 320 250\" aria-hidden=\"true\"><circle cx=\"160\" cy=\"125\" r=\"100\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"/><circle cx=\"160\" cy=\"125\" r=\"70\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"/><circle cx=\"160\" cy=\"125\" r=\"40\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"/><path d=\"M110 127l32 32 70-76\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"20\"/><path d=\"M20 125h65M235 125h65M160 0v25M160 225v25\" stroke=\"currentColor\"/></svg>",
+  "<svg viewBox=\"0 0 320 250\" aria-hidden=\"true\"><path d=\"M50 180V65h110v115h110V65\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"22\"/><circle cx=\"50\" cy=\"180\" r=\"28\" fill=\"currentColor\"/><circle cx=\"160\" cy=\"65\" r=\"28\" fill=\"currentColor\"/><circle cx=\"270\" cy=\"180\" r=\"28\" fill=\"currentColor\"/><path d=\"M246 67l24-24 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"9\"/></svg>",
+  "<svg viewBox=\"0 0 320 250\" aria-hidden=\"true\"><path d=\"M45 185V70h110v115zm120 0V70h110v115z\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"/><path d=\"M60 55V30h110v115H60z\" fill=\"currentColor\"/><path d=\"M150 115h110v110H150z\" fill=\"currentColor\"/><path d=\"M196 144v50m-25-25h50\" stroke=\"var(--tile,#e0efa0)\" stroke-width=\"5\"/></svg>",
+  "<svg viewBox=\"0 0 320 250\" aria-hidden=\"true\"><path d=\"M20 120h85m0 0 80-75h115m-195 75 80 0h115m-195 0 80 75h115\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3\"/><circle cx=\"105\" cy=\"120\" r=\"28\" fill=\"currentColor\"/><circle cx=\"240\" cy=\"45\" r=\"22\" fill=\"currentColor\"/><circle cx=\"240\" cy=\"120\" r=\"14\" fill=\"currentColor\"/><circle cx=\"240\" cy=\"195\" r=\"8\" fill=\"currentColor\"/></svg>",
+  "<svg viewBox=\"0 0 320 250\" aria-hidden=\"true\"><path d=\"M160 20l100 40v78c0 48-58 82-100 102-42-20-100-54-100-102V60z\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3\"/><path d=\"M160 49l72 30v58c0 33-39 61-72 78z\" fill=\"currentColor\"/><path d=\"M160 20v220M60 60l200 0M60 138h200\" stroke=\"currentColor\" stroke-width=\"1\"/></svg>"
+];
+---
+<div class="service-art" set:html={illustrations[index]} />
+<style>
+.service-art { height: 10rem; margin-block: 1.25rem; }
+.service-art :global(svg) { width: 100%; height: 100%; display: block; }
+</style>

@@ -1,5 +1,6 @@
 ---
 import "../styles/globals.css";
+import LabSignup from "../components/LabSignup.astro";
 import Icon from "../components/Icon.astro";
 interface Props {
   title: string;
@@ -11,8 +12,9 @@ const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
 const links = [
   { name: "Home", href: "/" },
   { name: "What We Do", href: "/services/" },
-  { name: "Our Thinking", href: "/#thinking" },
+  { name: "Proof", href: "/proof/" },
   { name: "About", href: "/about/" },
+  { name: "From the Lab", href: "/lab/" },
   { name: "Contact", href: "/contact/" },
 ];
 const canonical = new URL(
@@ -93,17 +95,23 @@ const isCurrent = (href: string) =>
           </p>
         </div>
         <nav class="footer-nav" aria-label="Footer navigation">
-          <span class="footer-col-title">Site</span>
+          <span class="footer-col-title">Explore</span>
           {links.map(({ name, href }) => (
             <a href={href}>{name}</a>
           ))}
         </nav>
-        <div class="footer-contact">
-          <span class="footer-col-title">Reach us</span>
-          <a href="/contact/" data-contact-dialog>Start a project</a>
-          <a href="https://exploithunter.app" target="_blank" rel="noreferrer">
-            ExploitHunter, our open-source research
+        <nav class="footer-tools" aria-label="Tools we build">
+          <span class="footer-col-title">Tools we build</span>
+          <a href="https://github.com/justsml/ExploitHunter.app" target="_blank" rel="noreferrer">
+            Hunt bugs
           </a>
+          <a href="https://docslurp.io/" target="_blank" rel="noreferrer">
+            Ingest documents
+          </a>
+        </nav>
+        <div class="footer-reading">
+          <div><span class="footer-col-title">From the Lab</span><p>Our newsletter: the experiments, the surprises, the useful bits.</p></div>
+          <button class="newsletter-button" data-newsletter-signup>Send me the good stuff</button>
         </div>
         <p class="footer-legal">
           <span>© 2026 17th Street Labs LLC</span>
@@ -111,6 +119,7 @@ const isCurrent = (href: string) =>
         </p>
       </div>
     </footer>
+    <LabSignup />
     <dialog
       class="contact-dialog"
       aria-labelledby="dialog-title"
@@ -123,8 +132,7 @@ const isCurrent = (href: string) =>
         Tell us what you are building.
       </h2>
       <p id="dialog-description" data-slot="dialog-description">
-        A few sentences is plenty: what the system does, where it fails, and
-        what that failure costs. An engineer reads every message.
+        A few sentences is plenty. An engineer reads every message.
       </p>
       <form
         data-project-brief
@@ -146,21 +154,11 @@ const isCurrent = (href: string) =>
           </label>
         </div>
         <label>
-          Focus
-          <select name="focus">
-            <option value="" disabled selected>Choose the closest fit</option>
-            <option>Evals &amp; reliability</option>
-            <option>Agentic systems</option>
-            <option>AI-native products &amp; model strategy</option>
-            <option>AI security</option>
-          </select>
-        </label>
-        <label>
-          Context
-          <textarea name="context" required rows={5}></textarea>
+          What are you working on?
+          <textarea name="context" required rows={4}></textarea>
         </label>
         <button type="submit" class="button button-solid">
-          Send project brief
+          Send message
         </button>
         <p class="form-status" data-form-status role="status" aria-live="polite"></p>
         <small>Goes straight to the team. Reply within a business day.</small>
@@ -194,7 +192,7 @@ const isCurrent = (href: string) =>
       const dialog =
         document.querySelector<HTMLDialogElement>(".contact-dialog");
       document
-        .querySelectorAll<HTMLAnchorElement>("[data-contact-dialog]")
+        .querySelectorAll<HTMLAnchorElement>('[data-contact-dialog], a[href="/contact/"]')
         .forEach((link) =>
           link.addEventListener("click", (event) => {
             if (
@@ -206,9 +204,16 @@ const isCurrent = (href: string) =>
             )
               return;
             event.preventDefault();
+            setMenu(false);
             dialog.showModal();
           }),
         );
+      const contactUrl = new URL(window.location.href);
+      if (contactUrl.searchParams.has("contact") && dialog) {
+        dialog.showModal();
+        contactUrl.searchParams.delete("contact");
+        history.replaceState(history.state, "", contactUrl);
+      }
       dialog
         ?.querySelector(".dialog-close")
         ?.addEventListener("click", () => dialog.close());
@@ -271,3 +276,12 @@ const isCurrent = (href: string) =>
     </script>
   </body>
 </html>
+
+<style>
+  .footer-reading { grid-column: 1 / -1; border-top: 1px solid #ffffff30; padding-top: 1.75rem; display: flex; justify-content: space-between; align-items: center; gap: 1.5rem; }
+  .footer-reading p { margin-top: .6rem; }
+  .footer-reading button { border: 1px solid #dcec91; background: transparent; color: #dcec91; padding: .85rem 1.1rem; white-space: nowrap; cursor: pointer; }
+  .footer-reading button:is(:hover, :focus-visible) { background: #dcec91; color: #302338; }
+  @media(max-width: 40rem) { .footer-reading { flex-direction: column; align-items: flex-start; } }
+  :global(body:has(.lab-dialog[open])) { overflow: hidden; }
+</style>

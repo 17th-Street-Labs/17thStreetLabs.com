@@ -9,7 +9,7 @@ export default defineConfig({
   output: "static",
   adapter: vercel(),
   trailingSlash: "always",
-  integrations: [sitemap()],
+  integrations: [sitemap({ filter: (page) => !new URL(page).pathname.startsWith("/contact") })],
   vite: {
     plugins: [tailwindcss()],
   },

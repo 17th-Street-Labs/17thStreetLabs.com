@@ -1348,7 +1348,7 @@ a.card:hover,
 }
 .avatar-marina img {
   transform: scale(1.9);
-  transform-origin: 49% 24%;
+  transform-origin: 49% 10%;
 }
 .founder h3 {
   font-weight: 600;
@@ -1688,6 +1688,7 @@ form small {
 
 /* ---------- Dialog ---------- */
 .contact-dialog {
+  margin: auto;
   width: min(92vw, 36rem);
   padding: clamp(1.5rem, 4vw, 2.25rem);
   border: 1px solid var(--line-2);
@@ -1696,9 +1697,9 @@ form small {
     linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01) 40%),
     var(--bg-2);
   color: var(--text);
-  box-shadow:
-    0 40px 80px -30px rgba(0, 0, 0, 0.9),
-    0 0 120px -30px rgba(61, 109, 255, 0.5);
+  max-height: calc(100dvh - 2rem);
+  overflow-y: auto;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.3);
 }
 .contact-dialog::backdrop {
   background: rgba(3, 4, 10, 0.7);
@@ -1740,7 +1741,7 @@ form small {
 }
 .footer-inner {
   display: grid;
-  grid-template-columns: minmax(0, 1.6fr) auto auto;
+  grid-template-columns: minmax(0, 1fr) auto;
   gap: 2rem 4rem;
   align-items: start;
 }
@@ -2236,6 +2237,9 @@ body {
 .messaging-copy p { margin: 0; }
 .messaging-copy p:not(.chip) { font-size: clamp(1.05rem, 1.6vw, 1.4rem); line-height: 1.45; }
 .messaging-copy p strong { color: var(--bg); }
+.page-hero .messaging-copy p strong { color: var(--text); }
+.band .founder .role { color: var(--bg); }
+.band .founder .bio { color: #655a69; }
 
 .service-grid { margin-top: 4rem; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0; border-block: 1px solid rgba(48,35,56,.32); }
 .service-grid > li, .service-grid > li:nth-last-child(-n+2) { grid-column: auto; }
@@ -2262,6 +2266,12 @@ a.card:hover p, a.card:hover .outcome { color: var(--muted); }
 .detail .card:nth-child(odd) { border-right: 1px solid rgba(48,35,56,.25); }
 .accordion details { border-radius: 0; background: transparent; border-color: rgba(48,35,56,.28); }
 .accordion details[open] { border-color: var(--bg); }
+.band .accordion [data-slot="accordion-content"],
+.band .accordion .idx { color: var(--bg); }
+.band .accordion .plus { border-color: #655a69; }
+.band .accordion .plus::before,
+.band .accordion .plus::after { background: var(--bg); }
+.band .accordion summary:focus-visible { outline-color: var(--bg); }
 .closing { border: 0; background: var(--bg); color: var(--text); border-radius: 0; text-align: left; }
 .closing::before, .closing::after { display: none; }
 .closing p { margin-left: 0; color: var(--muted); }
@@ -2304,4 +2314,155 @@ form label, form small { color: #655a69; }
   .brand-hero .hero-intro { max-width: 19rem; }
   .hero-service-strip a { font-size: .56rem; }
   .section-title { font-size: 3rem; }
+}
+
+/* Spacing hierarchy: introductions, content groups, then related text. */
+.band-head + :is(.founders, .principles, .accordion) {
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+}
+.band-head { gap: 1.5rem; }
+.band-head .chip { margin-bottom: .25rem; }
+.page-hero .wrap { gap: 1.75rem; }
+.page-hero .messaging-copy { display: grid; gap: 1rem; }
+.founders { grid-template-columns: minmax(0, 1fr); gap: 0; }
+.card.founder {
+  grid-template-columns: 6rem minmax(0, 1fr);
+  column-gap: clamp(1.5rem, 3vw, 2.5rem);
+  padding-block: 2.5rem;
+}
+.card.founder:first-child { padding-top: 0; }
+.card.founder:last-child { padding-bottom: 0; }
+.card.founder + .card.founder { border-top: 1px solid rgba(48, 35, 56, .2); }
+.founder h3 { font-size: 1.35rem; line-height: 1.25; margin: 0; }
+.founder .role { margin: .5rem 0 1.25rem; line-height: 1.5; }
+.founder .bio { max-width: 68ch; margin: 0; font-size: 1rem; line-height: 1.65; }
+.principles { gap: 1.5rem; }
+.principles .card { padding: clamp(1.5rem, 3vw, 2.25rem); }
+.principles .card h3, .service-grid .card h3 { line-height: 1.3; margin-bottom: 1rem; }
+.detail article { align-content: start; gap: 1.5rem; padding: clamp(1.5rem, 3vw, 2.5rem); }
+.detail h2 { line-height: 1.25; }
+.detail article:last-child:nth-child(odd) { grid-column: 1 / -1; border-right: 0; }
+.detail .outcome { display: block; margin-top: .75rem; line-height: 1.6; }
+.detail-body p + p { margin-top: 1rem; }
+.accordion { margin-inline: 0; width: min(100%, 60rem); gap: 1rem; }
+.accordion summary { padding: 1.5rem; gap: 1rem; line-height: 1.4; }
+.accordion [data-slot="accordion-content"] { padding: .25rem 1.5rem 1.75rem 5rem; line-height: 1.65; }
+.contact { gap: clamp(2rem, 5vw, 4rem); }
+.contact-aside dl { gap: 1.5rem; }
+.contact-aside dl > div { padding: 1.5rem; }
+.contact-aside dt { color: var(--bg); margin-bottom: .75rem; }
+.contact-aside dd { color: #655a69; }
+.contact-panel h2 { margin-bottom: 2rem; line-height: 1.25; }
+form { gap: 1.5rem; }
+form label { gap: .625rem; }
+.band form :is(input, textarea)::placeholder { color: #655a69; }
+.closing p { margin-top: 1.5rem; }
+.closing .hero-actions { margin-top: 2rem; }
+@media (max-width: 36rem) {
+  .card.founder { grid-template-columns: minmax(0, 1fr); gap: 1.25rem; padding-block: 2rem; }
+  .founder .role { margin-bottom: 1rem; }
+  .accordion summary { grid-template-columns: 1.5rem minmax(0, 1fr) 1.5rem; padding: 1.25rem; gap: .75rem; }
+  .accordion [data-slot="accordion-content"] { padding: 0 1.25rem 1.5rem; }
+  .page-hero .statement { font-size: clamp(2.75rem, 11vw, 3.7rem); }
+  .closing .button { white-space: normal; line-height: 1.3; }
+}
+
+/* Keep decoration in its own grid cell, clear of copy and service links. */
+.brand-hero { min-height: auto; padding-block: 9rem 2rem; }
+.brand-hero .hero-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  align-items: center;
+  justify-items: stretch;
+  gap: 3rem clamp(2rem, 4vw, 4rem);
+}
+.hero-copy { width: 100%; min-width: 0; container-type: inline-size; display: grid; gap: 1.5rem; justify-items: start; }
+.brand-hero .statement { font-size: clamp(3rem, 16cqi, 7.5rem); max-width: 100%; line-height: .92; }
+.brand-hero .hero-actions { margin-top: .25rem; }
+.brand-hero .hero-geometry {
+  position: relative;
+  inset: auto;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  min-width: 0;
+  overflow: hidden;
+  contain: paint;
+  opacity: 1;
+  mask-image: none;
+}
+.hero-geometry .geo-one { width: 45%; height: 80%; right: 12%; top: -16%; }
+.hero-geometry .geo-two { width: 100%; height: 50%; right: 0; top: 18%; }
+.hero-geometry .geo-three { width: 100%; height: 55%; right: 0; top: 37%; }
+.hero-geometry .geo-four { width: 88%; height: 50%; right: 0; top: 58%; }
+.hero-geometry .geo-person { top: 54%; right: 26%; }
+.brand-hero .hero-service-strip { grid-column: 1 / -1; width: 100%; margin: 0; }
+.contact-intro { padding-block: 9rem 3rem; }
+.contact-intro .statement { max-width: 18em; font-size: clamp(2.5rem, 4.5vw, 4.5rem); line-height: 1; }
+.contact-intro + .band { padding-top: 3rem; }
+.hero-service-strip a { padding: 1rem; }
+@media (max-width: 52rem) {
+  .brand-hero .hero-inner { grid-template-columns: minmax(0, 1fr); gap: 2.5rem; }
+  .brand-hero .hero-geometry { display: none; }
+  .hero-copy { max-width: 40rem; }
+  .hero-service-strip a { min-height: 3rem; }
+}
+
+body:has(.contact-dialog[open]) { overflow: hidden; }
+.contact-dialog .dialog-close { border: 0; background: transparent; width: 2.75rem; height: 2.75rem; }
+.contact-dialog :is(input, textarea):focus-visible { outline: 2px solid var(--text); outline-offset: 2px; box-shadow: none; }
+
+/* Compact footer: keep navigation comfortably inside the page. */
+.site-footer { padding-block: 3.5rem 2rem; }
+.site-footer .footer-inner { width: min(calc(100% - 2 * clamp(1.5rem, 5vw, 5rem)), 75rem); grid-template-columns: minmax(0, 1.5fr) minmax(0, .65fr) minmax(0, .9fr); gap: 2.5rem clamp(2rem, 5vw, 5rem); }
+.site-footer .footer-brand p { max-width: 29rem; font-size: .9rem; line-height: 1.6; }
+.site-footer :is(.footer-nav, .footer-tools) { display: grid; grid-template-columns: minmax(0, 1fr); gap: .4rem 1.5rem; align-content: start; padding-top: .25rem; }
+.site-footer :is(.footer-nav, .footer-tools) a { color: var(--muted); min-height: 2.75rem; display: flex; align-items: center; gap: .5rem; font-size: 1rem; }
+.site-footer .footer-legal { margin-top: .25rem; padding-top: 1.5rem; font-size: .75rem; line-height: 1.6; }
+@media (max-width: 52rem) {
+  .site-footer .footer-inner { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem; }
+  .site-footer .footer-brand { grid-column: 1 / -1; }
+  .site-footer .footer-nav { max-width: 28rem; }
+  .site-footer .footer-legal { flex-direction: column; gap: .5rem; }
+}
+
+@media (max-width: 24rem) { .site-footer .footer-inner { grid-template-columns: minmax(0, 1fr); } }
+
+/* Quiet, consistent feedback for footer navigation and newsletter invitations. */
+.site-footer a {
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: .35em;
+  transition: color 180ms ease, text-decoration-color 180ms ease;
+}
+.site-footer a:is(:hover, :focus-visible) {
+  color: #dcec91;
+  text-decoration-color: currentColor;
+}
+.newsletter-button {
+  transition: background-color 180ms ease, color 180ms ease, box-shadow 180ms ease;
+}
+.newsletter-button:not(:disabled):is(:hover, :focus-visible) {
+  box-shadow: inset 0 0 0 1px currentColor;
+}
+@media (prefers-reduced-motion: reduce) {
+  .site-footer a, .newsletter-button { transition: none; }
+}
+
+/* Shared, restrained depth for interactive framed controls. */
+:root :is(.button, .newsletter-button, .lab-closing a, .dialog-close, .edition-contact, a.card, .card.hover) {
+  transition: background-color 220ms ease, color 220ms ease, border-color 220ms ease, transform 220ms ease, box-shadow 220ms ease;
+}
+@media (hover: hover) {
+  :root :is(.button, .newsletter-button, .lab-closing a, .dialog-close, .edition-contact, a.card, .card.hover):not(:disabled):not([aria-disabled="true"]):hover {
+    transform: translate(-1px, -3px);
+    box-shadow: 3px 5px 0 #30233830;
+  }
+}
+:root :is(.button, .newsletter-button, .lab-closing a, .dialog-close, .edition-contact, a.card):focus-visible {
+  transform: translate(-1px, -3px);
+  box-shadow: 3px 5px 0 #30233830;
+}
+@media (prefers-reduced-motion: reduce) {
+  :root :is(.button, .newsletter-button, .lab-closing a, .dialog-close, .edition-contact, a.card, .card.hover):is(:hover, :focus-visible) { transform: none; transition: none; }
 }

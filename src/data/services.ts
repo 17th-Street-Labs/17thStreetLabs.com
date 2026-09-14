@@ -3,51 +3,51 @@ export const services = [
     "slug": "evals",
     "title": "AI Evals & Reliability",
     "summary": "We build evals and regression tests. So you know what works—and what broke.",
-    "outcome": "If you can’t measure whether your AI is getting better, you’re mostly guessing.",
+    "outcome": "Know what’s ready to ship.",
     "paragraphs": [
-      "We build evals and regression tests. So you know what works—and what broke."
+      "Evaluations and regression tests built around your real workflows."
     ]
   },
   {
     "slug": "agents",
     "title": "Agentic Systems",
     "summary": "We build the tools, context, and checks that keep agents doing the right work.",
-    "outcome": "Twenty agents. No tiny digital circus.",
+    "outcome": "Give it a job. Expect it finished.",
     "paragraphs": [
-      "We build the tools, context, and checks that keep agents doing the right work."
+      "Tools, permissions, and recovery. Agents that work. You stay in control."
     ]
   },
   {
     "slug": "products",
     "title": "AI-Native Products",
     "summary": "We build products around intelligence from the beginning. Language, memory, tools. A simpler way to get things done.",
-    "outcome": "Fewer buttons. Tell it what you want.",
+    "outcome": "More than a chatbot.",
     "paragraphs": [
-      "We build products around intelligence from the beginning. Language, memory, tools. A simpler way to get things done."
+      "From ambitious idea to production. Built around what your customers need to do."
     ]
   },
   {
     "slug": "models",
     "title": "Model Strategy",
     "summary": "We test models against your actual work. Sometimes a tiny local model does the job. Cheaper, too.",
-    "outcome": "You probably don’t need the biggest model for everything.",
+    "outcome": "Intelligence without expensive habits.",
     "paragraphs": [
-      "We test models against your actual work. Sometimes a tiny local model does the job. Cheaper, too."
+      "The right model for your work. Benchmarked for quality, speed, cost, and privacy."
     ]
   },
   {
     "slug": "security",
     "title": "AI Security",
     "summary": "We use AI to find vulnerabilities, test defenses, and catch problems before someone else does.",
-    "outcome": "The attackers are getting agents too.",
+    "outcome": "Find the weakness first.",
     "paragraphs": [
-      "We use AI to find vulnerabilities, test defenses, and catch problems before someone else does."
+      "Test defenses. Reproduce vulnerabilities. Give your engineers a clear plan."
     ]
   }
 ];
 
 export const proof = [
-  { value: "25+", label: "years building and leading production software" },
+  { value: "50+", label: "years of combined industry experience" },
   { value: "13", label: "agentic systems under management" },
   { value: "22", label: "security audits" },
   { value: "4wk", label: "average turnaround" },

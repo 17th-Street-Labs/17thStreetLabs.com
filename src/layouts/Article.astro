@@ -1,0 +1,121 @@
+---
+import Layout from './Layout.astro';
+import { labEntries } from '../data/lab';
+interface Props { frontmatter: { slug: string }; }
+const { frontmatter } = Astro.props;
+const index = labEntries.findIndex(entry => entry.slug === frontmatter.slug);
+if (index < 0) throw new Error(`Missing article metadata: ${frontmatter.slug}`);
+const entry = labEntries[index];
+const next = labEntries[(index + 1) % labEntries.length];
+---
+<Layout title={`${entry.title} | 17th Street Labs`} description={entry.summary}>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org", "@type": "BlogPosting",
+    headline: entry.title, description: entry.summary,
+    url: new URL(entry.url, Astro.site).href,
+    author: [{"@type":"Person", name:"Marina Levy"}, {"@type":"Person", name:"Dan Levy"}],
+    publisher: {"@type":"Organization", name:"17th Street Labs"},
+    isAccessibleForFree: true
+  }).replace(/</g, '\\u003c')} />
+  <article class="lab-article">
+    <header class="article-header">
+      <div class="article-wrap">
+        <a class="back-link" href="/lab/">← From the Lab</a>
+        <p class="article-category">{entry.category} <span>/ {String(index + 1).padStart(2, '0')}</span></p>
+        <h1>{entry.title}</h1>
+        <p class="article-deck">{entry.summary}</p>
+        <p class="byline">By <a href="/about/#team">Marina Levy and Dan Levy</a></p>
+      </div>
+    </header>
+    <div class="article-wrap article-reading">
+      <aside class="takeaway" aria-label="The takeaway"><span>The takeaway</span><p>{entry.takeaway}</p></aside>
+      <div class="article-prose" data-lab-article={entry.slug} tabindex="-1"><slot /></div>
+    </div>
+  </article>
+  <section class="article-newsletter" aria-labelledby="newsletter-heading">
+    <div class="article-wrap">
+      <h2 id="newsletter-heading">The useful bits. In your inbox.</h2>
+      <p>Our newsletter brings you practical AI lessons, experiments, and ideas worth your time.</p>
+      <button class="newsletter-button" data-newsletter-signup>Send me the good stuff</button>
+    </div>
+  </section>
+  <div class="article-actions">
+  <section class="article-next" aria-label="Continue reading">
+    <a class="article-band-link" href={next.url}>
+      <div class="article-wrap">
+        <p class="band-label">Keep reading</p>
+        <h2 class="band-title">{next.title}</h2>
+      </div>
+    </a>
+  </section>
+  <section class="article-contact">
+    <a class="article-band-link" href="/contact/" data-contact-dialog>
+      <div class="article-wrap">
+        <p class="band-label">Let’s talk</p>
+        <h2 class="band-title">Got a hard one of your own?</h2>
+      </div>
+    </a>
+  </section>
+  </div>
+</Layout>
+<style>
+  .article-newsletter { background: #f6f4ee; color: #302338; padding-bottom: 3rem; }
+  .article-newsletter .article-wrap { border-top: 1px solid #30233830; padding-top: 2rem; }
+  .article-newsletter h2 { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 650; letter-spacing: -.04em; }
+  .article-newsletter p { margin-block: .6rem 1.2rem; }
+  .article-newsletter button { padding: .8rem 1rem; border: 0; background: #302338; color: #f6f4ee; cursor: pointer; }
+  .article-newsletter button span { margin-left: 1rem; }
+  .lab-article { background: #f6f4ee; color: #302338; }
+  .article-wrap { width: min(100% - 3rem, 48rem); margin-inline: auto; }
+  .article-header { background: #302338; color: #f6f4ee; padding: clamp(7rem, 9vw, 9rem) 0 3rem; }
+  .back-link { font-size: .85rem; text-decoration: underline; text-underline-offset: .25em; }
+  .article-category { font: .68rem var(--mono); text-transform: uppercase; letter-spacing: .1em; margin-top: 3rem; color: #dcec91; }
+  .article-category span { opacity: .7; }
+  h1 { font-weight: 650; font-size: clamp(2.3rem, 5vw, 4.25rem); line-height: 1.06; letter-spacing: -.055em; margin-block: 1.25rem; text-wrap: balance; }
+  .article-deck { color: #d6cddd; font-size: 1.15rem; line-height: 1.6; max-width: 42rem; }
+  .byline { font-size: .8rem; margin-top: 1.75rem; color: #d6cddd; }
+  .byline a { text-decoration: underline; text-underline-offset: .25em; }
+  .article-reading { padding-block: 2.5rem 4rem; }
+  .takeaway { background: #e9e1ef; padding: 1.5rem 1.75rem; border-left: 3px solid #302338; margin-bottom: 2.5rem; }
+  .takeaway span { font: .65rem var(--mono); text-transform: uppercase; letter-spacing: .08em; }
+  .takeaway p { margin-top: .6rem; font-size: 1.15rem; line-height: 1.5; }
+  .article-prose { font-size: 1.05rem; line-height: 1.8; overflow-wrap: anywhere; }
+  .article-prose :global(p) { margin-block: 0 1.3rem; }
+  .article-prose :global(h2) { font-weight: 600; font-size: clamp(1.5rem, 3vw, 2rem); letter-spacing: -.035em; line-height: 1.2; margin: 2.75rem 0 1rem; }
+  .article-prose :global(a) { text-decoration: underline; text-underline-offset: .2em; text-decoration-color: #8b7b93; }
+  .article-prose :global(a:hover) { text-decoration-color: #302338; }
+  .article-prose :global(ul), .article-prose :global(ol) { padding-left: 1.4rem; margin-block: 1rem 1.5rem; }
+  .article-prose :global(ul) { list-style: disc; }
+  .article-prose :global(ol) { list-style: decimal; }
+  .article-prose :global(li) { margin-bottom: .55rem; padding-left: .2rem; }
+  .article-prose :global(blockquote) { margin: 1.75rem 0; border-left: 3px solid #a7b959; padding: .5rem 1.5rem; font-size: 1.15rem; }
+  .article-prose :global(blockquote p:last-child) { margin-bottom: 0; }
+  .article-prose :global(pre) { padding: 1.3rem; overflow-x: auto; font-size: .8rem; line-height: 1.7; margin-block: 1.5rem; white-space: pre-wrap; }
+  .article-prose :global(table) { width: 100%; border-collapse: collapse; margin-block: 1.5rem 2rem; font-size: .85rem; line-height: 1.5; }
+  .article-prose :global(th), .article-prose :global(td) { text-align: left; vertical-align: top; padding: .8rem; border-bottom: 1px solid #30233830; }
+  .article-prose :global(th) { background: #e9e1ef; font-weight: 600; }
+  .article-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; width: min(100% - 3rem, 64rem); margin: 0 auto; padding-block: 0 3rem; }
+  .article-actions section { border: 1px solid #30233835; }
+  .article-actions .article-wrap { width: auto; margin: 0; }
+  .article-next { background: #e9e1ef; color: #302338; }
+  .article-contact { background: #dcec91; color: #302338; }
+  .article-band-link { display: flex; align-items: flex-start; height: 100%; min-height: 15rem; padding: 2rem; color: inherit; text-decoration: none; transition: background-color 220ms ease, transform 220ms ease, box-shadow 220ms ease; }
+  .band-label { font: .68rem var(--mono); text-transform: uppercase; letter-spacing: .08em; margin: 0 0 1rem; }
+  .band-title { font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 400; line-height: 1.2; letter-spacing: -.035em; margin: 0; transition: font-weight 220ms ease; }
+  .article-next .article-band-link:is(:hover, :focus-visible) { background: #d6c7e3; }
+  .article-contact .article-band-link:is(:hover, :focus-visible) { background: #cce36b; }
+  .article-band-link:is(:hover, :focus-visible) { transform: translate(-2px, -3px); box-shadow: 4px 5px 0 #30233825; }
+  .article-band-link:is(:hover, :focus-visible) .band-title { font-weight: 700; }
+  .article-band-link:is(:hover, :focus-visible) .band-label { font-weight: 700; }
+  .article-band-link:focus-visible { outline: 2px solid #302338; outline-offset: -6px; }
+  @media (prefers-reduced-motion: reduce) {
+    .article-band-link, .band-title { transition: none; }
+    .article-band-link:is(:hover, :focus-visible) { transform: none; }
+  }
+  @media(max-width: 35rem) {
+    .article-actions { grid-template-columns: 1fr; }
+    .article-band-link { min-height: 11rem; padding: 1.5rem; }
+    .article-prose :global(th), .article-prose :global(td) { padding: .6rem .4rem; }
+    .takeaway { padding: 1.25rem; }
+  }
+</style>

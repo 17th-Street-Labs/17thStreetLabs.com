@@ -1,7 +1,7 @@
 ---
-import danHeadshot from "../images/headshots/dan-avatar.png";
-import marinaHeadshot from "../images/headshots/Marina-Levy-Headshot.png";
-import kyleHeadshot from "../images/headshots/kyle-coberly-headshot.jpg";
+import danHeadshot from "../images/headshots/dan-studio-portrait.png";
+import marinaHeadshot from "../images/headshots/marina-studio-mauve.png";
+import kyleHeadshot from "../images/headshots/kyle-studio-sage.png";
 import Avatar from "../components/Avatar.astro";
 import Layout from "../layouts/Layout.astro";
 import Icon from "../components/Icon.astro";
@@ -40,7 +40,7 @@ import { proof } from "../data/services";
     </div>
   </section>
 
-  <section class="band">
+  <section class="band" id="team">
     <div class="wrap">
       <div class="band-head">
         <p class="chip">Team</p>
@@ -49,43 +49,66 @@ import { proof } from "../data/services";
       </div>
       <div class="founders">
         <article class="card founder">
-          <Avatar src={marinaHeadshot} alt="Marina Levy" zoom={1.9} class="avatar-marina" />
+          <Avatar src={marinaHeadshot} alt="Marina Levy" />
           <div>
             <h3>Marina Levy</h3>
             <p class="role">Co-founder, chief executive officer</p>
             <p class="bio">
-              Marina runs the studio. She turns ambitious technical work into
-              engagements with a clear scope, a steady cadence, and an outcome
-              we can be held to.
+              Marina runs the business behind the engineering: operations,
+              partnerships, sales, and media. She knows what it takes to get an
+              ambitious idea off the ground—and keep it moving. Building a
+              venture that led to a $10 million exit in Tokyo and two companies
+              in Morocco taught her what execution demands. Reviewing pitches
+              and helping deploy capital with New York City investors sharpened
+              her eye for which ideas deserve it. That same instinct led her to
+              found{" "}
+              <a href="https://skillriseeducation.com/about" target="_blank" rel="noreferrer">SkillRise Education</a>,
+              a woman-led edtech company preparing people for the AI economy.
             </p>
+            <a class="text-link" href="https://www.linkedin.com/in/marina-a-solovyov" target="_blank" rel="noreferrer">Marina on LinkedIn <Icon name="ArrowRight" size={16} /></a>
           </div>
         </article>
         <article class="card founder">
-          <Avatar src={danHeadshot} alt="Dan" />
+          <Avatar src={danHeadshot} alt="Dan Levy" />
           <div>
-            <h3>Dan</h3>
-            <p class="role">Founding Engineer</p>
+            <h3>Dan Levy</h3>
+            <p class="role">Co-founder, founding engineer</p>
             <p class="bio">
-              Builds it, breaks it, measures it, builds it again. Dan asks the
-              questions that decide whether a system is real: Can we prove it
-              improved? What is the cheapest model that does the job? What
-              changes when an attacker has the same leverage?
+              Some of the engineers companies compete to hire started in Dan’s
+              classroom. Across Lambda School and Galvanize, he helped more than
+              3,000 students build their skills—including beginners who went on
+              to careers at leading companies. That changes a life, not just a résumé.
+              His own spans 25+ years building production software, including
+              roles at Hotel Engine and MagicSchool. At 17th Street Labs, he
+              brings that depth to the hard AI problems—and helps your team
+              understand the solution well enough to take it further.
             </p>
+            <a class="text-link" href="https://www.linkedin.com/in/realdaniellevy" target="_blank" rel="noreferrer">Dan Levy on LinkedIn <Icon name="ArrowRight" size={16} /></a>
           </div>
         </article>
         <article class="card founder">
           <Avatar src={kyleHeadshot} alt="Kyle" />
           <div>
             <h3>Kyle Coberly</h3>
-            <p class="role">Head of Research</p>
+            <p class="role">Head of Product Engineering</p>
             <p class="bio">
-              Systems engineer and educator. At Urban Sky he shipped the flight
-              simulation engine, stood up the company-wide testing stack, and
-              built the tooling that lets AI agents work across every app in
-              parallel. At Sunrun he led the rescue rewrite of the sales
-              pipeline. Adjunct professor at the University of Denver and a
-              seven-time Pluralsight Elite Instructor.
+              Kyle connects the engineering, the economics, and the people who
+              have to use the thing. At 17th Street Labs, he leads product
+              engineering: deciding what’s worth building, making it work at
+              scale, and helping your team take it from there.
             </p>
+            <p class="bio">
+              He’s helped 1,000 people change careers into software engineering.
+              He brings that educator’s instinct to his work at the National
+              Society of Leadership and Success, his consulting firm Sika
+              Education, and the{" "}
+              <a href="https://professionalstudies.du.edu/instructors/kyle-coberly/" target="_blank" rel="noreferrer">University of Denver</a>,
+              where he teaches information systems as an Adjunct Assistant
+              Professor. Before that, he was Faculty Director at Galvanize,
+              working alongside Dan, and Director of Education at Flatiron
+              School. He builds the product—and the team’s ability to own it.
+            </p>
+            <a class="text-link" href="https://www.linkedin.com/in/kylecoberly/" target="_blank" rel="noreferrer">Kyle on LinkedIn <Icon name="ArrowRight" size={16} /></a>
           </div>
         </article>
       </div>
@@ -124,9 +147,10 @@ import { proof } from "../data/services";
           <span class="card-icon"><Icon name="Zap" /></span>
           <h3>We experiment on ourselves first.</h3>
           <p>
-            We spend our own money finding what fails and what works cheaply.
-            What survives goes into client work, and your team leaves able to
-            run it without us.
+            We invest our own capital in R&amp;D, testing reliability,
+            performance, and cost before bringing an approach into your business.
+            You get the benefit of that research—and the knowledge to run
+            what we build.
           </p>
         </div>
       </div>
@@ -137,7 +161,7 @@ import { proof } from "../data/services";
     <div class="wrap">
       <div class="closing">
         <h2 class="statement">Put it in front of engineers.</h2>
-        <p>Send the system, not a brief. We will tell you what we would test first.</p>
+        <p>Tell us what you’re working on. We’ll tell you what we would test first.</p>
         <div class="hero-actions">
           <a class="button button-solid" href="/contact/">
             Start a project

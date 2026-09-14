@@ -1,0 +1,69 @@
+<div class="production-reality">
+  <div class="production-heading">
+    <p class="production-label">Sound familiar?</p>
+    <h2 class="section-title">The demo worked.<br />Now what?</h2>
+  </div>
+  <div class="production-story">
+    <p class="production-beat" data-production-reveal>
+      <span class="setup">Your “improved” prompt fixes one problem.</span>
+      <strong>Creates three more.</strong>
+    </p>
+    <p class="production-beat users-beat" data-production-reveal>
+      <span class="setup">Your eval says everything is fine.</span>
+      <strong>Your users disagree.</strong>
+    </p>
+    <p class="production-beat token-beat" data-production-reveal>
+      <span class="setup">And the token bill?</span>
+      <strong>Let’s not talk about the token bill.</strong>
+    </p>
+    <div class="production-finish">
+      <p class="finish-punch" data-production-reveal>This is where we work.</p>
+    </div>
+  </div>
+</div>
+
+<style>
+  .production-reality { display: grid; grid-template-columns: 1fr 1.2fr; gap: clamp(3rem, 7vw, 7rem); }
+  .production-heading { align-self: start; }
+  .production-label { font-family: var(--mono); font-size: .7rem; text-transform: uppercase; letter-spacing: .18em; margin-bottom: 1.5rem; }
+  .production-heading .section-title { font-size: clamp(3rem, 5vw, 5rem); }
+  .production-beat { padding-block: clamp(1.25rem, 2.5vw, 2rem); border-top: 1px solid rgba(48,35,56,.25); font-size: clamp(1.4rem, 2.3vw, 2.1rem); line-height: 1.2; letter-spacing: -.035em; text-wrap: pretty; }
+  .production-beat strong { font-weight: 720; }
+  .setup { display: block; margin-bottom: .6em; color: #655a69; font-size: .7em; line-height: 1.4; letter-spacing: -.02em; }
+  .users-beat strong { background: var(--blue); box-decoration-break: clone; -webkit-box-decoration-break: clone; padding-inline: .12em; }
+  .production-finish { background: var(--bg); color: var(--text); padding: 1.5rem; margin-top: .5rem; }
+  .finish-punch { color: var(--blue); font-size: clamp(2rem, 3.5vw, 3.5rem); font-weight: 720; letter-spacing: -.055em; line-height: 1.05; text-wrap: balance; }
+  @media (prefers-reduced-motion: no-preference) {
+    [data-production-reveal].reveal-pending { opacity: 0; transform: translateY(24px); }
+    [data-production-reveal].reveal-visible { animation: production-enter 650ms cubic-bezier(.2,.7,.2,1) both; }
+    @keyframes production-enter { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  }
+  @media (max-width: 52rem) {
+    .production-reality { grid-template-columns: minmax(0, 1fr); gap: 3rem; }
+    .production-heading { position: static; }
+  }
+</style>
+
+<script>
+  const beats = document.querySelectorAll<HTMLElement>("[data-production-reveal]");
+  const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  if (!motion.matches && "IntersectionObserver" in window) {
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        entry.target.classList.remove("reveal-pending");
+        entry.target.classList.add("reveal-visible");
+        observer.unobserve(entry.target);
+      }
+    }, { threshold: 0.15, rootMargin: "0px 0px -8% 0px" });
+    beats.forEach((beat) => {
+      beat.classList.add("reveal-pending");
+      observer.observe(beat);
+    });
+    motion.addEventListener("change", () => {
+      if (!motion.matches) return;
+      observer.disconnect();
+      beats.forEach((beat) => beat.classList.remove("reveal-pending", "reveal-visible"));
+    });
+  }
+</script>

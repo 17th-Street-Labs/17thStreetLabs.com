@@ -1,0 +1,96 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Icon from "../components/Icon.astro";
+import ServiceIllustration from "../components/ServiceIllustration.astro";
+import { labEntries } from "../data/lab";
+const [featured, ...rest] = labEntries;
+const hasPublished = labEntries.some(entry => entry.url);
+---
+<Layout title="From the Lab | 17th Street Labs" description="Experiments, benchmarks, AI security, and engineering lessons from the team building the systems. From the Lab at 17th Street Labs.">
+  <header class="page-hero lab-hero">
+    <div class="wrap">
+      <p class="chip">From the Lab</p>
+      <h1 class="statement">What we’re learning<br />while building it.</h1>
+      <div class="lab-intro">
+        <p>We test models, break agents, and find out which brilliant ideas fall apart in practice.</p>
+        <p>Then we write about what survives.</p>
+      </div>
+    </div>
+  </header>
+  <section class="lab-reading" aria-labelledby="reading-title">
+    <div class="wrap">
+      <div class="reading-heading">
+        <h2 id="reading-title">{hasPublished ? "Inside the experiments" : "Coming from the Lab"}</h2>
+        <p>Practical lessons. Open to curious minds.</p>
+      </div>
+      <article class="lab-feature">
+        <div class="feature-art" aria-hidden="true"><ServiceIllustration index={3} /><span>QUALITY / COST / CONTROL</span></div>
+        <div class="feature-copy">
+          <p class="lab-category">{featured.category}</p>
+          <h3>{featured.url ? <a href={featured.url}>{featured.title}</a> : featured.title}</h3>
+          <p class="lab-summary">{featured.summary}</p>
+          {featured.url ? <a class="lab-read" href={featured.url}>Read the story <Icon name="ArrowUpRight" size={18} /></a> : <p class="publication-status">Coming soon</p>}
+        </div>
+      </article>
+      <div class="lab-list">
+        {rest.map((entry, index) => (
+          <article>
+            <span class="article-number" aria-hidden="true">{String(index + 2).padStart(2, '0')}</span>
+            <div>
+              <p class="lab-category">{entry.category}</p>
+              <h3>{entry.url ? <a href={entry.url}>{entry.title}</a> : entry.title}</h3>
+              <p class="lab-summary">{entry.summary}</p>
+            </div>
+            {entry.url ? <a class="lab-read" href={entry.url} aria-label={`Read ${entry.title}`}>Read <Icon name="ArrowUpRight" size={18} /></a> : <p class="publication-status">Coming soon</p>}
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+  <section class="lab-closing">
+    <div class="wrap">
+      <h2>Got a hard one of your own?</h2>
+      <a href="/contact/" data-contact-dialog>Let’s talk</a>
+    </div>
+  </section>
+</Layout>
+<style>
+  .lab-hero { padding-bottom: 3.5rem; }
+  .lab-hero .statement { max-width: 18ch; font-size: clamp(2.75rem, 6vw, 5.5rem); }
+  .lab-intro { max-width: 42rem; font-size: 1.05rem; line-height: 1.6; color: var(--muted); }
+  .lab-intro p+p { margin-top: .7rem; color: var(--text); }
+  .lab-reading { background: #f6f4ee; color: #302338; padding-block: 3rem 4rem; }
+  .reading-heading { display: flex; justify-content: space-between; gap: 1rem; align-items: baseline; margin-bottom: 1.5rem; }
+  .reading-heading h2 { font-size: 1.1rem; font-weight: 550; }
+  .reading-heading>p { font-size: .8rem; color: #655a69; }
+  .lab-feature { display: grid; grid-template-columns: 1fr 1.3fr; background: #e9e1ef; }
+  .feature-art { background: #dcec91; display: flex; flex-direction: column; justify-content: center; padding: 2rem; min-height: 19rem; }
+  .feature-art :global(.service-art) { height: 13rem; }
+  .feature-art span { font: .6rem var(--mono); margin-top: 1rem; letter-spacing: .1em; }
+  .feature-copy { padding: clamp(1.5rem, 3.5vw, 3rem); display: flex; flex-direction: column; align-items: flex-start; }
+  .lab-category { font: .65rem var(--mono); text-transform: uppercase; letter-spacing: .08em; margin-bottom: .8rem; }
+  .feature-copy h3 { font-size: clamp(1.6rem, 2.6vw, 2.6rem); line-height: 1.1; letter-spacing: -.05em; }
+  .lab-summary { font-size: .95rem; line-height: 1.55; color: #655a69; margin-top: 1rem; max-width: 48rem; }
+  .publication-status { font: .65rem var(--mono); color: #655a69; white-space: nowrap; }
+  .feature-copy .publication-status, .feature-copy .lab-read { margin-top: 1.5rem; }
+  .lab-list { margin-top: 2rem; }
+  .lab-list article { display: grid; grid-template-columns: 2rem 1fr auto; gap: 1.5rem; border-bottom: 1px solid #30233830; padding: 2rem 0; align-items: start; }
+  .article-number { font: .7rem var(--mono); padding-top: .2rem; }
+  .lab-list h3 { font-size: clamp(1.3rem, 2vw, 1.85rem); line-height: 1.2; letter-spacing: -.04em; }
+  .lab-list .lab-summary { margin-top: .6rem; }
+  .lab-read { display: inline-flex; align-items: center; gap: .8rem; text-decoration: underline; text-underline-offset: .3em; }
+  .lab-closing { background: #dcec91; color: #302338; padding-block: 2.5rem; }
+  .lab-closing .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; }
+  .lab-closing h2 { font-size: clamp(1.5rem, 3vw, 2.5rem); letter-spacing: -.05em; }
+  .lab-closing a { display: flex; align-items: center; gap: 1rem; font-size: 1.2rem; border: 1px solid #302338; padding: .7rem 1.4rem; text-decoration: none; transition: background-color 180ms ease, color 180ms ease; }
+  .lab-closing a:is(:hover, :focus-visible) { background: #302338; color: #f6f4ee; }
+  @media (prefers-reduced-motion: reduce) { .lab-closing a { transition: none; } }
+  @media(max-width: 42rem) {
+    .lab-feature { grid-template-columns: 1fr; }
+    .feature-art { min-height: 12rem; padding: 1.5rem; }
+    .feature-art :global(.service-art) { height: 8rem; margin: 0; }
+    .lab-list article { grid-template-columns: 1.5rem 1fr; gap: .8rem; }
+    .lab-list .publication-status, .lab-list .lab-read { grid-column: 2; }
+    .reading-heading, .lab-closing .wrap { align-items: flex-start; flex-direction: column; }
+  }
+</style>

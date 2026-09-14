@@ -13,7 +13,7 @@ export default tseslint.config(
   },
   {
     files: ["**/*.{js,mjs,ts}"],
-    languageOptions: { globals: { console: "readonly", process: "readonly", URL: "readonly", document: "readonly", window: "readonly", HTMLElement: "readonly", HTMLDialogElement: "readonly", HTMLFormElement: "readonly", HTMLButtonElement: "readonly", FormData: "readonly", matchMedia: "readonly", requestAnimationFrame: "readonly" } },
+    languageOptions: { globals: { fetch: "readonly", Buffer: "readonly", AbortSignal: "readonly", console: "readonly", process: "readonly", URL: "readonly", document: "readonly", window: "readonly", HTMLElement: "readonly", HTMLDialogElement: "readonly", HTMLFormElement: "readonly", HTMLButtonElement: "readonly", FormData: "readonly", matchMedia: "readonly", requestAnimationFrame: "readonly" } },
   },
   {
     // The perf harness ships browser code inside page.evaluate() callbacks,

@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { access, readFile } from "node:fs/promises";
+import { access, readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
@@ -7,12 +7,21 @@ import { fileURLToPath } from "node:url";
 // The Vercel adapter emits prerendered pages under dist/client.
 const output = fileURLToPath(new URL("../dist/client/", import.meta.url));
 const origin = "https://17thstreetlabs.com";
-const routes = [
-  { route: "/", heading: /Send us.*the hard one\./, content: /Stop guessing\.<br\s*\/?\s*>Start measuring\./ },
-  { route: "/services", heading: /We build the engineering around the intelligence\./, content: /How we work/ },
+const navigationRoutes = [
+  { route: "/lab", heading: /What we’re learning.*while building it\./, content: /Inside the experiments/ },
+  { route: "/", heading: /Send us.*the hard one\./, content: /The work makes the case\./ },
+  { route: "/services", heading: /Serious engineering\..*A little imagination helps\./, content: /How we work/ },
+  { route: "/proof", heading: /Trusted by people.*who set the standard\./, content: /ExploitHunter/ },
   { route: "/about", heading: /We don(?:&#39;|')t sell AI theater\./, content: /Marina Levy/ },
-  { route: "/contact", heading: /Got an AI problem that(?:&#39;|')s getting weird\?/, content: /Three sentences is plenty\./ },
 ];
+
+const articleFiles = (await readdir(new URL("../src/content/lab/", import.meta.url))).filter(name => name.endsWith(".md"));
+const articleRoutes = articleFiles.map(name => ({
+  route: `/lab/${name.replace(/\.md$/, "")}`,
+  heading: /\S/,
+  content: /Marina Levy and Dan Levy/,
+}));
+const routes = [...navigationRoutes, ...articleRoutes];
 
 function attribute(tag, name) {
   return tag.match(new RegExp(`\\b${name}\\s*=\\s*(?:"([^"]*)"|'([^']*)'|([^\\s>]+))`, "i"))?.slice(1).find((value) => value !== undefined);
@@ -43,7 +52,7 @@ for (const { route, heading, content } of routes) {
     const nav = html.match(/<nav\b[^>]*>([\s\S]*?)<\/nav>/i)?.[1];
     assert.ok(nav, "navigation is server-rendered");
     const destinations = tags(nav, "a").map((tag) => attribute(tag, "href")).filter(Boolean).map((href) => new URL(href, origin));
-    for (const expected of routes) {
+    for (const expected of navigationRoutes) {
       assert.ok(destinations.some((url) => url.origin === origin && normalizeRoute(url) === expected.route), `navigation links to ${expected.route}`);
     }
   });
@@ -108,4 +117,30 @@ test("the static error page is branded, excluded from indexing, and links home",
   const robots = tags(html, "meta").find((tag) => attribute(tag, "name") === "robots");
   assert.match(attribute(robots ?? "", "content") ?? "", /\bnoindex\b/);
   assert.ok(tags(html, "a").some((tag) => attribute(tag, "href") === "/"));
+});
+
+test("old contact links redirect to the homepage conversation dialog", async () => {
+  const html = await readPage("/contact");
+  assert.match(html, /http-equiv="refresh"/i);
+  assert.match(html, /url=\/\?contact/);
+});
+
+
+test("all ten articles are complete, undated, and discoverable from the lab", async () => {
+  assert.equal(articleRoutes.length, 10);
+  const index = await readPage("/lab");
+  assert.doesNotMatch(index, /Coming soon/);
+  for (const { route } of articleRoutes) {
+    assert.ok(tags(index, "a").some(tag => attribute(tag, "href") === `${route}/`), `${route} appears in index`);
+    const html = await readPage(route);
+    const main = html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i)?.[1] ?? "";
+    assert.match(main, /The takeaway/);
+    assert.match(main, /Keep reading/);
+    assert.doesNotMatch(main, /<time\b|datePublished|dateModified|Coming soon/i);
+    assert.ok(tags(main, "h2").length >= 3, `${route} renders complete article sections`);
+    assert.match(main, /data-lab-article/);
+    assert.doesNotMatch(main, /data-protected-article|data-lab-gate/);
+    const structured = [...main.matchAll(/<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)].map(match => JSON.parse(match[1]));
+    assert.ok(structured.some(item => item['@type'] === 'BlogPosting' && item.isAccessibleForFree === true));
+  }
 });

@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Icon from "../components/Icon.astro";
+import ProductionReality from "../components/ProductionReality.astro";
 import { services } from "../data/services";
 const lines: Record<string, string> = {
   evals: "Less “feels better.” More “prove it.”",
@@ -16,6 +17,17 @@ const lines: Record<string, string> = {
   description="We build, test, and improve AI products. Evals, agents, model strategy, and security."
 >
   <section class="hero brand-hero">
+    <div class="wrap hero-inner">
+      <div class="hero-copy">
+      <p class="eyebrow">17th Street Labs · AI engineering</p>
+      <h1 class="statement">Send us<br /> the hard one.</h1>
+      <p class="lede">We help product and engineering teams build AI that works outside the demo. And fix it when it doesn’t.</p>
+      <div class="hero-actions">
+        <a href="/contact/" data-contact-dialog class="button button-solid">
+          Start a conversation <Icon name="ArrowRight" size={16} />
+        </a>
+      </div>
+      </div>
     <div class="hero-geometry" aria-hidden="true">
       <span class="geo geo-one"></span>
       <span class="geo geo-two"></span>
@@ -23,15 +35,6 @@ const lines: Record<string, string> = {
       <span class="geo geo-four"></span>
       <span class="geo-person"></span>
     </div>
-    <div class="wrap hero-inner">
-      <p class="eyebrow">17th Street Labs · AI engineering</p>
-      <h1 class="statement">Send us<br /> the hard one.</h1>
-      <p class="lede">AI that survives contact with reality.</p>
-      <div class="hero-actions">
-        <a href="/contact/" data-contact-dialog class="button button-solid">
-          Start a conversation <Icon name="ArrowRight" size={16} />
-        </a>
-      </div>
       <ul class="hero-service-strip">
         {services.map((service) => <li><a href={`/services/#${service.slug}`}>{service.title}</a></li>)}
       </ul>
@@ -40,11 +43,7 @@ const lines: Record<string, string> = {
 
   <section class="band">
     <div class="wrap">
-      <div class="band-head">
-        <h2 class="section-title">The demo worked.<br />Now what?</h2>
-        <p>Your eval says everything is fine. Your users disagree.</p>
-        <p>Welcome to production AI. This is where we work.</p>
-      </div>
+      <ProductionReality />
       <ul class="service-grid">
         {services.map((service) => (
           <li>
@@ -61,10 +60,9 @@ const lines: Record<string, string> = {
   <section class="band" id="thinking">
     <div class="wrap">
       <div class="band-head messaging-copy">
-        <h2 class="section-title">Stop guessing.<br />Start measuring.</h2>
-        <p>Build it. Break it. Fix it. Test it again.</p>
-        <p>We don’t sell AI theater.</p>
-        <a class="text-link" href="/about/">Meet the people doing the work <Icon name="ArrowRight" size={16} /></a>
+        <h2 class="section-title">The work makes the case.</h2>
+        <p>Explore the AI tools we’ve built, the research we share, and what industry-leading clients say about working with us.</p>
+        <a class="text-link" href="/proof/">See the proof <Icon name="ArrowRight" size={16} /></a>
       </div>
     </div>
   </section>

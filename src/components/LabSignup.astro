@@ -1,0 +1,127 @@
+<dialog class="lab-dialog" aria-labelledby="lab-signup-title" aria-describedby="lab-signup-description">
+  <button class="lab-close" aria-label="Close reader signup">×</button>
+  <p class="lab-eyebrow">From the Lab</p>
+  <h2 id="lab-signup-title">There’s more where<br />that came from.</h2>
+  <p id="lab-signup-description">Enjoying the useful bits? Pop in your email and make yourself at home in the Lab.</p>
+  <form id="lab-signup-form">
+    <label for="lab-email">Email address</label>
+    <input id="lab-email" type="email" name="email" autocomplete="email" maxlength="160" required placeholder="you@company.com" />
+    <div hidden><input name="company" tabindex="-1" autocomplete="off" aria-hidden="true" /></div>
+    <button type="submit">Keep reading <span aria-hidden="true">↗</span></button>
+    <p class="lab-signup-status" role="status" aria-live="polite"></p>
+    <p class="lab-fineprint">Free access, remembered in this browser. We use your email to register your access—not to sign you up for marketing.</p>
+  </form>
+  <button type="button" class="lab-skip">Keep reading for now</button>
+</dialog>
+<script>
+  const modal = document.querySelector<HTMLDialogElement>('.lab-dialog')!;
+  const form = document.querySelector<HTMLFormElement>('#lab-signup-form')!;
+  const status = form.querySelector<HTMLElement>('.lab-signup-status')!;
+  const submit = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+  const article = document.querySelector<HTMLElement>('[data-lab-article]');
+  let unlocked = false;
+  let purpose: "article-access" | "newsletter" = "article-access";
+  let opener: HTMLElement | null = null;
+  function markUnlocked() {
+    document.querySelectorAll<HTMLElement>('[data-lab-signup]').forEach(el => {
+      el.innerHTML = 'Explore the articles <span aria-hidden="true">↗</span>';
+    });
+  }
+  function invite(newsletter = false) {
+    purpose = newsletter ? 'newsletter' : 'article-access';
+    form.hidden = false;
+    form.reset();
+    modal.querySelector<HTMLElement>('#lab-signup-title')!.textContent = newsletter ? 'The useful bits. In your inbox.' : 'There’s more where that came from.';
+    modal.querySelector<HTMLElement>('#lab-signup-description')!.textContent = newsletter ? 'Get practical AI lessons, experiments, and ideas from the people building the systems.' : 'Enjoying the useful bits? Pop in your email and make yourself at home in the Lab.';
+    modal.querySelector<HTMLElement>('.lab-fineprint')!.textContent = newsletter ? 'By subscribing, you agree to receive the From the Lab newsletter by email.' : 'Free access, remembered in this browser. We use your email to register your access—not to sign you up for marketing.';
+    submit.classList.toggle('newsletter-button', newsletter);
+    submit.textContent = newsletter ? 'Send me the good stuff' : 'Keep reading';
+    modal.querySelector<HTMLElement>('.lab-skip')!.textContent = newsletter ? 'Not now' : 'Keep reading for now';
+    if (modal.open || document.querySelector('dialog[open]')) return;
+    status.textContent = '';
+    modal.showModal();
+  }
+  async function recognizeReader() {
+    try {
+      const res = await fetch('/api/lab-access/', {cache: 'no-store'});
+      if (res.ok) unlocked = (await res.json()).unlocked === true;
+    } catch { /* Reading remains available when registration is offline. */ }
+    if (unlocked) { markUnlocked(); return; }
+    if (!article) return;
+    try {
+      const key = 'lab-reading-history';
+      const stored = JSON.parse(localStorage.getItem(key) || '[]');
+      const visited: string[] = Array.isArray(stored) ? stored.filter(value => typeof value === 'string') : [];
+      const slug = article.dataset.labArticle!;
+      const isNew = !visited.includes(slug);
+      if (isNew) localStorage.setItem(key, JSON.stringify([...visited, slug].slice(-100)));
+      if (isNew && visited.length >= 3 && Date.now() > Number(localStorage.getItem('lab-invite-after') || 0)) invite();
+    } catch { /* Without storage, use the voluntary footer invitation only. */ }
+  }
+  document.querySelectorAll<HTMLElement>('[data-lab-signup]').forEach(trigger => trigger.addEventListener('click', event => {
+    event.preventDefault();
+    opener = trigger;
+    if (unlocked) { window.location.assign('/lab/'); return; }
+    invite();
+  }));
+  document.querySelectorAll<HTMLElement>('[data-newsletter-signup]').forEach(trigger => trigger.addEventListener('click', () => {
+    opener = trigger;
+    invite(true);
+  }));
+  modal.querySelector('.lab-skip')?.addEventListener('click', () => modal.close());
+  modal.querySelector('.lab-close')?.addEventListener('click', () => modal.close());
+  modal.addEventListener('click', event => {
+    if (event.target !== modal) return;
+    const r = modal.getBoundingClientRect();
+    if (event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom) modal.close();
+  });
+  modal.addEventListener('close', () => {
+    try { localStorage.setItem('lab-invite-after', String(Date.now() + 86400000)); } catch { /* Optional reminder preference. */ }
+    if (opener) opener.focus();
+    else article?.focus({preventScroll: true});
+  });
+  form.addEventListener('submit', async event => {
+    event.preventDefault();
+    if (!form.reportValidity()) return;
+    submit.disabled = true;
+    status.textContent = purpose === 'newsletter' ? 'Saving your signup…' : 'Opening the collection…';
+    try {
+      const data = new FormData(form);
+      const res = await fetch('/api/lab-access/', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({email:data.get('email'), company:data.get('company'), purpose})});
+      const result = await res.json();
+      if (!res.ok || !result.unlocked) throw new Error(result.error || 'Please try again.');
+      unlocked = true;
+      markUnlocked();
+      if (purpose === 'newsletter') {
+        form.hidden = true;
+        modal.querySelector<HTMLElement>('#lab-signup-title')!.textContent = 'You’re on the list.';
+        modal.querySelector<HTMLElement>('#lab-signup-description')!.textContent = 'Thanks for subscribing. In the meantime, there’s plenty to explore in the Lab.';
+        modal.querySelector<HTMLElement>('.lab-skip')!.textContent = 'Back to reading';
+        return;
+      }
+      modal.close();
+      if (article) article.focus({preventScroll: true});
+      else window.location.assign('/lab/');
+    } catch (error) { status.textContent = error instanceof Error ? error.message : 'Please try again.'; }
+    finally { submit.disabled = false; }
+  });
+  recognizeReader();
+</script>
+<style>
+  #lab-signup-form[hidden] { display: none; }
+  .lab-skip { display: block; margin: 1rem auto 0; background: none; border: 0; color: #655a69; text-decoration: underline; text-underline-offset: .2em; cursor: pointer; font-size: .8rem; }
+  .lab-dialog { margin:auto; width:min(100% - 2rem, 32rem); max-height:calc(100dvh - 2rem); overflow:auto; padding:clamp(1.5rem,4vw,2.75rem); background:#f6f4ee; color:#302338; border:1px solid #30233840; }
+  .lab-dialog::backdrop { background:#18102099; }
+  .lab-close { position:absolute; right:1rem; top:.5rem; border:0; background:transparent; color:inherit; font-size:2rem; cursor:pointer; width:2.5rem; height:2.5rem; }
+  .lab-eyebrow { font: .65rem var(--mono); text-transform:uppercase; letter-spacing:.1em; margin-bottom:1.3rem; }
+  h2 { font-size:clamp(1.8rem,4vw,2.5rem); font-weight:650; letter-spacing:-.05em; line-height:1.1; }
+  #lab-signup-description { margin-block:1rem 1.5rem; line-height:1.6; }
+  #lab-signup-form { display: block; margin: 0; }
+  .lab-signup-status:empty { display: none; }
+  label { display:block; font-size:.85rem; margin-bottom:.5rem; }
+  input[type=email] { width:100%; border:1px solid #8b7b93; background:transparent; padding:.8rem; color:#302338; border-radius:0; }
+  button[type=submit] { width:100%; margin-top:.8rem; padding:.9rem; background:#302338; color:#f6f4ee; border:0; cursor:pointer; display:flex; justify-content:space-between; }
+  button:disabled { opacity:.6; cursor:wait; }
+  .lab-fineprint { font-size:.72rem; line-height:1.5; color:#655a69; margin-top:.7rem; }
+  .lab-signup-status { font-size:.85rem; margin-top:.7rem; }
+</style>

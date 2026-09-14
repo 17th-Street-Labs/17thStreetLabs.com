@@ -1,0 +1,12 @@
+---
+import type { MarkdownInstance } from 'astro';
+import Article from '../../layouts/Article.astro';
+import { labEntries } from '../../data/lab';
+export function getStaticPaths() {
+  return labEntries.map(entry => ({ params: { slug: entry.slug } }));
+}
+const { slug } = Astro.params;
+const files = import.meta.glob<MarkdownInstance<Record<string, unknown>>>('../../content/lab/*.md');
+const { Content } = await files[`../../content/lab/${slug}.md`]();
+---
+<Article frontmatter={{ slug: slug! }}><Content /></Article>

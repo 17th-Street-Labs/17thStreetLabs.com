@@ -1,0 +1,133 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Icon from "../components/Icon.astro";
+---
+
+<Layout
+  title="Proof | 17th Street Labs"
+  description="Trusted by industry leaders in telecom, sport, finance, healthcare, education, hospitality, and travel. Read client feedback and explore our public engineering projects."
+>
+  <section class="page-hero">
+    <div class="wrap">
+      <p class="chip">Proof</p>
+      <h1 class="statement">Trusted by people<br />who set the standard.</h1>
+      <p class="lede">Our clients lead the way in telecom, sport, finance, healthcare, education, hospitality, and travel. Their names are confidential, but they’ve given us permission to share what it’s like to work with us.</p>
+      <nav class="project-jumps" aria-label="Explore our proof">
+        <a href="#feedback">Client feedback <Icon name="ArrowRight" size={16} /></a>
+        <a href="#exploithunter">ExploitHunter <Icon name="ArrowRight" size={16} /></a>
+        <a href="#docslurp">DocSlurp <Icon name="ArrowRight" size={16} /></a>
+      </nav>
+    </div>
+  </section>
+
+  <section class="band" id="feedback" aria-labelledby="feedback-title">
+    <div class="wrap">
+      <div class="band-head">
+        <p class="chip">What comes back to us</p>
+        <h2 class="section-title" id="feedback-title">Apparently, we’re early.</h2>
+        <p>A few things clients have told us. Paraphrased, with names kept private.</p>
+      </div>
+      <div class="feedback-grid">
+        <article><h3>A fly on the wall, please.</h3><p>Clients tell us the solutions feel almost uncanny—things they hadn’t imagined were possible. Then those ideas change how the whole company works. Naturally, they’d like to know what goes on in here.</p></article>
+        <article><h3>How did you see that coming?</h3><p>One client came back after an idea we’d discussed nine months earlier started turning up in the news. What had sounded unlikely was suddenly very real.</p></article>
+        <article><h3>How are you always this early?</h3><p>Over 50 years of combined experience, plus a close eye on technology, economics, finance, and world events. We connect the dots and make informed calls about what’s next. That’s our crystal ball. It gets mistaken for magic.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="band project-section" id="exploithunter" aria-labelledby="exploithunter-title">
+    <div class="wrap project-layout">
+      <div class="band-head">
+        <p class="chip">01 / Open-source security research</p>
+        <h2 class="section-title" id="exploithunter-title">ExploitHunter</h2>
+        <p class="project-hook">The agent found a vulnerability.<br />Great. Show us.</p>
+        <a class="text-link" href="https://github.com/justsml/ExploitHunter.app" target="_blank" rel="noreferrer">Open the code on GitHub <Icon name="ArrowRight" size={16} /></a>
+      </div>
+      <div class="project-copy">
+        <p>A confident security report is easy to generate. A finding you can check takes more work.</p>
+        <p>ExploitHunter is our open-source workbench for AI-assisted security research. It keeps the target, tools, approvals, and evidence together, so an investigation has something to show for itself.</p>
+        <dl class="project-details">
+          <div><dt>Different models. Same scrutiny.</dt><dd>Compare frontier, lower-cost, and local models on security tasks. See where each earns its keep.</dd></div>
+          <div><dt>Room to investigate. Boundaries to respect.</dt><dd>Scoped targets, approval controls, and isolated labs for authorized testing.</dd></div>
+          <div><dt>The workings are public.</dt><dd>Code, evaluation results, and the scoring method are there to inspect. Including the limits of what a result tells you.</dd></div>
+        </dl>
+        <p class="project-takeaway">This is how we work: ask a difficult question, build a way to test it, and keep the evidence.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band project-section" id="docslurp" aria-labelledby="docslurp-title">
+    <div class="wrap project-layout">
+      <div class="band-head">
+        <p class="chip">02 / Document ingestion &amp; search</p>
+        <h2 class="section-title" id="docslurp-title">DocSlurp</h2>
+        <p class="project-hook">Your documents have answers.<br />Getting them out is the trick.</p>
+        <a class="text-link" href="https://docslurp.io/" target="_blank" rel="noreferrer">Explore DocSlurp <Icon name="ArrowRight" size={16} /></a>
+      </div>
+      <div class="project-copy">
+        <p>That answer might be in a table. Inside a scan. On page 214. Naturally.</p>
+        <p>DocSlurp is our document ingestion platform. It extracts and organizes document content so people and AI systems can search it—and get back to the source.</p>
+        <dl class="project-details">
+          <div><dt>Keep the useful parts.</dt><dd>Table extraction, OCR, and image descriptions help bring more than plain text into the pipeline.</dd></div>
+          <div><dt>Show where the answer came from.</dt><dd>Search results link to page regions and page previews. You can check the document yourself.</dd></div>
+          <div><dt>Give it a place in the system.</dt><dd>Model routing handles different document regions. API, SDK, and MCP interfaces connect the pipeline to applications and agents.</dd></div>
+        </dl>
+        <p class="project-takeaway">A document is only useful to an AI system if the important parts make it through.</p>
+      </div>
+    </div>
+  </section>
+
+
+
+  <section class="band">
+    <div class="wrap teaching-proof">
+      <p class="teaching-number">3,000+</p>
+      <div class="band-head">
+        <p class="chip">Students taught by Dan Levy</p>
+        <h2 class="section-title">Good work travels.</h2>
+        <p>More than 3,000 students have learned from Dan. For some, the starting point was zero coding experience. Today, they’re engineers leading companies want to hire. The work changed what they could do—and what their lives could look like.</p>
+        <p>Some still stop him in the street to say thank you. That one never gets old.</p>
+        <p>Dan and Kyle Coberly worked together at Galvanize. They bring the same standard to client work: build something that works, and leave people capable of taking it further.</p>
+        <a class="text-link" href="/about/">Meet the people behind the work <Icon name="ArrowRight" size={16} /></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <div class="closing">
+        <h2 class="statement">Got an AI problem that's getting weird?</h2>
+        <p>Good. Those are usually the interesting ones.</p>
+        <div class="hero-actions"><a href="/contact/" data-contact-dialog class="button button-solid">Start a conversation <Icon name="ArrowRight" size={16} /></a></div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .project-jumps { display: flex; flex-wrap: wrap; gap: 1rem 2.5rem; margin-top: .5rem; }
+  .project-jumps a { display: inline-flex; align-items: center; gap: 1rem; padding-block: .75rem; border-bottom: 1px solid var(--line-2); font-size: .95rem; }
+  .project-jumps a:hover { color: var(--blue); }
+  .project-section { scroll-margin-top: 2rem; }
+  .project-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: clamp(2.5rem, 6vw, 6rem); align-items: start; }
+  .project-layout .section-title { font-size: clamp(2.5rem, 4.6vw, 4.8rem); overflow-wrap: anywhere; }
+  .band-head .chip { white-space: normal; font-size: .68rem; line-height: 1.6; }
+  .project-layout .project-hook { font-size: clamp(1.25rem, 2vw, 1.65rem); line-height: 1.4; color: var(--bg); }
+  .project-copy { font-size: 1.05rem; line-height: 1.65; }
+  .project-copy > p + p { margin-top: 1rem; }
+  .project-details { margin-block: 2rem; }
+  .project-details > div { padding-block: 1.25rem; border-top: 1px solid rgba(48,35,56,.25); }
+  .project-details dt { font-weight: 650; margin-bottom: .5rem; }
+  .project-details dd { margin: 0; color: #655a69; }
+  .project-takeaway { border-left: 3px solid var(--bg); padding-left: 1.25rem; font-weight: 550; }
+  .feedback-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2rem; margin-top: 3rem; }
+  .feedback-grid article { border-top: 1px solid rgba(48,35,56,.3); padding-top: 1.5rem; }
+  .feedback-grid h3 { font-size: 1.65rem; line-height: 1.15; letter-spacing: -.04em; margin-bottom: 1rem; }
+  .feedback-grid p { line-height: 1.6; }
+  .teaching-proof { display: grid; grid-template-columns: minmax(0, .75fr) minmax(0, 1.25fr); gap: 3rem; align-items: start; }
+  .teaching-number { font-size: clamp(4rem, 9vw, 8rem); font-weight: 720; letter-spacing: -.07em; line-height: 1; }
+  @media (max-width: 52rem) {
+    .project-layout, .feedback-grid, .teaching-proof { grid-template-columns: minmax(0, 1fr); }
+    .project-jumps { gap: .5rem 1.5rem; }
+  }
+</style>
