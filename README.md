@@ -1,5 +1,8 @@
 # 17th Street Labs
 
+[![Build, lint & tests](https://github.com/17th-Street-Labs/17thStreetLabs.com/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/17th-Street-Labs/17thStreetLabs.com/actions/workflows/ci.yml?query=branch%3Amain)
+[![Vercel deployments](https://img.shields.io/badge/Deployments-Vercel-black?logo=vercel)](https://vercel.com/dan-levys-projects/17th-street-labs-com/deployments)
+
 The 17th Street Labs consultancy website, built with Astro 7 and native CSS.
 Astro generates static HTML for the home, services, about, and contact pages,
 with browser scripts for interactive controls.
