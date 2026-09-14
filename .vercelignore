@@ -1,0 +1,14 @@
+.local
+.env*
+.git
+node_modules
+dist
+outputs
+work
+.remember
+playwright-report
+test-results
+.sites-runtime
+.astro
+.vercel
+.wrangler
