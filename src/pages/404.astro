@@ -1,6 +1,5 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Icon from "../components/Icon.astro";
 ---
 
 <Layout
@@ -8,13 +7,17 @@ import Icon from "../components/Icon.astro";
   description="Find your way back to 17th Street Labs."
   noindex
 >
-  <section class="interior-hero">
-    <div class="section-label"><span>404</span> PAGE NOT FOUND</div>
-    <h1>This page is<br /><em>off the map.</em></h1>
-    <p>The address may have changed. Explore our services or head back home.</p>
-    <div class="hero-actions">
-      <a class="button-primary" href="/">Back to home <Icon name="ArrowRight" size={18} /></a>
-      <a class="button-quiet" href="/services/">Explore services <Icon name="ArrowUpRight" size={18} /></a>
+  <section class="page-hero">
+    <div class="container">
+      <p class="lede">Error 404</p>
+      <h1>This page is off the map.</h1>
+      <p class="lede">
+        The address may have changed. Head back home or look at what we do.
+      </p>
+      <div class="hero-actions">
+        <a class="button button-primary" href="/">Back to home</a>
+        <a class="button button-ghost" href="/services/">See services</a>
+      </div>
     </div>
   </section>
 </Layout>

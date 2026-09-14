@@ -1,104 +1,109 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Icon from "../components/Icon.astro";
+import { proof } from "../data/services";
 ---
 
 <Layout
   title="About | 17th Street Labs"
-  description="Meet the founders and operating principles behind 17th Street Labs, an independent AI engineering and security research consultancy."
+  description="Meet the founders and operating principles behind 17th Street Labs, an independent AI engineering and security research firm in Denver."
 >
-  <section class="interior-hero about-hero">
-    <div class="section-label">
-      <span>01</span> THE LAB
-    </div>
-    <h1>
-      Experience without
-      <br />
-      <em>the institution.</em>
-    </h1>
-    <p>
-      17th Street Labs is a founder-led AI engineering and security research
-      consultancy. Small by design, direct by default, and built for work where
-      judgment matters.
-    </p>
-  </section>
-  <section class="numbers">
-    <div>
-      <b>25+</b>
-      <span>years building and leading software systems</span>
-    </div>
-    <div>
-      <b>6→60</b>
-      <span>engineers scaled in a prior platform organization</span>
-    </div>
-    <div>
-      <b>250k/s</b>
-      <span>events delivered at production scale</span>
-    </div>
-    <div>
-      <b>50M</b>
-      <span>users reached by a platform Dan helped build</span>
+  <section class="page-hero">
+    <div class="container">
+      <h1>Experience without the institution.</h1>
+      <p class="lede">
+        17th Street Labs is a founder-led AI engineering and security research
+        firm. Small by design, direct by default, and built for work where
+        judgment matters more than headcount.
+      </p>
     </div>
   </section>
-  <section class="principles-section">
-    <div class="section-label">
-      <span>02</span> OPERATING PRINCIPLES
+
+  <section class="section">
+    <div class="container">
+      <dl class="proof-strip">
+        {proof.map(({ value, label }) => (
+          <div>
+            <dt>{value}</dt>
+            <dd>{label}</dd>
+          </div>
+        ))}
+      </dl>
     </div>
-    <div class="principle-stack">
-      <div>
-        <span>01</span>
-        <h3>Evidence over theater.</h3>
-        <p>
-          A fluent demo is not a reliable system. We design measurement that can
-          survive scrutiny.
-        </p>
+  </section>
+
+  <section class="section section-tint">
+    <div class="container section-grid">
+      <div class="section-intro">
+        <h2>Founders</h2>
+        <p>Two people, one firm. You get both on every engagement.</p>
       </div>
-      <div>
-        <span>02</span>
-        <h3>Security is architecture.</h3>
-        <p>
-          Permissions, boundaries, data flows, and failure recovery belong in
-          the design, not the launch checklist.
-        </p>
-      </div>
-      <div>
-        <span>03</span>
-        <h3>Capability must transfer.</h3>
-        <p>
-          The engagement compounds when your team leaves with sharper systems
-          and stronger judgment.
-        </p>
+      <div class="founder-pair founder-pair-long">
+        <article class="founder">
+          <h3>Marina Levy</h3>
+          <p class="role">Co-founder, chief executive officer</p>
+          <p>
+            Marina sets the operating direction for 17th Street Labs. She
+            shapes ambitious technical work into focused engagements with a
+            clear scope, a steady cadence, and an outcome we can be held to.
+            If an engagement is going well, that is usually her doing.
+          </p>
+        </article>
+        <article class="founder">
+          <h3>Dan Levy</h3>
+          <p class="role">Co-founder, principal AI engineer</p>
+          <p>
+            Engineer, educator, founder, and technical leader with more than
+            twenty-five years across production systems, developer platforms,
+            AI applications, evaluation infrastructure, and offensive and
+            defensive AI security. He grew one platform organization from six
+            engineers to sixty and has shipped systems used by fifty million
+            people. He still writes the code on every engagement.
+          </p>
+          <a class="text-link" href="mailto:dan@danlevy.net">dan@danlevy.net</a>
+        </article>
       </div>
     </div>
   </section>
-  <section class="founders">
-    <div class="section-label">
-      <span>03</span> FOUNDERS
+
+  <section class="section">
+    <div class="container section-grid">
+      <div class="section-intro">
+        <h2>How we think</h2>
+        <p>Three convictions that show up in every piece of work.</p>
+      </div>
+      <div class="principles">
+        <div>
+          <h3>Evidence over theater</h3>
+          <p>
+            A fluent demo is not a reliable system. We design measurement that
+            survives scrutiny from your engineers, your customers, and your
+            auditors.
+          </p>
+        </div>
+        <div>
+          <h3>Security is architecture</h3>
+          <p>
+            Permissions, boundaries, data flows, and failure recovery belong in
+            the design. Bolting them on at launch is how agents end up in the
+            news.
+          </p>
+        </div>
+        <div>
+          <h3>Capability has to transfer</h3>
+          <p>
+            The engagement pays off when your team leaves with sharper systems
+            and stronger judgment, and does not need us for the next change.
+          </p>
+        </div>
+      </div>
     </div>
-    <div class="founder-grid">
-      <article class="spotlight-card">
-        <div class="founder-monogram marina">ML</div>
-        <span class="micro">CO-FOUNDER · CHIEF EXECUTIVE OFFICER</span>
-        <h2>Marina Levy</h2>
-        <p>
-          Marina sets the operating direction for 17th Street Labs, shaping
-          ambitious technical work into focused engagements, durable
-          partnerships, and measurable client value.
-        </p>
-      </article>
-      <article class="spotlight-card">
-        <div class="founder-monogram">DL</div>
-        <span class="micro">CO-FOUNDER · PRINCIPAL AI ENGINEER</span>
-        <h2>Dan Levy</h2>
-        <p>
-          Engineer, educator, founder, and technical leader with 25+ years
-          across production systems, developer platforms, AI applications,
-          evaluation infrastructure, and offensive and defensive AI security.
-        </p>
-        <a href="mailto:dan@danlevy.net">
-          dan@danlevy.net <Icon name="ArrowUpRight" size={15} />
-        </a>
-      </article>
+  </section>
+
+  <section class="closing">
+    <div class="container">
+      <h2>Work with us.</h2>
+      <p>Send the problem, not a pitch. We will tell you if we can help.</p>
+      <a class="button button-primary" href="/contact/">Start a conversation</a>
     </div>
   </section>
 </Layout>

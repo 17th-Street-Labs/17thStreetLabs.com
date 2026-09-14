@@ -1,87 +1,96 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Icon from "../components/Icon.astro";
 import { services } from "../data/services";
 ---
 
 <Layout
   title="Services | 17th Street Labs"
-  description="AI product engineering, AI security, evaluations and reliability, and hands-on technical advisory."
+  description="AI product engineering, AI security, evaluations and reliability, and hands-on technical advisory from senior practitioners."
 >
-  <section class="interior-hero">
-    <div class="section-label">
-      <span>01</span> SERVICES
+  <section class="page-hero">
+    <div class="container">
+      <h1>Senior hands on the hard part.</h1>
+      <p class="lede">
+        We enter where capability, uncertainty, and consequence meet. Every
+        engagement is led hands-on by the founders, not handed to a bench.
+      </p>
     </div>
-    <h1>
-      Senior leverage,
-      <br />
-      <em>at the fault line.</em>
-    </h1>
-    <p>
-      We enter where capability, uncertainty, and consequence meet. Every
-      engagement is led hands-on by senior practitioners.
-    </p>
   </section>
-  <section class="service-list">
-    {services.map((service) => (
-      <article class="spotlight-card service-row">
-        <span class="service-number">{service.number}</span>
-        <div>
-          <span class="micro">{service.tag}</span>
-          <h2>{service.title}</h2>
-        </div>
-        <div>
-          <p>{service.detail}</p>
-          <b>{service.outcome}</b>
-        </div>
-        <Icon name="ArrowUpRight" />
-      </article>
-    ))}
-  </section>
-  <section class="engagement-model">
-    <div class="section-label">
-      <span>02</span> ENGAGEMENT MODEL
+
+  <section class="section">
+    <div class="container">
+      <div class="service-detail-list">
+        {services.map((service) => (
+          <article class="service-detail" id={service.slug}>
+            <div class="service-detail-head">
+              <h2>{service.title}</h2>
+              <p class="outcome">{service.outcome}</p>
+            </div>
+            <div class="service-detail-body">
+              <p>{service.summary}</p>
+              <h3>A good fit when</h3>
+              <ul class="plain-list">
+                {service.fits.map((fit) => (
+                  <li>{fit}</li>
+                ))}
+              </ul>
+            </div>
+          </article>
+        ))}
+      </div>
     </div>
-    <div>
-      <h2>Clarity before ceremony.</h2>
+  </section>
+
+  <section class="section section-tint">
+    <div class="container section-grid">
+      <div class="section-intro">
+        <h2>How we work</h2>
+        <p>Clarity before ceremony. Open a step to see what it means in practice.</p>
+      </div>
       <div class="engagement-accordion">
         <details name="engagement" data-slot="accordion-item" open>
           <summary data-slot="accordion-trigger">
-            01 · Frame the consequential question
-            <Icon name="ChevronDown" size={16} />
+            <span class="step-index">1</span>
+            Frame the question that matters
           </summary>
           <div data-slot="accordion-content">
-            We identify the decision, failure mode, or capability that matters.
-            Success criteria are explicit before implementation expands.
+            We identify the decision, failure mode, or capability at stake and
+            write down success criteria before implementation expands. This is
+            usually a one to two week, fixed-fee piece of work with a written
+            recommendation at the end.
           </div>
         </details>
         <details name="engagement" data-slot="accordion-item">
           <summary data-slot="accordion-trigger">
-            02 · Build the smallest credible proof
-            <Icon name="ChevronDown" size={16} />
+            <span class="step-index">2</span>
+            Build the smallest credible proof
           </summary>
           <div data-slot="accordion-content">
-            Architecture, research, and evaluation proceed together. Evidence
-            arrives early enough to change direction.
+            Architecture, research, and evaluation proceed together. You get
+            working software and measured results early enough to change
+            direction while it is still cheap to do so.
           </div>
         </details>
         <details name="engagement" data-slot="accordion-item">
           <summary data-slot="accordion-trigger">
-            03 · Harden what survives contact
-            <Icon name="ChevronDown" size={16} />
+            <span class="step-index">3</span>
+            Harden what survives, then hand it over
           </summary>
           <div data-slot="accordion-content">
-            We pressure-test the system, turn findings into controls, and
-            transfer the operating capability to your team.
+            We pressure-test the system, turn findings into controls and
+            regression gates, and transfer the operating capability to your
+            team. The goal is that you do not need us for the next change.
           </div>
         </details>
       </div>
     </div>
   </section>
-  <section class="closing-cta compact">
-    <h2>Need a precise engagement?</h2>
-    <a class="magnetic button-primary" href="/contact/">
-      Tell us what is stuck <Icon name="ArrowRight" size={18} />
-    </a>
+
+  <section class="closing">
+    <div class="container">
+      <h2>Not sure which one you need?</h2>
+      <p>Describe the problem. We will tell you honestly whether we are the right fit.</p>
+      <a class="button button-primary" href="/contact/">Tell us what is stuck</a>
+    </div>
   </section>
 </Layout>

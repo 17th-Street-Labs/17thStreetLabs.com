@@ -2,19 +2,19 @@ import { expect, test } from "@playwright/test";
 
 test("navigation uses real routes and supports browser history and direct visits", async ({ page }) => {
   await page.goto("/");
-  await page.getByRole("navigation", { name: "Primary navigation" }).getByRole("link", { name: "services", exact: true }).click();
+  await page.getByRole("navigation", { name: "Primary navigation" }).getByRole("link", { name: "Services", exact: true }).click();
   await expect(page).toHaveURL(/\/services\/$/);
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("Senior leverage");
-  await page.getByRole("navigation", { name: "Primary navigation" }).getByRole("link", { name: "about", exact: true }).click();
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Senior hands");
+  await page.getByRole("navigation", { name: "Primary navigation" }).getByRole("link", { name: "About", exact: true }).click();
   await expect(page).toHaveURL(/\/about\/$/);
   await expect(page.getByRole("heading", { name: "Marina Levy" })).toBeVisible();
   await page.goBack();
   await expect(page).toHaveURL(/\/services\/$/);
   await page.reload();
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("Senior leverage");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Senior hands");
   await page.goto("/contact/");
   await expect(page.getByRole("heading", { level: 1 })).toContainText("hard problem");
-  await expect(page.getByRole("navigation", { name: "Primary navigation" }).getByRole("link", { name: "contact", exact: true })).toHaveAttribute("aria-current", "page");
+  await expect(page.getByRole("navigation", { name: "Primary navigation" }).getByRole("link", { name: "Contact", exact: true })).toHaveAttribute("aria-current", "page");
 });
 
 test("mobile navigation toggles, dismisses with Escape, and reaches a page", async ({ page }) => {
@@ -32,7 +32,7 @@ test("mobile navigation toggles, dismisses with Escape, and reaches a page", asy
   await expect(nav).toBeHidden();
   await expect(menu).toBeFocused();
   await menu.click();
-  await nav.getByRole("link", { name: "contact", exact: true }).click();
+  await nav.getByRole("link", { name: "Contact", exact: true }).click();
   await expect(page).toHaveURL(/\/contact\/$/);
   await expect(menu).toHaveAttribute("aria-expanded", "false");
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
@@ -89,7 +89,7 @@ test("contact form validates required fields and email without opening an email 
   expect(await email.evaluate((input: HTMLInputElement) => input.validity.typeMismatch)).toBe(true);
   await email.fill("test@example.com");
   expect(await form.evaluate((element: HTMLFormElement) => element.checkValidity())).toBe(true);
-  await expect(form).toContainText("Opens your email app with a draft for you to send.");
+  await expect(form).toContainText("Opens your email app with a draft you can edit before sending.");
   await expect(page).toHaveURL(/\/contact\/$/);
 });
 
@@ -116,14 +116,14 @@ test("mobile navigation and conversation links work without JavaScript", async (
     await page.goto("http://127.0.0.1:4322/");
     const nav = page.getByRole("navigation", { name: "Primary navigation" });
     await expect(nav).toBeVisible();
-    await nav.getByRole("link", { name: "services", exact: true }).click();
+    await nav.getByRole("link", { name: "Services", exact: true }).click();
     await expect(page).toHaveURL(/\/services\/$/);
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("Senior leverage");
-    await nav.getByRole("link", { name: "home", exact: true }).click();
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("Senior hands");
+    await nav.getByRole("link", { name: "Home", exact: true }).click();
     await page.getByRole("link", { name: "Bring us the hard problem" }).click();
     await expect(page).toHaveURL(/\/contact\/$/);
     await expect(page.getByRole("heading", { level: 1 })).toContainText("hard problem");
-    await expect(page.getByRole("link", { name: "dan@danlevy.net", exact: true })).toBeVisible();
+    await expect(page.getByRole("main").getByRole("link", { name: "dan@danlevy.net", exact: true })).toBeVisible();
   } finally {
     await context.close();
   }
@@ -133,7 +133,7 @@ test("missing routes return a branded 404 and a usable home link", async ({ page
   const response = await page.goto("/this-page-does-not-exist/");
   expect(response?.status()).toBe(404);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(/This page is\s*off the map\./);
-  await page.getByRole("navigation", { name: "Primary navigation" }).getByRole("link", { name: "home", exact: true }).click();
+  await page.getByRole("navigation", { name: "Primary navigation" }).getByRole("link", { name: "Home", exact: true }).click();
   await expect(page).toHaveURL("http://127.0.0.1:4322/");
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("Engineering intelligence");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("hold up in production");
 });

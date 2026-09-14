@@ -1,34 +1,57 @@
 export const services = [
   {
-    number: "01",
+    slug: "engineering",
     title: "AI product engineering",
-    tag: "BUILD",
-    detail:
-      "Production architecture for agentic applications, retrieval, tool use, model routing, durable workflows, and the integrations that make them useful.",
-    outcome: "From impressive prototype to dependable product.",
+    summary:
+      "We design and build agentic products that survive contact with real users: retrieval, tool use, model routing, durable workflows, and the integrations that make them useful.",
+    outcome: "You ship a product, not a demo.",
+    fits: [
+      "A prototype impressed leadership and now has to become a product",
+      "An agent needs to take real actions in real systems",
+      "Costs, latency, or reliability are blocking launch",
+    ],
   },
   {
-    number: "02",
+    slug: "security",
     title: "AI security",
-    tag: "ATTACK / DEFEND",
-    detail:
-      "Threat modeling, adversarial testing, red teaming, permissions, control design, and operational defenses for systems that reason and act.",
-    outcome: "Know how the system breaks before an attacker does.",
+    summary:
+      "Threat modeling, adversarial testing, and red teaming for systems that reason and act. We find how the system breaks, then design the permissions and controls that stop it.",
+    outcome: "You learn how it breaks before an attacker does.",
+    fits: [
+      "An agent has access to customer data, money, or production systems",
+      "Prompt injection and tool escalation are on the risk register",
+      "A customer or auditor is asking for evidence of testing",
+    ],
   },
   {
-    number: "03",
+    slug: "evals",
     title: "Evals & reliability",
-    tag: "PROVE",
-    detail:
-      "Curated datasets, scenario evaluations, deterministic and LLM judges, failure taxonomies, regression gates, and measurable improvement loops.",
-    outcome: "Replace launch anxiety with decision-quality evidence.",
+    summary:
+      "Curated datasets, scenario evaluations, deterministic and LLM judges, failure taxonomies, and regression gates. Measurement your team can run every week, not a one-off report.",
+    outcome: "You replace launch anxiety with numbers you trust.",
+    fits: [
+      "Quality is judged by vibes and a spreadsheet of screenshots",
+      "A model or prompt change broke something nobody noticed",
+      "Leadership wants to know if it is actually getting better",
+    ],
   },
   {
-    number: "04",
+    slug: "advisory",
     title: "Technical advisory",
-    tag: "LEAD",
-    detail:
-      "Architecture direction, build-vs-buy decisions, platform strategy, executive counsel, and hands-on enablement for senior teams.",
-    outcome: "Move faster without mortgaging the system.",
+    summary:
+      "Architecture direction, build-versus-buy decisions, platform strategy, and hands-on enablement for senior teams. Counsel from people who still write the code.",
+    outcome: "You move faster without mortgaging the system.",
+    fits: [
+      "You are choosing a platform, vendor, or architecture you will live with for years",
+      "Your senior engineers need a peer, not a slide deck",
+      "The board is asking questions the team cannot yet answer",
+    ],
   },
+];
+
+export const proof = [
+  { value: "25+", label: "years building and leading production software" },
+  { value: "6 → 60", label: "engineers, one platform org Dan scaled and led" },
+  { value: "50M", label: "users reached by a platform he helped build" },
+  { value: "250k/s", label: "events delivered at peak in production" },
 ];

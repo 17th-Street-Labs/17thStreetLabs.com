@@ -1,79 +1,69 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Icon from "../components/Icon.astro";
 ---
 
 <Layout
   title="Contact | 17th Street Labs"
   description="Start a conversation with 17th Street Labs about your AI engineering, security, or evaluation challenge."
 >
-  <section class="contact-view">
-    <div>
-      <div class="section-label">
-        <span>01</span> CONTACT
-      </div>
-      <h1>
-        Bring the
-        <br />
-        <em>hard problem.</em>
-      </h1>
-      <p>
+  <section class="page-hero page-hero-compact">
+    <div class="container">
+      <h1>Bring the hard problem.</h1>
+      <p class="lede">
         Tell us what you are building, where confidence breaks down, and what a
-        meaningful result would change.
+        meaningful result would change. No forms that go to a queue: this goes
+        to Dan.
       </p>
-      <div class="contact-people">
-        <span>ENGAGEMENTS</span>
-        <a href="mailto:dan@danlevy.net">dan@danlevy.net</a>
-        <span>LED BY</span>
-        <strong>
-          Marina Levy · CEO
-          <br />
-          Dan Levy · Principal AI Engineer
-        </strong>
-      </div>
     </div>
-    <article class="spotlight-card contact-panel">
-      <span class="micro">START HERE</span>
-      <h2>Three useful sentences are enough.</h2>
-      <form
+  </section>
+
+  <section class="section">
+    <div class="container contact-grid">
+      <div class="contact-aside">
+        <h2>Direct</h2>
+        <p>
+          Prefer email? Write to{" "}
+          <a href="mailto:dan@danlevy.net">dan@danlevy.net</a>.
+        </p>
+        <h2>Who replies</h2>
+        <p>
+          Dan Levy, principal AI engineer, and Marina Levy, chief executive.
+          You will hear back within a business day.
+        </p>
+        <h2>Where</h2>
+        <p>Denver, Colorado. We work with teams in any time zone.</p>
+      </div>
+      <div class="contact-panel">
+        <h2>Three useful sentences are enough.</h2>
+        <form
           data-project-brief
           action="mailto:dan@danlevy.net?subject=17th%20Street%20Labs%20%E2%80%94%20project%20brief"
           method="post"
           enctype="text/plain"
         >
-        <label>
-          Name
-          <input
-            name="name"
-            autocomplete="name"
-            required
-            placeholder="Your name"
-          />
-        </label>
-        <label>
-          Work email
-          <input
-            name="email"
-            autocomplete="email"
-            required
-            type="email"
-            placeholder="you@company.com"
-          />
-        </label>
-        <label>
-          What is at stake?
-          <textarea
-            name="context"
-            required
-            rows={6}
-            placeholder="The system, the uncertainty, and the consequence."
-          ></textarea>
-        </label>
-        <button class="submit-button" type="submit">
-          Open project brief <Icon name="ArrowUpRight" size={17} />
-        </button>
-        <small>Opens your email app with a draft for you to send.</small>
-      </form>
-    </article>
+          <label>
+            Name
+            <input name="name" autocomplete="name" required />
+          </label>
+          <label>
+            Work email
+            <input name="email" autocomplete="email" required type="email" />
+          </label>
+          <label>
+            What is at stake?
+            <textarea
+              name="context"
+              required
+              rows={7}
+              placeholder="The system, the uncertainty, and the consequence."
+            ></textarea>
+          </label>
+          <button class="button button-primary" type="submit">
+            Open project brief
+          </button>
+          <small>Opens your email app with a draft you can edit before sending.</small>
+        </form>
+      </div>
+    </div>
   </section>
 </Layout>

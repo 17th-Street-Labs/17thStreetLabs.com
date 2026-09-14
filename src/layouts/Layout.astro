@@ -9,15 +9,17 @@ interface Props {
 const { title, description, noindex = false } = Astro.props;
 const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
 const links = [
-  { name: "home", href: "/" },
-  { name: "services", href: "/services/" },
-  { name: "about", href: "/about/" },
-  { name: "contact", href: "/contact/" },
+  { name: "Home", href: "/" },
+  { name: "Services", href: "/services/" },
+  { name: "About", href: "/about/" },
+  { name: "Contact", href: "/contact/" },
 ];
 const canonical = new URL(
   Astro.url.pathname,
   Astro.site ?? "https://17thstreetlabs.com",
 );
+const isCurrent = (href: string) =>
+  currentPath === (href.replace(/\/$/, "") || "/");
 ---
 
 <!doctype html>
@@ -34,52 +36,39 @@ const canonical = new URL(
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:ital,wght@0,400..900;1,400..900&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap"
+    />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
-    <meta name="theme-color" content="#08060e" />
+    <meta name="theme-color" content="#f3f4f1" />
   </head>
   <body>
-    <div class="prism-site">
-      <a class="skip-link" href="#main-content">
-        Skip to content
-      </a>
-      <div class="light-rays" aria-hidden="true">
-        <i></i>
-        <i></i>
-        <i></i>
-        <i></i>
-        <i></i>
-      </div>
-      <header class="topbar">
-        <a class="brand" href="/">
-          <span class="brand-mark" aria-hidden="true">
-            <i>1</i>
-            <i>7</i>
-            <b></b>
-          </span>
-          <span>17th Street Labs</span>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <header class="topbar">
+      <div class="topbar-inner">
+        <a class="brand" href="/" aria-label="17th Street Labs home">
+          <span class="brand-mark" aria-hidden="true">17</span>
+          <span class="brand-name">17th Street Labs</span>
         </a>
         <nav id="primary-navigation" aria-label="Primary navigation">
           {links.map(({ name, href }) => (
             <a
               href={href}
-              class:list={{
-                active: currentPath === (href.replace(/\/$/, "") || "/"),
-              }}
-              aria-current={
-                currentPath === (href.replace(/\/$/, "") || "/")
-                  ? "page"
-                  : undefined
-              }
+              class:list={{ active: isCurrent(href) }}
+              aria-current={isCurrent(href) ? "page" : undefined}
             >
               {name}
             </a>
           ))}
         </nav>
-        <a href="/contact/" class="magnetic header-cta" data-contact-dialog>
-          Start a conversation <Icon name="ArrowUpRight" size={15} />
+        <a href="/contact/" class="button button-primary header-cta" data-contact-dialog>
+          Start a conversation
         </a>
         <button
           class="menu-button"
@@ -87,31 +76,24 @@ const canonical = new URL(
           aria-expanded="false"
           aria-controls="primary-navigation"
         >
-          <span class="menu-open-icon">
-            <Icon name="Menu" />
-          </span>
-          <span class="menu-close-icon" hidden>
-            <Icon name="X" />
-          </span>
+          <span class="menu-open-icon"><Icon name="Menu" /></span>
+          <span class="menu-close-icon" hidden><Icon name="X" /></span>
         </button>
-      </header>
-      <main id="main-content" class="page-wrap">
-        <slot />
-      </main>
-      <footer>
-        <div>
+      </div>
+    </header>
+    <main id="main-content">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div class="footer-brand">
           <a class="brand" href="/">
-            <span class="brand-mark" aria-hidden="true">
-              <i>1</i>
-              <i>7</i>
-              <b></b>
-            </span>
-            <span>17th Street Labs</span>
+            <span class="brand-mark" aria-hidden="true">17</span>
+            <span class="brand-name">17th Street Labs</span>
           </a>
           <p>
-            Engineering intelligence.
-            <br />
-            Securing agency.
+            An independent AI engineering and security firm in Denver, working
+            with teams anywhere.
           </p>
         </div>
         <nav class="footer-nav" aria-label="Footer navigation">
@@ -119,83 +101,66 @@ const canonical = new URL(
             <a href={href}>{name}</a>
           ))}
         </nav>
-        <div class="footer-meta">
-          <span>AI SYSTEMS · EVALS · SECURITY</span>
-          <span>DENVER · WORKING GLOBALLY</span>
-          <span>© 2026 17TH STREET LABS LLC</span>
+        <div class="footer-contact">
+          <a href="mailto:dan@danlevy.net">dan@danlevy.net</a>
+          <a href="https://exploithunter.app" target="_blank" rel="noreferrer">
+            ExploitHunter, our open-source research
+          </a>
         </div>
-      </footer>
-      <dialog
-        class="contact-dialog"
-        aria-labelledby="dialog-title"
-        aria-describedby="dialog-description"
+        <p class="footer-legal">© 2026 17th Street Labs LLC</p>
+      </div>
+    </footer>
+    <dialog
+      class="contact-dialog"
+      aria-labelledby="dialog-title"
+      aria-describedby="dialog-description"
+    >
+      <button class="dialog-close" aria-label="Close conversation form">
+        <Icon name="X" size={20} />
+      </button>
+      <h2 id="dialog-title" data-slot="dialog-title">
+        What hard problem are you carrying?
+      </h2>
+      <p id="dialog-description" data-slot="dialog-description">
+        A few honest sentences are enough: what you are building, what is
+        uncertain, and what happens if it fails. Dan reads every message.
+      </p>
+      <form
+        data-project-brief
+        action="mailto:dan@danlevy.net?subject=17th%20Street%20Labs%20%E2%80%94%20project%20brief"
+        method="post"
+        enctype="text/plain"
       >
-        <button class="dialog-close" aria-label="Close conversation form">
-          <Icon name="X" size={20} />
+        <div class="form-row">
+          <label>
+            Name
+            <input name="name" required autocomplete="name" />
+          </label>
+          <label>
+            Work email
+            <input name="email" required type="email" autocomplete="email" />
+          </label>
+        </div>
+        <label>
+          Focus
+          <select name="focus">
+            <option value="" disabled selected>Choose the closest fit</option>
+            <option>AI product engineering</option>
+            <option>AI security</option>
+            <option>Evals &amp; reliability</option>
+            <option>Technical advisory</option>
+          </select>
+        </label>
+        <label>
+          Context
+          <textarea name="context" required rows={5}></textarea>
+        </label>
+        <button type="submit" class="button button-primary">
+          Open project brief
         </button>
-        <span class="micro">NEW ENGAGEMENT</span>
-        <h2 id="dialog-title" data-slot="dialog-title">
-          What hard problem are you carrying?
-        </h2>
-        <p id="dialog-description" data-slot="dialog-description">
-          Give us the useful version: what you are building, what is uncertain,
-          and what happens if it fails.
-        </p>
-        <form
-          data-project-brief
-          action="mailto:dan@danlevy.net?subject=17th%20Street%20Labs%20%E2%80%94%20project%20brief"
-          method="post"
-          enctype="text/plain"
-        >
-          <div class="form-row">
-            <label>
-              Name
-              <input
-                name="name"
-                required
-                autocomplete="name"
-                placeholder="Your name"
-              />
-            </label>
-            <label>
-              Work email
-              <input
-                name="email"
-                required
-                type="email"
-                autocomplete="email"
-                placeholder="you@company.com"
-              />
-            </label>
-          </div>
-          <label>
-            Focus
-            <select name="focus">
-              <option value="" disabled selected>
-                Select an area
-              </option>
-              <option>AI product engineering</option>
-              <option>AI security</option>
-              <option>Evals &amp; reliability</option>
-              <option>Technical advisory</option>
-            </select>
-          </label>
-          <label>
-            Context
-            <textarea
-              name="context"
-              required
-              rows={5}
-              placeholder="What are you building?"
-            ></textarea>
-          </label>
-          <button type="submit" class="submit-button">
-            Open project brief <Icon name="ArrowUpRight" size={17} />
-          </button>
-          <small>Opens your email app with a draft for you to send.</small>
-        </form>
-      </dialog>
-    </div>
+        <small>Opens your email app with a draft you can edit before sending.</small>
+      </form>
+    </dialog>
     <script>
       const menu = document.querySelector<HTMLButtonElement>(".menu-button");
       const nav = document.querySelector<HTMLElement>("#primary-navigation");
@@ -267,25 +232,6 @@ const canonical = new URL(
               String(data.get("context") || ""),
             ];
             window.location.href = `mailto:dan@danlevy.net?subject=${encodeURIComponent("17th Street Labs — project brief")}&body=${encodeURIComponent(lines.join("\n"))}`;
-          }),
-        );
-      document.querySelectorAll<HTMLElement>(".magnetic").forEach((element) => {
-        element.addEventListener("mousemove", (event) => {
-          if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-          const r = element.getBoundingClientRect();
-          element.style.transform = `translate(${(event.clientX - r.left - r.width / 2) * 0.14}px, ${(event.clientY - r.top - r.height / 2) * 0.14}px)`;
-        });
-        element.addEventListener("mouseleave", () => {
-          element.style.transform = "";
-        });
-      });
-      document
-        .querySelectorAll<HTMLElement>(".spotlight-card")
-        .forEach((element) =>
-          element.addEventListener("mousemove", (event) => {
-            const rect = element.getBoundingClientRect();
-            element.style.setProperty("--mx", `${event.clientX - rect.left}px`);
-            element.style.setProperty("--my", `${event.clientY - rect.top}px`);
           }),
         );
     </script>
