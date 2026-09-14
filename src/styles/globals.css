@@ -903,6 +903,39 @@ textarea {
   box-shadow: 0 0 12px rgba(91, 227, 164, 0.5);
 }
 
+/* Console replay */
+[data-console].is-replaying .row[data-at]:not(.on),
+[data-console].is-replaying [data-prompt]:not(.on) {
+  visibility: hidden;
+}
+[data-console] .row.typing > span:last-child::after {
+  content: "▍";
+  color: var(--blue-2);
+  animation: pulse calc(0.6s / var(--speed, 1)) steps(2) infinite;
+}
+[data-console].is-replaying .live {
+  color: var(--amber);
+}
+[data-console].is-replaying .live::before {
+  animation-duration: calc(1s / var(--speed, 1));
+}
+[data-console].is-replaying .row.on {
+  animation: rowin 0.3s ease-out;
+}
+@keyframes rowin {
+  from {
+    opacity: 0;
+    transform: translateY(2px);
+  }
+}
+
+[data-panel].is-loading .stats dt,
+[data-panel].is-loading .judges b,
+[data-panel].is-loading .panel-head .mono {
+  color: var(--blue-2);
+  transition: color 0.4s;
+}
+
 /* ---------- Ticker ---------- */
 .ticker {
   position: relative;
@@ -1255,12 +1288,21 @@ a.card:hover,
   gap: 1.25rem;
   align-items: start;
 }
+.card.founder {
+  padding: 0;
+  border: none;
+  background: none;
+  box-shadow: none;
+}
+.card.founder::before {
+  content: none;
+}
 .avatar {
   display: grid;
   place-items: center;
   width: 3.4rem;
   height: 3.4rem;
-  border-radius: 3px;
+  border-radius: 50%;
   border: 1px solid var(--line-2);
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0) 60%),
@@ -1272,6 +1314,7 @@ a.card:hover,
 .avatar-portrait {
   width: 6rem;
   height: 6rem;
+  border-radius: 50%;
   overflow: hidden;
 }
 .avatar-portrait img {

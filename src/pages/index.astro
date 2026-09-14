@@ -55,7 +55,7 @@ const log = [
         <span><Icon name="Check" size={14} /> Open-source research</span>
       </p>
 
-      <div class="console" role="img" aria-label="A simulated evaluation run against a support agent: nine passes, one failure, and what the dashboard missed.">
+      <div class="console" data-console role="img" aria-label="A simulated evaluation run against a support agent: nine passes, one failure, and what the dashboard missed.">
         <div class="console-bar">
           <span class="console-dots"><i></i><i></i><i></i></span>
           <span class="path">17sl · evals / support-agent / run #418</span>
@@ -64,14 +64,14 @@ const log = [
         <div class="console-body">
           <div class="console-log" aria-hidden="true">
             {log.map(({ t, tag, cls, text }) => (
-              <div class="row">
+              <div class="row" data-at={t}>
                 <span class="t">{t}</span>
                 <span class:list={["tag", cls]}>{tag}</span>
-                <span class:list={{ fixed: cls === "tag-green" }}>{text}</span>
+                <span class:list={{ fixed: cls === "tag-green" }} data-text={text}>{text}</span>
               </div>
             ))}
-            <div class="row">
-              <span class="t">00:33</span>
+            <div class="row" data-prompt>
+              <span class="t" data-clock>00:33</span>
               <span class="prompt">❯</span>
               <span class="cursor"></span>
             </div>
@@ -79,20 +79,20 @@ const log = [
           <div class="console-side" aria-hidden="true">
             <div>
               <div class="label">Pass rate</div>
-              <div class="big">90% <small>the dashboard is green</small></div>
+              <div class="big"><span data-count="90" data-suffix="%">90%</span> <small>the dashboard is green</small></div>
             </div>
             <div>
               <div class="label">The other 10%</div>
-              <div class="big" style="color: var(--red)">21 <small>2 critical · 6 high</small></div>
+              <div class="big" style="color: var(--red)"><span data-count="21">21</span> <small>2 critical · 6 high</small></div>
             </div>
             <div>
               <div class="label">Failure modes</div>
               <div class="meter">
-                <div><span>Wrong tool</span><div class="bar red"><i style="width: 82%"></i></div><b>82%</b></div>
-                <div><span>Invented fact</span><div class="bar red"><i style="width: 64%"></i></div><b>64%</b></div>
-                <div><span>Path drift</span><div class="bar"><i style="width: 31%"></i></div><b>31%</b></div>
-                <div><span>Judge variance</span><div class="bar"><i style="width: 14%"></i></div><b>14%</b></div>
-                <div><span>After fix, re-run</span><div class="bar green"><i style="width: 3%"></i></div><b>3%</b></div>
+                <div><span>Wrong tool</span><div class="bar red"><i style="width: 82%" data-width="82"></i></div><b data-count="82" data-suffix="%">82%</b></div>
+                <div><span>Invented fact</span><div class="bar red"><i style="width: 64%" data-width="64"></i></div><b data-count="64" data-suffix="%">64%</b></div>
+                <div><span>Path drift</span><div class="bar"><i style="width: 31%" data-width="31"></i></div><b data-count="31" data-suffix="%">31%</b></div>
+                <div><span>Judge variance</span><div class="bar"><i style="width: 14%" data-width="14"></i></div><b data-count="14" data-suffix="%">14%</b></div>
+                <div><span>After fix, re-run</span><div class="bar green"><i style="width: 3%" data-width="3"></i></div><b data-count="3" data-suffix="%">3%</b></div>
               </div>
             </div>
           </div>
@@ -335,10 +335,10 @@ const log = [
         </p>
         <p><strong>The attackers are becoming agentic. Defense has to become agentic too.</strong></p>
       </div>
-      <div class="panel">
+      <div class="panel" data-panel>
         <div class="panel-head">
           <span><strong>ExploitHunter</strong> · open-source research</span>
-          <span class="mono">173 profiles</span>
+          <span class="mono"><span data-num>173</span> profiles</span>
         </div>
         <div class="panel-body">
           <p>
@@ -348,16 +348,16 @@ const log = [
             on client work. Work you can inspect before you hire us.
           </p>
           <dl class="stats">
-            <div><dt>412M+</dt><dd>tokens evaluated</dd></div>
-            <div><dt>173</dt><dd>model profiles compared</dd></div>
-            <div><dt>4,835</dt><dd>scored evaluation rows</dd></div>
+            <div><dt data-num>412M+</dt><dd>tokens evaluated</dd></div>
+            <div><dt data-num>173</dt><dd>model profiles compared</dd></div>
+            <div><dt data-num>4,835</dt><dd>scored evaluation rows</dd></div>
           </dl>
           <div class="judges" aria-hidden="true">
-            <div><span>Deterministic</span><div class="bar green"><i style="width: 96%"></i></div><b>0.96</b></div>
-            <div><span>LLM judge · A</span><div class="bar"><i style="width: 88%"></i></div><b>0.88</b></div>
-            <div><span>LLM judge · B</span><div class="bar"><i style="width: 79%"></i></div><b>0.79</b></div>
-            <div><span>Human agreement</span><div class="bar"><i style="width: 91%"></i></div><b>0.91</b></div>
-            <div><span>Cost per finding</span><div class="bar red"><i style="width: 22%"></i></div><b>$0.14</b></div>
+            <div><span>Deterministic</span><div class="bar green"><i style="width: 96%" data-width="96"></i></div><b data-num>0.96</b></div>
+            <div><span>LLM judge · A</span><div class="bar"><i style="width: 88%" data-width="88"></i></div><b data-num>0.88</b></div>
+            <div><span>LLM judge · B</span><div class="bar"><i style="width: 79%" data-width="79"></i></div><b data-num>0.79</b></div>
+            <div><span>Human agreement</span><div class="bar"><i style="width: 91%" data-width="91"></i></div><b data-num>0.91</b></div>
+            <div><span>Cost per finding</span><div class="bar red"><i style="width: 22%" data-width="22"></i></div><b data-num>$0.14</b></div>
           </div>
           <a class="text-link" href="https://exploithunter.app" target="_blank" rel="noreferrer">
             Explore ExploitHunter <Icon name="ArrowUpRight" size={16} />
@@ -457,3 +457,175 @@ const log = [
     </div>
   </section>
 </Layout>
+
+<script>
+  const console_ = document.querySelector<HTMLElement>("[data-console]");
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (console_ && !reduced) {
+    const rows = [...console_.querySelectorAll<HTMLElement>(".row[data-at]")];
+    const prompt = console_.querySelector<HTMLElement>("[data-prompt]");
+    const clock = console_.querySelector<HTMLElement>("[data-clock]");
+    const counts = [...console_.querySelectorAll<HTMLElement>("[data-count]")];
+    const bars = [...console_.querySelectorAll<HTMLElement>("[data-width]")];
+    const parse = (at: string) => {
+      const [m, s] = at.split(":").map(Number);
+      return m * 60 + s;
+    };
+    const fmt = (sec: number) =>
+      `${String(Math.floor(sec / 60)).padStart(2, "0")}:${String(Math.floor(sec % 60)).padStart(2, "0")}`;
+    const END = 33; // log-seconds until the prompt returns
+    const BASE = 260; // real ms per log-second at 1x
+    const TYPE = 3.2; // log-seconds to type one line at 1x
+
+    let vt = 0; // virtual log-seconds
+    let boost = 0;
+    let last = 0;
+    let done = false;
+    let running = false;
+
+    const render = () => {
+      const p = Math.min(vt / END, 1);
+      for (const row of rows) {
+        const at = parse(row.dataset.at || "0:0");
+        const text = row.lastElementChild as HTMLElement;
+        const full = text.dataset.text || "";
+        if (vt < at) {
+          row.classList.remove("on", "typing");
+          text.textContent = "";
+          continue;
+        }
+        const k = Math.min((vt - at) / TYPE, 1);
+        const n = Math.ceil(full.length * (1 - Math.pow(1 - k, 2)));
+        row.classList.add("on");
+        row.classList.toggle("typing", k < 1);
+        text.textContent = full.slice(0, n);
+      }
+      if (clock) clock.textContent = fmt(Math.min(vt, END));
+      prompt?.classList.toggle("on", vt >= END);
+      const ease = 1 - Math.pow(1 - p, 3);
+      for (const el of counts) {
+        const target = Number(el.dataset.count);
+        el.textContent = `${Math.round(target * ease)}${el.dataset.suffix || ""}`;
+      }
+      for (const el of bars) el.style.width = `${Number(el.dataset.width) * ease}%`;
+    };
+
+    const tick = (now: number) => {
+      const dt = Math.min(now - last, 100);
+      last = now;
+      boost *= Math.pow(0.985, dt / 16);
+      const speed = 1 + boost;
+      vt += (dt / BASE) * speed;
+      console_.style.setProperty("--speed", speed.toFixed(2));
+      render();
+      if (vt >= END + TYPE) {
+        done = true;
+        running = false;
+        console_.classList.remove("is-replaying");
+        return;
+      }
+      requestAnimationFrame(tick);
+    };
+
+    const start = () => {
+      if (running) return;
+      vt = 0;
+      boost = 0;
+      done = false;
+      running = true;
+      console_.classList.add("is-replaying");
+      last = performance.now();
+      requestAnimationFrame(tick);
+    };
+
+    const nudge = (amount: number) => {
+      if (running) boost = Math.min(boost + amount, 6);
+    };
+    console_.addEventListener("pointermove", () => nudge(0.12));
+    console_.addEventListener("wheel", () => nudge(0.5), { passive: true });
+    console_.addEventListener("click", () => (done ? start() : nudge(1.5)));
+    addEventListener("scroll", () => nudge(0.25), { passive: true });
+
+    render();
+    new IntersectionObserver(
+      (entries, io) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          io.disconnect();
+          start();
+        }
+      },
+      { threshold: 0.35 },
+    ).observe(console_);
+  }
+</script>
+
+<script>
+  const panel = document.querySelector<HTMLElement>("[data-panel]");
+  if (panel && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const nums = [...panel.querySelectorAll<HTMLElement>("[data-num]")].map((el) => {
+      const raw = el.textContent?.trim() || "";
+      const m = raw.match(/^([^\d]*)([\d,]*\.?\d+)(.*)$/);
+      const value = m ? Number(m[2].replace(/,/g, "")) : 0;
+      const decimals = m && m[2].includes(".") ? m[2].split(".")[1].length : 0;
+      return { el, pre: m?.[1] || "", post: m?.[3] || "", value, decimals, grouped: raw.includes(",") };
+    });
+    const bars = [...panel.querySelectorAll<HTMLElement>("[data-width]")];
+    const DURATION = 1800;
+    let t = 0;
+    let boost = 0;
+    let last = 0;
+    let running = false;
+    const paint = (p: number) => {
+      const ease = 1 - Math.pow(1 - p, 3);
+      for (const n of nums) {
+        const v = n.value * ease;
+        const str = n.grouped ? Math.round(v).toLocaleString("en-US") : v.toFixed(n.decimals);
+        n.el.textContent = `${n.pre}${str}${n.post}`;
+      }
+      for (const b of bars) b.style.width = `${Number(b.dataset.width) * ease}%`;
+    };
+    const tick = (now: number) => {
+      const dt = Math.min(now - last, 100);
+      last = now;
+      boost *= Math.pow(0.985, dt / 16);
+      t += (dt / DURATION) * (1 + boost);
+      paint(Math.min(t, 1));
+      if (t >= 1) {
+        running = false;
+        panel.classList.remove("is-loading");
+        return;
+      }
+      requestAnimationFrame(tick);
+    };
+    const start = () => {
+      if (running) return;
+      t = 0;
+      boost = 0;
+      running = true;
+      panel.classList.add("is-loading");
+      last = performance.now();
+      requestAnimationFrame(tick);
+    };
+    const nudge = (amount: number) => {
+      if (running) boost = Math.min(boost + amount, 6);
+    };
+    panel.addEventListener("pointermove", () => nudge(0.12));
+    panel.addEventListener("wheel", () => nudge(0.5), { passive: true });
+    panel.addEventListener("click", (e) => {
+      if ((e.target as HTMLElement).closest("a")) return;
+      if (running) nudge(1.5);
+      else start();
+    });
+    addEventListener("scroll", () => nudge(0.25), { passive: true });
+    paint(0);
+    new IntersectionObserver(
+      (entries, io) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          io.disconnect();
+          start();
+        }
+      },
+      { threshold: 0.35 },
+    ).observe(panel);
+  }
+</script>
