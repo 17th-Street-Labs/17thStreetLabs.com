@@ -324,7 +324,7 @@ const WebThreads: React.FC<WebThreadsProps> = ({
     const io = new IntersectionObserver(
       ([entry]) => {
         isVisible = entry.isIntersecting;
-        isVisible ? tryStart() : tryStop();
+        if (isVisible) tryStart(); else tryStop();
       },
       { threshold: 0 }
     );
@@ -332,7 +332,7 @@ const WebThreads: React.FC<WebThreadsProps> = ({
 
     const onVisibility = () => {
       isPageVisible = !document.hidden;
-      isPageVisible ? tryStart() : tryStop();
+      if (isPageVisible) tryStart(); else tryStop();
     };
     document.addEventListener('visibilitychange', onVisibility);
 
@@ -349,7 +349,9 @@ const WebThreads: React.FC<WebThreadsProps> = ({
       ctxMap.delete(container);
       try {
         container.removeChild(canvas);
-      } catch {}
+      } catch {
+        // canvas may already be detached during unmount
+      }
       gl.getExtension('WEBGL_lose_context')?.loseContext();
     };
   }, []);
@@ -360,7 +362,7 @@ const WebThreads: React.FC<WebThreadsProps> = ({
     const ctx = ctxMap.get(container);
     if (!ctx) return;
     const { program } = ctx;
-    const u = program.uniforms as Record<string, { value: any }>;
+    const u = program.uniforms as Record<string, { value: number }>;
 
     u.uSpeed.value = speed;
     u.uThreadCount.value = Math.round(threadCount);

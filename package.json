@@ -6,14 +6,15 @@
   "engines": {
     "node": "24.x"
   },
+  "packageManager": "pnpm@12.4.1",
   "scripts": {
-    "install:ci": "npm ci",
+    "install:ci": "pnpm install --frozen-lockfile",
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
     "start": "astro preview",
     "check": "astro check",
-    "test": "npm run build && node --test tests/*.test.mjs",
+    "test": "pnpm run build && node --test tests/*.test.mjs",
     "test:browser": "playwright test",
     "lint": "eslint ."
   },
