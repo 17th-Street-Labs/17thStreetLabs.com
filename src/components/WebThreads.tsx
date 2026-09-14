@@ -25,6 +25,9 @@ export interface WebThreadsProps {
   grainIntensity?: number;
   mouseInteraction?: boolean;
   mouseStrength?: number;
+  rainbow?: boolean;
+  rainbowSpeed?: number;
+  rainbowSpread?: number;
   backgroundColor?: string;
   lightMode?: boolean;
   className?: string;
@@ -68,6 +71,9 @@ uniform float uGrainIntensity;
 uniform vec3 uColor1;
 uniform vec3 uColor2;
 uniform vec3 uColor3;
+uniform float uRainbow;
+uniform float uRainbowSpeed;
+uniform float uRainbowSpread;
 uniform vec3 uBackgroundColor;
 uniform bool uLightMode;
 uniform vec2 uMouse;
@@ -78,6 +84,11 @@ out vec4 fragColor;
 
 #define TAU 6.28318530718
 #define MAX_THREADS 10
+
+vec3 hue2rgb(float h) {
+  vec3 k = fract(vec3(h) + vec3(0.0, 2.0 / 3.0, 1.0 / 3.0));
+  return clamp(abs(k * 6.0 - 3.0) - 1.0, 0.0, 1.0);
+}
 
 float glow(float x, float str, float dist) {
   return dist / pow(max(x, 1e-4), str);
@@ -119,13 +130,17 @@ void main() {
     float g = glow(sdf, uFalloff, uGlow);
     float ci = i * ciScale;
     vec3 threadCol = mix(uColor1, uColor2, ci);
+    if (uRainbow > 0.5) {
+      float hue = fract(uv.x * uRainbowSpread + ci * 0.35 + iTime * uRainbowSpeed);
+      threadCol = mix(vec3(1.0), hue2rgb(hue), 0.85);
+    }
 
     col += g * threadCol;
     gsum += g;
   }
 
   float coreAmt = smoothstep(0.5, 2.2, gsum);
-  col = mix(col, uColor3 * gsum, coreAmt * 0.5);
+  col = mix(col, uColor3 * gsum, coreAmt * (uRainbow > 0.5 ? 0.25 : 0.5));
 
   float bright = uBrightness;
   if (uEnableMouse > 0.5) {
@@ -190,6 +205,9 @@ const WebThreads: React.FC<WebThreadsProps> = ({
   grainIntensity = 0.05,
   mouseInteraction = true,
   mouseStrength = 0.3,
+  rainbow = false,
+  rainbowSpeed = 0.06,
+  rainbowSpread = 0.8,
   backgroundColor = '#FFFFFF',
   lightMode = false,
   className = ''
@@ -243,6 +261,9 @@ const WebThreads: React.FC<WebThreadsProps> = ({
         uColor1: { value: new Float32Array([1, 1, 1]) },
         uColor2: { value: new Float32Array([1, 1, 1]) },
         uColor3: { value: new Float32Array([1, 1, 1]) },
+        uRainbow: { value: 0.0 },
+        uRainbowSpeed: { value: 0.06 },
+        uRainbowSpread: { value: 0.8 },
         uBackgroundColor: { value: new Float32Array([1, 1, 1]) },
         uLightMode: { value: false },
         uMouse: { value: new Float32Array([0.5, 0.5]) },
@@ -380,6 +401,9 @@ const WebThreads: React.FC<WebThreadsProps> = ({
     u.uShimmer.value = shimmer ? 1.0 : 0.0;
     u.uGrain.value = grain ? 1.0 : 0.0;
     u.uGrainIntensity.value = grainIntensity;
+    u.uRainbow.value = rainbow ? 1.0 : 0.0;
+    u.uRainbowSpeed.value = rainbowSpeed;
+    u.uRainbowSpread.value = rainbowSpread;
     const c1 = u.uColor1.value as Float32Array;
     const rgb1 = hexToRgb(color1);
     c1[0] = rgb1[0];
@@ -427,6 +451,9 @@ const WebThreads: React.FC<WebThreadsProps> = ({
     grainIntensity,
     mouseInteraction,
     mouseStrength,
+    rainbow,
+    rainbowSpeed,
+    rainbowSpread,
     backgroundColor,
     lightMode
   ]);

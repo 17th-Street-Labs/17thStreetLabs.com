@@ -452,6 +452,8 @@ textarea {
   mask-image: linear-gradient(#000 55%, transparent 95%);
   -webkit-mask-image: linear-gradient(#000 55%, transparent 95%);
   display: block;
+  /* soften the threads so they sit behind the copy instead of competing with it */
+  filter: blur(14px) saturate(1.15);
   opacity: 0;
   transition: opacity 1.2s ease;
   pointer-events: none;
