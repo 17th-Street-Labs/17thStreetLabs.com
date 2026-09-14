@@ -1,6 +1,7 @@
 ---
 import danHeadshot from "../images/headshots/dan-avatar.png";
 import marinaHeadshot from "../images/headshots/Marina-Levy-Headshot.png";
+import kyleHeadshot from "../images/headshots/kyle-coberly-headshot.jpg";
 import Layout from "../layouts/Layout.astro";
 import Icon from "../components/Icon.astro";
 import HeroThreads from "../components/HeroThreads.astro";
@@ -413,7 +414,9 @@ const log = [
           </div>
         </div>
         <div class="card founder">
-          <span class="avatar" aria-hidden="true">KC</span>
+          <span class="avatar avatar-portrait">
+            <img src={kyleHeadshot.src} alt="Kyle" width={kyleHeadshot.width} height={kyleHeadshot.height} loading="lazy" decoding="async" />
+          </span>
           <div>
             <h3>Kyle Coberly</h3>
             <p class="role">Head of Research</p>
