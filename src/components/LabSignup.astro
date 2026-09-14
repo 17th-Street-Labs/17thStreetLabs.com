@@ -87,11 +87,11 @@
     status.textContent = purpose === 'newsletter' ? 'Saving your signup…' : 'Opening the collection…';
     try {
       const data = new FormData(form);
-      const res = await fetch('/api/lab-access/', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({email:data.get('email'), company:data.get('company'), purpose})});
+      const res = await fetch('/api/lab-access/', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({email:data.get('email'), company:data.get('company'), purpose, page:window.location.pathname})});
       const result = await res.json();
-      if (!res.ok || !result.unlocked) throw new Error(result.error || 'Please try again.');
-      unlocked = true;
-      markUnlocked();
+      if (!res.ok || !result.saved) throw new Error(result.error || 'Please try again.');
+      unlocked = result.unlocked === true;
+      if (unlocked) markUnlocked();
       if (purpose === 'newsletter') {
         form.hidden = true;
         modal.querySelector<HTMLElement>('#lab-signup-title')!.textContent = 'You’re on the list.';

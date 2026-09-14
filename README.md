@@ -118,7 +118,19 @@ Required environment variables (see `.env.example`):
 Set both in Vercel project settings for Preview and Production. Without them the
 endpoint returns `503` and the form shows an error.
 
-The endpoint is the only server-rendered route; every page stays prerendered.
+The form endpoints are server-rendered; every page stays prerendered.
 Abuse controls are a hidden honeypot field and a per-instance in-memory rate
 limit (5 submissions per IP per 10 minutes) — best effort, since serverless
 instances do not share memory.
+
+## Newsletter signups → existing Telegram chat
+
+Every footer and article-end newsletter button opens `LabSignup`, which POSTs to
+`/api/lab-access/`. Signups use the same `TELEGRAM_BOT_TOKEN` and
+`TELEGRAM_CHAT_ID` as the contact form in development and production. There is
+no Mailchimp or email delivery service involved and no local-file fallback.
+Each Telegram message includes the email, purpose, signup page, UTC timestamp,
+and newsletter consent version. Article-access requests remain labeled separately.
+The form confirms success only after Telegram accepts the message; failed
+submissions show a retry message. `LAB_ACCESS_SECRET` is required for remembering
+reader access in production, but newsletter collection works without it.

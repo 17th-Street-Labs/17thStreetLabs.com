@@ -1,5 +1,4 @@
 import type { APIRoute } from 'astro';
-import { appendFile, mkdir } from 'node:fs/promises';
 import { COOKIE, MAX_AGE, createAccessToken, validAccessToken, validEmail } from '../../lib/lab-access';
 import { labSecret } from '../../lib/lab-secret';
 export const prerender = false;
@@ -25,24 +24,31 @@ export const POST: APIRoute = async ({ request, cookies, clientAddress }) => {
   const purpose = data.purpose ?? 'article-access';
   if (!['article-access', 'newsletter'].includes(purpose)) return response({error: 'Please choose a valid signup.'}, 400);
   const secret = labSecret();
-  if (!secret) return response({ error: 'Reader access is unavailable right now. Please try again later.' }, 503);
+  if (purpose === 'article-access' && !secret) return response({ error: 'Reader access is unavailable right now. Please try again later.' }, 503);
+  const token = import.meta.env.TELEGRAM_BOT_TOKEN || process.env.TELEGRAM_BOT_TOKEN;
+  const chatId = import.meta.env.TELEGRAM_CHAT_ID || process.env.TELEGRAM_CHAT_ID;
+  if (!token || !chatId) return response({error: 'Signup is unavailable right now. Please try again later.'}, 503);
+  const page = typeof data.page === 'string' ? data.page.slice(0, 300) : '';
+  const registeredAt = new Date().toISOString();
+  const lines = [
+    purpose === 'newsletter' ? 'New From the Lab newsletter signup' : 'New From the Lab reader',
+    `Email: ${email}`,
+    `Purpose: ${purpose}`,
+    ...(page ? [`Page: ${page}`] : []),
+    `Registered at: ${registeredAt}`,
+    purpose === 'newsletter'
+      ? 'Consent: Agreed to receive the From the Lab newsletter by email. Version: from-the-lab-newsletter-v1.'
+      : 'Article access only; no marketing subscription.',
+  ];
   try {
-    if (import.meta.env.DEV) {
-      await mkdir('.local', { recursive: true, mode: 0o700 });
-      await appendFile('.local/lab-readers.jsonl', JSON.stringify({ email, purpose, consentVersion: purpose === 'newsletter' ? 'from-the-lab-newsletter-v1' : undefined, registeredAt: new Date().toISOString() })+'\n', { mode: 0o600 });
-    } else {
-      const token = import.meta.env.TELEGRAM_BOT_TOKEN || process.env.TELEGRAM_BOT_TOKEN;
-      const chatId = import.meta.env.TELEGRAM_CHAT_ID || process.env.TELEGRAM_CHAT_ID;
-      if (!token || !chatId) return response({error: 'Reader access is unavailable right now. Please try again later.'}, 503);
-      const delivery = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-        method: 'POST', headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({chat_id: chatId, text: `New From the Lab reader\nEmail: ${email}\nPurpose: ${purpose === 'newsletter' ? 'Explicit From the Lab newsletter signup (consent v1).' : 'Article access only; no marketing subscription.'}`, disable_web_page_preview: true}),
-        signal: AbortSignal.timeout(8000),
-      });
-      if (!delivery.ok || !(await delivery.json()).ok) throw new Error('registration delivery failed');
-    }
-    cookies.set(COOKIE, createAccessToken(secret), { httpOnly: true, secure: new URL(request.url).protocol === 'https:', sameSite: 'lax', path: '/', maxAge: MAX_AGE });
-    return response({ unlocked: true });
+    const delivery = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({chat_id: chatId, text: lines.join('\n'), disable_web_page_preview: true}),
+      signal: AbortSignal.timeout(8000),
+    });
+    if (!delivery.ok || !(await delivery.json()).ok) throw new Error('registration delivery failed');
+    if (secret) cookies.set(COOKIE, createAccessToken(secret), { httpOnly: true, secure: new URL(request.url).protocol === 'https:', sameSite: 'lax', path: '/', maxAge: MAX_AGE });
+    return response({ saved: true, unlocked: Boolean(secret) });
   } catch {
     return response({error: 'We couldn’t save your email. Please try again.'}, 503);
   }
