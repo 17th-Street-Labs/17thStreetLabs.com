@@ -272,65 +272,162 @@ textarea {
 
 /* ---------- Buttons ---------- */
 .button {
+  --btn-glow: rgba(61, 109, 255, 0.55);
   position: relative;
+  isolation: isolate;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  min-height: 2.9rem;
-  padding: 0.75rem 1.35rem;
+  gap: 0.6rem;
+  min-height: 3rem;
+  padding: 0.8rem 1.5rem;
   border: 1px solid transparent;
-  border-radius: 2px;
-  font-weight: 500;
+  border-radius: 999px;
+  font-weight: 600;
   font-size: 0.95rem;
+  letter-spacing: 0.005em;
   line-height: 1;
+  color: var(--text);
+  text-decoration: none;
   cursor: pointer;
   white-space: nowrap;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
   transition:
-    transform 0.18s ease,
-    box-shadow 0.18s ease,
-    background-color 0.18s,
-    border-color 0.18s;
+    transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 0.25s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
 }
 .button svg {
   width: 1rem;
   height: 1rem;
+  flex: none;
+  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
-.button-solid {
-  color: #f4f6ff;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0) 50%),
-    linear-gradient(180deg, #2b4fe4, #1d37c2);
-  border-color: rgba(255, 255, 255, 0.14);
+.button:hover svg {
+  transform: translateX(3px);
+}
+.button:active {
+  transform: translateY(1px) scale(0.985);
+  transition-duration: 0.08s;
+}
+.button:focus-visible {
+  outline: none;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    0 1px 2px rgba(0, 0, 0, 0.5),
-    0 10px 24px -14px rgba(29, 55, 194, 0.9);
+    0 0 0 2px var(--bg),
+    0 0 0 4px var(--blue-2);
+}
+
+/* Primary: saturated gradient + glow + shine sweep */
+.button-solid {
+  color: #fff;
+  background:
+    linear-gradient(120deg, #3d6dff 0%, #5b7dff 55%, #4fc3ff 100%);
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.25),
+    0 1px 2px rgba(0, 0, 0, 0.4),
+    0 8px 24px -8px var(--btn-glow);
+}
+.button-solid::before {
+  /* shine sweep */
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    105deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.35) 48%,
+    rgba(255, 255, 255, 0.55) 50%,
+    rgba(255, 255, 255, 0.35) 52%,
+    transparent 70%
+  );
+  transform: translateX(-120%);
+  opacity: 0;
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.2s;
+}
+.button-solid::after {
+  /* soft inner vignette so the gradient reads as a surface, not a flat fill */
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: radial-gradient(120% 140% at 50% -20%, rgba(255, 255, 255, 0.22), transparent 55%);
+  pointer-events: none;
 }
 .button-solid:hover {
-  transform: translateY(-1px);
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0) 50%),
-    linear-gradient(180deg, #3358f0, #2341cc);
-  border-color: rgba(255, 255, 255, 0.22);
+  --btn-glow: rgba(79, 155, 255, 0.85);
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.32);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.14),
-    0 2px 4px rgba(0, 0, 0, 0.5),
-    0 14px 28px -14px rgba(29, 55, 194, 0.9);
+    inset 0 1px 0 rgba(255, 255, 255, 0.34),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2),
+    0 2px 4px rgba(0, 0, 0, 0.35),
+    0 14px 34px -8px var(--btn-glow),
+    0 0 48px -12px rgba(97, 214, 255, 0.5);
 }
+.button-solid:hover::before {
+  transform: translateX(120%);
+  opacity: 1;
+}
+.button-solid:active {
+  box-shadow:
+    inset 0 2px 6px rgba(0, 0, 0, 0.3),
+    0 4px 14px -6px var(--btn-glow);
+}
+.button-solid:disabled,
+.button-solid[aria-disabled="true"] {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Secondary: frosted glass outline */
 .button-line {
   color: var(--text);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
-  border-color: var(--line-2);
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 .button-line:hover {
-  border-color: rgba(255, 255, 255, 0.3);
-  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px);
+  color: #fff;
+  border-color: rgba(126, 160, 255, 0.55);
+  background: rgba(126, 160, 255, 0.1);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 10px 28px -12px rgba(61, 109, 255, 0.5);
 }
+
 .button-sm {
-  min-height: 2.4rem;
-  padding: 0.55rem 1.05rem;
+  min-height: 2.5rem;
+  padding: 0.6rem 1.1rem;
   font-size: 0.875rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button,
+  .button svg,
+  .button-solid::before {
+    transition: none;
+  }
+  .button:hover {
+    transform: none;
+  }
+  .button:hover svg {
+    transform: none;
+  }
+  .button-solid::before {
+    display: none;
+  }
 }
 .text-link {
   display: inline-flex;
@@ -456,9 +553,10 @@ textarea {
   background: rgba(255, 255, 255, 0.08);
 }
 .header-cta {
-  min-height: 2.45rem;
-  padding: 0.55rem 1.05rem;
+  min-height: 2.5rem;
+  padding: 0.55rem 1.1rem 0.55rem 1.2rem;
   font-size: 0.875rem;
+  margin-left: 0.5rem;
 }
 .menu-button {
   display: none;
@@ -561,7 +659,13 @@ textarea {
   color: var(--muted);
 }
 .hero .hero-actions {
-  margin-top: 0.75rem;
+  margin-top: 1rem;
+  gap: 1rem;
+}
+.hero .hero-actions .button {
+  min-height: 3.4rem;
+  padding: 0.95rem 1.9rem;
+  font-size: 1.02rem;
 }
 .hero .hero-meta {
   margin-top: -0.25rem;
