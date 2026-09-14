@@ -1,39 +1,79 @@
 ---
-import WebThreads from "./WebThreads";
+// Animated WebGL thread field behind the hero. Purely decorative, so it is
+// loaded out of band: the ~50KB shader module is dynamically imported only
+// once the hero is actually near the viewport and the browser is idle, and
+// is skipped entirely for reduced-motion, save-data, and no-WebGL2 clients.
 ---
 
-<div class="hero-gl" aria-hidden="true">
-  <WebThreads
-    client:only="react"
-    color1="#06B6D4"
-    color2="#F43F5E"
-    color3="#FFFFFF"
-    speed={0.05}
-    threadCount={6}
-    frequency={5}
-    spread={0.18}
-    taper={1}
-    position={0.71}
-    fanMode="center"
-    glow={0.02}
-    falloff={0.6}
-    thickness={1.1}
-    brightness={0.6}
-    opacity={0.5}
-    rainbow
-    rainbowSpeed={0.05}
-    rainbowSpread={0.9}
-    mirror
-    shimmer={false}
-    grain
-    grainIntensity={0.05}
-    mouseInteraction
-    mouseStrength={0.3}
-  />
-</div>
+<div class="hero-gl" aria-hidden="true"></div>
 
 <script>
-  document.querySelectorAll<HTMLElement>(".hero-gl").forEach((el) => {
-    el.closest<HTMLElement>(".hero")?.classList.add("has-gl");
-  });
+  import type { WebThreadsOptions } from "./webThreads";
+
+  const OPTIONS: WebThreadsOptions = {
+    color1: "#06B6D4",
+    color2: "#F43F5E",
+    color3: "#FFFFFF",
+    speed: 0.05,
+    threadCount: 6,
+    frequency: 5,
+    spread: 0.18,
+    taper: 1,
+    position: 0.71,
+    fanMode: "center",
+    glow: 0.02,
+    falloff: 0.6,
+    thickness: 1.1,
+    brightness: 0.6,
+    opacity: 0.5,
+    rainbow: true,
+    rainbowSpeed: 0.05,
+    rainbowSpread: 0.9,
+    mirror: true,
+    shimmer: false,
+    grain: true,
+    grainIntensity: 0.05,
+    mouseInteraction: true,
+    mouseStrength: 0.3,
+  };
+
+  const container = document.querySelector<HTMLElement>(".hero-gl");
+
+  const supported = () => {
+    if (!container) return false;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return false;
+    // Respect an explicit data saver signal; the effect is pure decoration.
+    const conn = (navigator as { connection?: { saveData?: boolean } }).connection;
+    if (conn?.saveData) return false;
+    const probe = document.createElement("canvas").getContext("webgl2");
+    return Boolean(probe);
+  };
+
+  if (supported() && container) {
+    // Marking the hero lets CSS reserve the backdrop before the canvas exists,
+    // so bringing the effect in causes no layout shift.
+    container.closest<HTMLElement>(".hero")?.classList.add("has-gl");
+
+    const start = () => {
+      import("./webThreads").then(({ initWebThreads }) => {
+        initWebThreads(container, OPTIONS);
+      });
+    };
+
+    const whenIdle = (fn: () => void) =>
+      "requestIdleCallback" in window
+        ? requestIdleCallback(fn, { timeout: 1200 })
+        : setTimeout(fn, 200);
+
+    // Only pay for the shader if the hero is on screen.
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((e) => e.isIntersecting)) return;
+        io.disconnect();
+        whenIdle(start);
+      },
+      { rootMargin: "200px" },
+    );
+    io.observe(container);
+  }
 </script>
