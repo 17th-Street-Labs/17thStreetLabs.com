@@ -1,6 +1,7 @@
 ---
 import "../styles/globals.css";
 import LabSignup from "../components/LabSignup.astro";
+import SiteMotion from "../components/SiteMotion.astro";
 import Icon from "../components/Icon.astro";
 interface Props {
   title: string;
@@ -120,6 +121,7 @@ const isCurrent = (href: string) =>
       </div>
     </footer>
     <LabSignup />
+    <SiteMotion />
     <dialog
       class="contact-dialog"
       aria-labelledby="dialog-title"

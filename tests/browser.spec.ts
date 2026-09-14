@@ -142,3 +142,64 @@ test("missing routes return a branded 404 and a usable home link", async ({ page
   await expect(page).toHaveURL("http://127.0.0.1:4322/");
   await expect(page.getByRole("heading", { level: 1 })).toContainText("Send us the hard one");
 });
+
+ test('motion introduces section headings once and preserves keyboard targets', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.goto('/');
+  const heading = page.locator('#thinking .band-head');
+  await heading.scrollIntoViewIfNeeded();
+  await expect.poll(() => heading.evaluate(el => el.getAnimations().length)).toBeGreaterThan(0);
+  await expect.poll(() => heading.evaluate(el => el.getAnimations().length)).toBe(0);
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await heading.scrollIntoViewIfNeeded();
+  expect(await heading.evaluate(el => el.getAnimations().length)).toBe(0);
+  const cta = page.locator('.closing [data-contact-dialog]');
+  await cta.focus();
+  await expect(cta).toBeFocused();
+  expect(await cta.locator('..').evaluate(el => el.getAnimations().length)).toBe(0);
+  await page.keyboard.press('Enter');
+  await expect(page.locator('.contact-dialog')).toBeVisible();
+ });
+
+ test('motion respects reduced motion including a preference change', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.goto('/');
+  await page.locator('#thinking').scrollIntoViewIfNeeded();
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await expect.poll(() => page.evaluate(() => document.getAnimations().length)).toBe(0);
+  await page.locator('.footer-reading').scrollIntoViewIfNeeded();
+  expect(await page.locator('.footer-reading').evaluate(el => getComputedStyle(el).opacity)).toBe('1');
+  await page.getByRole('button', { name: 'Send me the good stuff' }).click();
+  await expect(page.locator('.lab-dialog')).toBeVisible();
+  expect(await page.locator('.lab-dialog').evaluate(el => el.getAnimations().length)).toBe(0);
+ });
+
+ test('motion leaves content visible without JavaScript', async ({ browser, baseURL }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false, baseURL });
+  const page = await context.newPage();
+  await page.goto('/');
+  for (const selector of ['.production-beat', '#thinking .band-head', '.closing', '.footer-reading']) {
+    expect(await page.locator(selector).first().evaluate(el => getComputedStyle(el).opacity)).toBe('1');
+  }
+  await context.close();
+ });
+
+ for (const width of [1440, 390]) {
+  test(`motion keeps page layouts stable at ${width}px`, async ({ page }, testInfo) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    const errors: string[] = [];
+    page.on('pageerror', error => errors.push(error.message));
+    for (const route of ['/', '/services/', '/proof/', '/about/', '/lab/', '/lab/small-local-models/']) {
+      await page.goto(route);
+      await page.locator('.footer-reading').scrollIntoViewIfNeeded();
+      await expect.poll(() => page.locator('.footer-reading').evaluate(el => el.getAnimations().length)).toBe(0);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+    }
+    await page.goto('/');
+    await page.locator('#thinking').scrollIntoViewIfNeeded();
+    await expect.poll(() => page.locator('#thinking .band-head').evaluate(el => el.getAnimations().length)).toBe(0);
+    await page.screenshot({ path: testInfo.outputPath(`motion-${width}.png`) });
+    expect(errors).toEqual([]);
+  });
+ }

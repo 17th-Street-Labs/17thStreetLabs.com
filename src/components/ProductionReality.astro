@@ -33,37 +33,8 @@
   .users-beat strong { background: var(--blue); box-decoration-break: clone; -webkit-box-decoration-break: clone; padding-inline: .12em; }
   .production-finish { background: var(--bg); color: var(--text); padding: 1.5rem; margin-top: .5rem; }
   .finish-punch { color: var(--blue); font-size: clamp(2rem, 3.5vw, 3.5rem); font-weight: 720; letter-spacing: -.055em; line-height: 1.05; text-wrap: balance; }
-  @media (prefers-reduced-motion: no-preference) {
-    [data-production-reveal].reveal-pending { opacity: 0; transform: translateY(24px); }
-    [data-production-reveal].reveal-visible { animation: production-enter 650ms cubic-bezier(.2,.7,.2,1) both; }
-    @keyframes production-enter { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
-  }
   @media (max-width: 52rem) {
     .production-reality { grid-template-columns: minmax(0, 1fr); gap: 3rem; }
     .production-heading { position: static; }
   }
 </style>
-
-<script>
-  const beats = document.querySelectorAll<HTMLElement>("[data-production-reveal]");
-  const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
-  if (!motion.matches && "IntersectionObserver" in window) {
-    const observer = new IntersectionObserver((entries) => {
-      for (const entry of entries) {
-        if (!entry.isIntersecting) continue;
-        entry.target.classList.remove("reveal-pending");
-        entry.target.classList.add("reveal-visible");
-        observer.unobserve(entry.target);
-      }
-    }, { threshold: 0.15, rootMargin: "0px 0px -8% 0px" });
-    beats.forEach((beat) => {
-      beat.classList.add("reveal-pending");
-      observer.observe(beat);
-    });
-    motion.addEventListener("change", () => {
-      if (!motion.matches) return;
-      observer.disconnect();
-      beats.forEach((beat) => beat.classList.remove("reveal-pending", "reveal-visible"));
-    });
-  }
-</script>

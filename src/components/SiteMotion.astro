@@ -1,0 +1,83 @@
+<script>
+  // Content stays visible by default. Animate only when it enters the viewport;
+  // never leave a hidden class behind if scripts fail or a visitor jumps ahead.
+  const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const active = new Map<HTMLElement, Animation>();
+  const seen = new WeakSet<HTMLElement>();
+  const selectors = [
+    '.hero-copy > .hero-actions', '.production-heading', '[data-production-reveal]',
+    '.band-head', '.reading-heading', '.edition-label', '.edition-process',
+    '.closing > h2', '.closing > .hero-actions', '.lab-closing > .wrap',
+    '.edition-contact > a', '.article-newsletter > .article-wrap', '.footer-reading',
+  ];
+  const targets = document.querySelectorAll<HTMLElement>(selectors.join(','));
+
+  function enter(element: HTMLElement) {
+    if (seen.has(element)) return;
+    seen.add(element);
+    if (preference.matches || element.contains(document.activeElement)) return;
+    const animation = element.animate([
+      { opacity: .55, translate: '0 12px' },
+      { opacity: 1, translate: '0 0' },
+    ], { duration: 560, easing: 'cubic-bezier(.2,.7,.2,1)' });
+    active.set(element, animation);
+    animation.onfinish = animation.oncancel = () => active.delete(element);
+  }
+
+  if ('IntersectionObserver' in window && 'animate' in Element.prototype) {
+    const observer = new IntersectionObserver(entries => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        enter(entry.target as HTMLElement);
+        observer.unobserve(entry.target);
+      }
+    }, { threshold: 0, rootMargin: '0px 0px -48px 0px' });
+    targets.forEach(target => observer.observe(target));
+    preference.addEventListener('change', () => {
+      if (!preference.matches) return;
+      observer.disconnect();
+      active.forEach(animation => animation.cancel());
+    });
+    // Keyboard navigation should land on a stable, fully visible control.
+    document.addEventListener('focusin', event => {
+      if (!(event.target instanceof Element)) return;
+      const focused = event.target;
+      targets.forEach(target => {
+        if (!target.contains(focused)) return;
+        seen.add(target);
+        observer.unobserve(target);
+        active.get(target)?.cancel();
+      });
+    });
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) active.forEach(animation => animation.cancel());
+    });
+  }
+</script>
+
+<style is:global>
+  @media (prefers-reduced-motion: no-preference) {
+    /* Directional feedback reinforces the action without moving its hit area. */
+    :is(.text-link, .lab-read, .back-link, .project-jumps a) svg {
+      transition: translate 180ms ease;
+    }
+    :is(.text-link, .lab-read, .project-jumps a):is(:hover, :focus-visible) svg {
+      translate: 3px 0;
+    }
+    .button:focus-visible svg { transform: translateX(3px); }
+    :is(.contact-dialog, .lab-dialog)[open] {
+      animation: dialog-arrive 200ms cubic-bezier(.2,.7,.2,1);
+    }
+    :is(.contact-dialog, .lab-dialog)[open]::backdrop {
+      animation: backdrop-arrive 200ms ease-out;
+    }
+    @keyframes dialog-arrive {
+      from { opacity: .6; translate: 0 8px; }
+      to { opacity: 1; translate: 0 0; }
+    }
+    @keyframes backdrop-arrive { from { opacity: 0; } to { opacity: 1; } }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .button:is(:hover, :focus-visible) svg { transform: none; }
+  }
+</style>
