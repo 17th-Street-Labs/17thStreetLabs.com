@@ -164,6 +164,7 @@ const isCurrent = (href: string) =>
           Send message
         </button>
         <p class="form-status" data-form-status role="status" aria-live="polite"></p>
+        <button type="button" class="button contact-reload" data-contact-reload hidden>Reload and keep my message</button>
         <small>Goes straight to the team. Reply within a business day.</small>
       </form>
     </dialog>
@@ -175,10 +176,10 @@ const isCurrent = (href: string) =>
         menu?.setAttribute("aria-expanded", String(open));
         nav?.classList.toggle("open", open);
         document
-          .querySelector<HTMLElement>(".menu-open-icon")
+          .querySelector(".menu-open-icon")
           ?.toggleAttribute("hidden", open);
         document
-          .querySelector<HTMLElement>(".menu-close-icon")
+          .querySelector(".menu-close-icon")
           ?.toggleAttribute("hidden", !open);
       };
       menu?.addEventListener("click", () =>
@@ -195,9 +196,8 @@ const isCurrent = (href: string) =>
       });
       const dialog =
         document.querySelector<HTMLDialogElement>(".contact-dialog");
-      document
-        .querySelectorAll<HTMLAnchorElement>('[data-contact-dialog], a[href="/contact/"]')
-        .forEach((link) =>
+      const contactLinks = document.querySelectorAll<HTMLAnchorElement>('[data-contact-dialog], a[href="/contact/"]');
+      contactLinks.forEach((link) =>
           link.addEventListener("click", (event) => {
             if (
               !dialog ||
@@ -232,22 +232,51 @@ const isCurrent = (href: string) =>
         )
           dialog.close();
       });
-      document
-        .querySelectorAll<HTMLFormElement>("[data-project-brief]")
-        .forEach((form) => {
+      const briefForms = document.querySelectorAll<HTMLFormElement>("[data-project-brief]");
+      briefForms.forEach((form) => {
           const status = form.querySelector<HTMLElement>("[data-form-status]");
-          const button = form.querySelector<HTMLButtonElement>(
-            "button[type=submit]",
-          );
+          const button = form.querySelector<HTMLButtonElement>("button[type=submit]");
           const say = (message: string, state: "" | "ok" | "error") => {
             if (!status) return;
             status.textContent = message;
             status.dataset.state = state;
           };
 
+          const reload = form.querySelector<HTMLButtonElement>('[data-contact-reload]')!;
+          const draftKey = 'contact-verification-recovery';
+          // Only save a draft when the visitor explicitly chooses to reload.
+          // Consume it once, in this tab, and never send it automatically.
+          try {
+            const raw = sessionStorage.getItem(draftKey);
+            if (raw) {
+              sessionStorage.removeItem(draftKey);
+              const draft = JSON.parse(raw);
+              if (draft.page === location.pathname && Date.now() - draft.savedAt < 600_000) {
+                for (const key of ['name', 'email', 'context']) {
+                  const field = form.elements.namedItem(key);
+                  if ((field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement) && typeof draft.fields?.[key] === 'string') field.value = draft.fields[key];
+                }
+                if (dialog && !dialog.open) dialog.showModal();
+                say('Your message is still here. Please try sending again.', '');
+              }
+            }
+          } catch { /* The form remains usable without browser storage. */ }
+          reload.addEventListener('click', () => {
+            try {
+              const data = new FormData(form);
+              sessionStorage.setItem(draftKey, JSON.stringify({ page: location.pathname, savedAt: Date.now(), fields: {
+                name: data.get('name'), email: data.get('email'), context: data.get('context'),
+              } }));
+              location.reload();
+            } catch {
+              say('Your browser cannot keep this draft during reload. Copy your message before reloading.', 'error');
+            }
+          });
+
           form.addEventListener("submit", async (event) => {
             event.preventDefault();
             if (button?.disabled) return;
+            reload.hidden = true;
             const data = new FormData(form);
             if (button) button.disabled = true;
             say("Sending…", "");
@@ -266,7 +295,12 @@ const isCurrent = (href: string) =>
                 say("Received. We will reply within a business day.", "ok");
                 return;
               }
-              if (response.status === 400 || response.status === 403 || response.status === 429) {
+              if (response.status === 403) {
+                say('Browser verification failed. Reload safely below, then try again. Your message will be kept in this tab.', 'error');
+                reload.hidden = false;
+                return;
+              }
+              if (response.status === 400 || response.status === 429) {
                 say(result.error || "Please check the form and try again.", "error");
                 return;
               }

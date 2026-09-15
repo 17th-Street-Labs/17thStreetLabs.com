@@ -24,7 +24,7 @@ for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844
     await dialog.getByLabel('Work email').fill('browser@example.com');
     await dialog.getByLabel('What are you working on?').fill('Delivery is intercepted.');
     await dialog.getByRole('button', { name: 'Send message' }).click();
-    await expect(dialog.locator('[data-form-status]')).toContainText('Please reload');
+    await expect(dialog.locator('[data-form-status]')).toContainText('Browser verification failed');
     expect(submissions).toHaveLength(1);
     expect(submissions[0].headers['x-is-human']).toBeTruthy();
     expect(submissions[0].headers['x-path']).toBe('/api/contact/');

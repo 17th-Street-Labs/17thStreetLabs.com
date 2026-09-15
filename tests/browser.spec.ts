@@ -346,3 +346,30 @@ test('every published article supports a midpoint prompt with blocked storage', 
     await expect(page.locator('[data-lab-article]')).toBeFocused();
   }
 });
+
+test('contact verification recovery keeps the draft through reload and retries safely', async ({ page }) => {
+  await page.route('**/a-4-a/c.js?*', route => route.fulfill({ contentType: 'application/javascript', body: 'window.V_C.push({ b: 1, v: "test", e: "test", d: 0 });' }));
+  let attempts = 0;
+  await page.route('**/api/contact/', route => {
+    attempts++;
+    expect(route.request().headers()['x-is-human']).toBeTruthy();
+    return route.fulfill(attempts === 1 ? { status: 403, json: { ok: false, error: 'Verification failed' } } : { json: { ok: true } });
+  });
+  await page.goto('/?contact');
+  const form = page.locator('[data-project-brief]');
+  await form.getByLabel('Name', { exact: true }).fill('Browser Test');
+  await form.getByLabel('Work email').fill('test@example.com');
+  await form.getByLabel('What are you working on?').fill('Keep this draft intact.');
+  await form.getByRole('button', { name: 'Send message' }).click();
+  await expect(form.getByRole('status')).toContainText('Browser verification failed');
+  await form.getByRole('button', { name: 'Reload and keep my message' }).click();
+  await expect(form.getByRole('status')).toContainText('Your message is still here');
+  await expect(form.getByLabel('Name', { exact: true })).toHaveValue('Browser Test');
+  await expect(form.getByLabel('Work email')).toHaveValue('test@example.com');
+  await expect(form.getByLabel('What are you working on?')).toHaveValue('Keep this draft intact.');
+  expect(await page.evaluate(() => sessionStorage.getItem('contact-verification-recovery'))).toBeNull();
+  expect(attempts).toBe(1);
+  await form.getByRole('button', { name: 'Send message' }).click();
+  await expect(form.getByRole('status')).toContainText('Received.');
+  expect(attempts).toBe(2);
+});

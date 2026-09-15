@@ -2481,3 +2481,6 @@ body:has(.contact-dialog[open]) { overflow: hidden; }
 @media (max-width: 900px) { .editorial-page .topbar nav { background: #f6f4ee; } }
 
 .editorial-page { background: #f6f4ee; }
+
+.contact-reload[hidden] { display: none; }
+.contact-dialog .contact-reload { width: fit-content; max-width: 100%; white-space: normal; }
