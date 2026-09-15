@@ -1,4 +1,6 @@
+import { protectSubmission } from '../../lib/bot-protection';
 import type { APIRoute } from "astro";
+import { sendTelegramMessage } from "../../lib/telegram-delivery";
 
 export const prerender = false;
 
@@ -47,13 +49,8 @@ const json = (body: unknown, status: number) =>
   });
 
 export const POST: APIRoute = async ({ request, clientAddress }) => {
-  // import.meta.env covers dev and build-time vars; process.env covers runtime
-  // values set in the Vercel dashboard after the build.
-  const token =
-    import.meta.env.TELEGRAM_BOT_TOKEN ?? process.env.TELEGRAM_BOT_TOKEN;
-  const chatId =
-    import.meta.env.TELEGRAM_CHAT_ID ?? process.env.TELEGRAM_CHAT_ID;
-
+  const denied = await protectSubmission(request);
+  if (denied) return denied;
   let data: FormData;
   try {
     data = await readSubmission(request);
@@ -79,10 +76,6 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   if (rateLimited(ip))
     return json({ ok: false, error: "Too many messages. Try again shortly." }, 429);
 
-  if (!token || !chatId) {
-    console.error("contact: TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID is not set");
-    return json({ ok: false, error: "Messaging is offline right now." }, 503);
-  }
 
   const lines = [
     "<b>New project brief — 17thstreetlabs.com</b>",
@@ -94,27 +87,11 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     escapeHtml(context),
   ];
 
-  try {
-    const response = await fetch(
-      `https://api.telegram.org/bot${token}/sendMessage`,
-      {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          chat_id: chatId,
-          parse_mode: "HTML",
-          disable_web_page_preview: true,
-          text: lines.join("\n"),
-        }),
-        signal: AbortSignal.timeout(8000),
-      },
-    );
-    if (!response.ok) {
-      console.error("contact: telegram rejected the message", response.status, await response.text());
-      return json({ ok: false, error: "Delivery failed. Please try again shortly." }, 502);
+  const delivery = await sendTelegramMessage({ text: lines.join("\n"), format: "HTML" });
+  if (!delivery.delivered) {
+    if (delivery.reason === "unconfigured") {
+      return json({ ok: false, error: "Messaging is offline right now." }, 503);
     }
-  } catch (error) {
-    console.error("contact: telegram request failed", error);
     return json({ ok: false, error: "Delivery failed. Please try again shortly." }, 502);
   }
 

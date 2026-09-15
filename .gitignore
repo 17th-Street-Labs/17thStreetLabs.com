@@ -49,3 +49,6 @@ next-env.d.ts
 
 # Local reader registrations (never publish)
 /.local/
+
+# Safe configuration template
+!.env.example

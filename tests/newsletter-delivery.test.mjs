@@ -1,30 +1,44 @@
+import { createBotProtection } from '../src/lib/bot-protection.ts';
 /* global Request, Response */
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import ts from 'typescript';
+import { createTelegramDelivery } from '../src/lib/telegram-delivery.ts';
+import * as access from '../src/lib/lab-access.ts';
 
 const source = readFileSync(new URL('../src/pages/api/lab-access.ts', import.meta.url), 'utf8');
-const compiled = ts.transpileModule(source.replaceAll('import.meta.env', 'env'), {
+const compiled = ts.transpileModule(source, {
   compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
 }).outputText;
 
-function setup({ secret = '', accepted = true, status = 200, configured = true, fail = false } = {}) {
+function setup({ isBot = false, verificationFails = false, secret = '', accepted = true, status = 200, configured = true, fail = false } = {}) {
+  const protectSubmission = createBotProtection(async () => {
+    if (verificationFails) throw new Error('verification unavailable');
+    return { isBot, isHuman: !isBot, isVerifiedBot: false, bypassed: false };
+  });
   const messages = [];
   const cookies = [];
   const exports = {};
-  const env = configured ? { TELEGRAM_BOT_TOKEN: 'test-token', TELEGRAM_CHAT_ID: 'test-chat' } : {};
-  const require = name => name.endsWith('lab-secret')
-    ? { labSecret: () => secret }
-    : { COOKIE: 'reader', MAX_AGE: 60, validEmail: email => email === 'reader@example.com', createAccessToken: () => 'signed-test-token' };
   const fetch = async (url, options) => {
     messages.push({ url, body: JSON.parse(options.body) });
     if (fail) throw new Error('Network unavailable');
     return new Response(JSON.stringify({ ok: accepted }), { status });
   };
-  // Execute the actual route with isolated configuration and Telegram transport.
-  new Function('exports', 'require', 'env', 'process', 'fetch', compiled)(exports, require, env, { env: {} }, fetch);
-  const submit = (purpose = 'newsletter') => exports.POST({
+  const sendTelegramMessage = createTelegramDelivery({
+    configure: () => configured ? { token: 'test-token', chatId: 'test-chat' } : {},
+    transport: fetch,
+  });
+  const require = name => {
+    if (name.endsWith('bot-protection')) return { protectSubmission };
+    if (name.endsWith('lab-secret')) return { labSecret: () => secret };
+    if (name.endsWith('telegram-delivery')) return { sendTelegramMessage };
+    if (name.endsWith('lab-access')) return access;
+    throw new Error(`Unexpected import: ${name}`);
+  };
+  // Run the route with real delivery and token logic; only configuration and transport vary.
+  new Function('exports', 'require', compiled)(exports, require);
+  const submit = async (purpose = 'newsletter') => exports.POST({
     request: new Request('https://example.com/api/lab-access/', {
       method: 'POST', headers: { origin: 'https://example.com' },
       body: JSON.stringify({ email: 'reader@example.com', purpose, page: '/lab/example/' }),
@@ -49,7 +63,7 @@ test('newsletter reaches the existing Telegram chat without a reader secret', as
 
 for (const options of [{ accepted: false }, { status: 500 }, { fail: true }, { configured: false }]) {
   test(`newsletter never confirms a failed delivery: ${JSON.stringify(options)}`, async () => {
-    const { submit, cookies } = setup(options);
+    const { submit, cookies } = setup({ ...options, secret: 'test-secret' });
     const res = await submit();
     assert.equal(res.status, 503);
     assert.ok((await res.json()).error);
@@ -61,6 +75,20 @@ test('reader access remains distinct from newsletter consent', async () => {
   const { submit, messages, cookies } = setup({ secret: 'test-secret' });
   assert.equal((await submit('article-access')).status, 200);
   assert.equal(cookies.length, 1);
+  assert.equal(cookies[0][0], access.COOKIE);
+  assert.equal(access.validAccessToken(cookies[0][1], 'test-secret'), true);
+  assert.equal(cookies[0][2].httpOnly, true);
   assert.match(messages[0].body.text, /no marketing subscription/);
   assert.ok(!messages[0].body.text.includes('from-the-lab-newsletter-v1'));
 });
+
+for (const purpose of ['newsletter', 'article-access']) {
+  for (const [options, status] of [[{ isBot: true }, 403], [{ verificationFails: true }, 503]]) {
+    test(`${purpose} blocks before delivery or cookie: ${status}`, async () => {
+      const { submit, messages, cookies } = setup({ ...options, secret: 'test-secret' });
+      assert.equal((await submit(purpose)).status, status);
+      assert.equal(messages.length, 0);
+      assert.equal(cookies.length, 0);
+    });
+  }
+}

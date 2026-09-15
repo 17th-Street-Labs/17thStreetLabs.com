@@ -14,6 +14,7 @@
   <button type="button" class="lab-skip">Keep reading for now</button>
 </dialog>
 <script>
+  import "../lib/botid-client";
   const modal = document.querySelector<HTMLDialogElement>('.lab-dialog')!;
   const form = document.querySelector<HTMLFormElement>('#lab-signup-form')!;
   const status = form.querySelector<HTMLElement>('.lab-signup-status')!;
@@ -82,7 +83,7 @@
   });
   form.addEventListener('submit', async event => {
     event.preventDefault();
-    if (!form.reportValidity()) return;
+    if (submit.disabled || !form.reportValidity()) return;
     submit.disabled = true;
     status.textContent = purpose === 'newsletter' ? 'Saving your signup…' : 'Opening the collection…';
     try {
