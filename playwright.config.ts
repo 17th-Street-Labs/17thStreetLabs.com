@@ -2,7 +2,7 @@ import { defineConfig } from "@playwright/test";
 
 export default defineConfig({
   testDir: "./tests",
-  testMatch: "browser.spec.ts",
+  testMatch: "smoke.spec.ts",
   fullyParallel: true,
   // Multiple concurrent headless-Chromium contexts rendering the WebGL hero
   // crash the renderer process in this environment; keep tests serialized.

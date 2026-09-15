@@ -3,46 +3,52 @@
 [![Build, lint & tests](https://github.com/17th-Street-Labs/17thStreetLabs.com/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/17th-Street-Labs/17thStreetLabs.com/actions/workflows/ci.yml?query=branch%3Amain)
 [![Vercel deployments](https://img.shields.io/badge/Deployments-Vercel-black?logo=vercel)](https://vercel.com/dan-levys-projects/17th-street-labs-com/deployments)
 
-The 17th Street Labs consultancy website, built with Astro 7 and native CSS.
-Astro generates static HTML for the home, services, about, and contact pages,
-with browser scripts for interactive controls.
+The 17th Street Labs consultancy website, built with Astro 7 and hand-written
+CSS. Every page is prerendered to static HTML; the two API routes under
+`src/pages/api/` are server-rendered on Vercel. Browser scripts drive the
+interactive controls.
 
 ## Local development
 
-Requires Node.js 24.x and npm. Run `nvm use` if you use nvm; `.nvmrc` selects
-the same Node major version as CI and `package.json`.
+Requires Node.js 24.x and pnpm (the version is pinned by `packageManager` in
+`package.json`; `corepack enable` picks it up). Run `nvm use` if you use nvm;
+`.nvmrc` selects the same Node major version as CI and `package.json`.
 
 ```sh
-npm ci
-npm run dev
+pnpm install --frozen-lockfile
+pnpm dev
 ```
 
 Open the local URL printed by Astro. Pages live in `src/pages/`, shared
-layouts in `src/layouts/`, components in `src/components/`, and styling in
-`src/styles/`. The routes are `/`, `/services/`, `/about/`, and `/contact/`.
+layouts in `src/layouts/`, components in `src/components/`, articles in
+`src/content/lab/`, and styling in `src/styles/`. The routes are `/`,
+`/services/`, `/about/`, `/contact/`, `/proof/`, `/blog/`, and `/lab/`, plus
+per-article pages under `/blog/` and `/lab/`.
 
 Contact forms POST to `/api/contact/`, which forwards the brief to a Telegram
 bot. No email address is published anywhere on the site.
 
 ```sh
-npm run check
-npm run lint
-npm test
-npm run build
-npm run preview
+pnpm check
+pnpm lint
+pnpm test
+pnpm build
+pnpm preview
 ```
 
-`check` validates Astro and TypeScript sources. `test` checks the generated
-site. `build` writes the deployable static site to `dist/`; `preview` serves
-that build locally.
+`check` validates Astro and TypeScript sources. `test` rebuilds, then asserts
+against the generated site. `build` writes the deployable output to `dist/`.
+`preview` runs `scripts/preview-static.mjs`, which serves that build *and* the
+API routes — a static-only file server cannot exercise the forms. See
+[`docs/local-preview.md`](docs/local-preview.md) for its flags.
 
 For browser validation, install Chromium on the first run, then test a fresh
 production build:
 
 ```sh
-npx playwright install chromium
-npm run build
-npm run test:browser
+pnpm exec playwright install chromium
+pnpm build
+pnpm test:browser
 ```
 
 ## Deploy to Vercel
@@ -53,8 +59,8 @@ project root. The checked-in `vercel.json` selects these settings:
 | Setting | Value |
 | --- | --- |
 | Framework preset | Astro |
-| Install command | `npm ci` |
-| Build command | `npm run build` |
+| Install command | `pnpm install --frozen-lockfile` |
+| Build command | `pnpm run build` |
 | Output directory | `dist` |
 
 Select Node.js 24.x in Vercel. Connect the production domain in the Vercel project
@@ -62,8 +68,11 @@ after reviewing its preview deployment. Trailing-slash redirects match Astro's
 generated route URLs. Responses include `X-Content-Type-Options: nosniff` and
 `Referrer-Policy: strict-origin-when-cross-origin`.
 
-This static site requires no Vercel runtime adapter, Cloudflare Worker, or
-server-side environment variables. See the official
+The site uses the `@astrojs/vercel` adapter so the API routes can run as
+functions; the pages themselves still build to static HTML. `TELEGRAM_BOT_TOKEN`
+and `TELEGRAM_CHAT_ID` must be set in the project (see below), and
+`LAB_ACCESS_SECRET` is needed for remembered reader access. No Cloudflare Worker
+is involved. See the official
 [Astro deployment guide](https://docs.astro.build/en/guides/deploy/vercel/) and
 [Vercel Astro documentation](https://vercel.com/docs/frameworks/frontend/astro).
 Committing this configuration does not deploy the site or change DNS.
