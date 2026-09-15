@@ -52,7 +52,10 @@
   if (supported() && container) {
     // Marking the hero lets CSS reserve the backdrop before the canvas exists,
     // so bringing the effect in causes no layout shift.
-    container.closest<HTMLElement>(".hero")?.classList.add("has-gl");
+    const hero = container.closest<HTMLElement>(".hero");
+    if (hero) {
+      hero.classList.add("has-gl");
+    }
 
     const start = () => {
       import("./webThreads").then(({ initWebThreads }) => {
