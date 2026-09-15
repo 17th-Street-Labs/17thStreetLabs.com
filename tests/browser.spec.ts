@@ -373,3 +373,29 @@ test('contact verification recovery keeps the draft through reload and retries s
   await expect(form.getByRole('status')).toContainText('Received.');
   expect(attempts).toBe(2);
 });
+
+test('all six service cards open the contact popup and tilt gently on hover', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.goto('/services/');
+  const cards = page.locator('.edition-grid .edition');
+  await expect(cards).toHaveCount(6);
+  const dialog = page.locator('.contact-dialog');
+  for (const card of await cards.all()) {
+    await card.hover();
+    const angle = await card.evaluate(el => parseFloat((el as HTMLElement).style.getPropertyValue('--card-tilt')));
+    expect(Math.abs(angle)).toBeGreaterThanOrEqual(1.2);
+    expect(Math.abs(angle)).toBeLessThanOrEqual(2.2);
+    // Click the illustration/body area, outside the link's visible label.
+    await card.click({ position: { x: 70, y: 100 } });
+    await expect(dialog).toBeVisible();
+    await expect(page).toHaveURL(/\/services\/$/);
+    await page.keyboard.press('Escape');
+    await expect(dialog).toBeHidden();
+  }
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await cards.first().hover();
+  expect(await cards.first().evaluate(el => getComputedStyle(el).transform)).toBe('none');
+  await cards.first().getByRole('link').focus();
+  await page.keyboard.press('Enter');
+  await expect(dialog).toBeVisible();
+});

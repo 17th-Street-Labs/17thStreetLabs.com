@@ -17,6 +17,7 @@ import { services } from "../data/services";
     <section class="edition-grid wrap" aria-label="Our AI engineering services">
       {services.map((service, index) => (
         <article id={service.slug} class={`edition edition-${index}`}>
+          <a class="edition-link" href="/contact/" data-contact-dialog>
           <div class="edition-label">
             <h2><span aria-hidden="true">0{index + 1} / </span>{service.title}</h2>
           </div>
@@ -25,6 +26,7 @@ import { services } from "../data/services";
             <p class="edition-hook">{service.outcome}</p>
             <p class="edition-description">{service.paragraphs[0]}</p>
           </div>
+          </a>
         </article>
       ))}
       <aside class="edition edition-contact">
@@ -41,18 +43,40 @@ import { services } from "../data/services";
   </div>
 </Layout>
 
+<script>
+  const serviceCards = document.querySelectorAll<HTMLElement>('.edition-grid .edition');
+  serviceCards.forEach(card => {
+    card.addEventListener('pointerenter', () => {
+      if (!matchMedia('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)').matches) return;
+      const direction = Math.random() < .5 ? -1 : 1;
+      card.style.setProperty('--card-tilt', `${direction * (1.2 + Math.random())}deg`);
+    });
+  });
+</script>
+
 <style>
   .editions { background: var(--bg); color: var(--text); }
   .editions-hero { padding-block: 9rem 3rem; }
   .editions-hero h1 { margin-top: 1.25rem; font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 650; letter-spacing: -.055em; line-height: 1.05; }
   .editions-hero h1 span { color: #dcec91; }
   .edition-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; padding-bottom: 2.5rem; }
-  .edition { padding: 1.5rem; min-width: 0; display: flex; flex-direction: column; background: var(--tile); color: #302338; scroll-margin-top: 6rem; }
+  .edition { position: relative; --card-tilt: 1.5deg; transition: transform 220ms ease, box-shadow 220ms ease; transform-origin: center; padding: 1.5rem; min-width: 0; display: flex; flex-direction: column; background: var(--tile); color: #302338; scroll-margin-top: 6rem; }
   .edition-0 { --tile: #dcec91; }
   .edition-1 { --tile: #c8bad5; }
   .edition-2 { --tile: #f6f4ee; }
   .edition-3 { --tile: #ddd8cb; }
   .edition-4 { --tile: #b7cbc4; }
+  .edition:nth-child(even) { --card-tilt: -1.5deg; }
+  .edition-link { display: flex; flex: 1; flex-direction: column; color: inherit; text-decoration: none; }
+  .edition-link::after { content: ''; position: absolute; inset: 0; z-index: 1; }
+  .edition-grid .edition:focus-within { outline: 2px solid #dcec91; outline-offset: 4px; }
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .edition-grid .edition:hover { z-index: 2; transform: translateY(-3px) rotate(var(--card-tilt)); box-shadow: 0 12px 24px #00000025; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .edition-grid .edition { transition: none; }
+    .edition-grid .edition:hover, .edition-grid .edition:focus-within { transform: none; }
+  }
   .edition-label { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
   .edition-label h2, .edition-kicker { font-family: var(--mono); font-size: .68rem; font-weight: 400; line-height: 1.5; letter-spacing: .01em; }
   .edition-copy { margin-top: auto; }

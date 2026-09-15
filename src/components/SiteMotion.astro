@@ -2,13 +2,13 @@
   // Content stays visible by default. Animate only when it enters the viewport;
   // never leave a hidden class behind if scripts fail or a visitor jumps ahead.
   const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const active = new Map<HTMLElement, Animation>();
-  const seen = new WeakSet<HTMLElement>();
+  const active: Map<HTMLElement, Animation> = new Map();
+  const seen: WeakSet<HTMLElement> = new WeakSet();
   const selectors = [
     '.hero-copy > .hero-actions', '.production-heading', '[data-production-reveal]',
     '.band-head', '.reading-heading', '.edition-label', '.edition-process',
     '.closing > h2', '.closing > .hero-actions', '.lab-closing > .wrap',
-    '.blog-subscribe > .editorial-wrap', '.edition-contact > a', '.article-newsletter > .article-wrap', '.footer-reading',
+    '.blog-subscribe > .editorial-wrap', '.article-newsletter > .article-wrap', '.footer-reading',
   ];
   const targets = document.querySelectorAll<HTMLElement>(selectors.join(','));
 
