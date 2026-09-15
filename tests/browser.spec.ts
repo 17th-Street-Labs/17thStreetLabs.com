@@ -205,11 +205,21 @@ for (const width of [320, 390, 768, 900, 1440]) {
     await page.goto('/blog/');
     await expect(page.getByRole('heading', { name: 'Blog', exact: true })).toBeVisible();
     await expect(page.locator('.article-grid article')).toHaveCount(9);
+    await expect(page.locator('.card-folio')).toHaveCount(9);
     await expect(page.locator('.category-filters button')).toHaveCount(0);
     await expect(page.locator('.collection-heading').first()).toContainText('Featured category Security & Privacy');
     expect(await page.locator('.blog-card').evaluateAll(cards => cards.slice(0, 3).map(card => card.getAttribute('data-category')))).toEqual(['Security & Privacy', 'Security & Privacy', 'Security & Privacy']);
     await expect(page.locator('.blog-category', { hasText: 'Costs and Optimization' })).toHaveCount(2);
     await expect(page.locator('.blog-category', { hasText: 'Testing & Evaluation' })).toHaveCount(2);
+
+    const layout = await page.locator('.article-grid').evaluate(grid => ({
+      columns: getComputedStyle(grid).gridTemplateColumns.split(' ').length,
+      cardHeight: grid.querySelector('.blog-card')?.getBoundingClientRect().height ?? 0,
+      artworkHeight: grid.querySelector('.card-art')?.getBoundingClientRect().height ?? 0,
+    }));
+    expect(layout.columns).toBe(width <= 650 ? 1 : 3);
+    expect(layout.cardHeight).toBeLessThanOrEqual(width <= 650 ? 221 : width <= 1100 ? 241 : 251);
+    expect(layout.artworkHeight).toBeGreaterThan(90);
 
     for (const headline of await page.locator('.blog-card h2').all()) {
       const size = await headline.evaluate(el => ({ height: el.getBoundingClientRect().height, line: parseFloat(getComputedStyle(el).lineHeight) }));

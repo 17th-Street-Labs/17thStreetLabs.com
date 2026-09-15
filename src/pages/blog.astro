@@ -36,6 +36,7 @@ const orderedEntries = [...labEntries].sort((a, b) => Number(b.category === feat
           <h2><a href={entry.url}>{(titleLines[entry.slug] ?? [entry.title]).map((line, index) => <span class="title-line">{index > 0 ? ' ' : ''}{line}</span>)}</a></h2>
           <div class="card-art"><BlogArtwork index={index} /></div>
           <a class="lab-read" href={entry.url}>Read <Icon name="ArrowUpRight" size={16} /><span class="sr-only">: {entry.title}</span></a>
+          <span class="card-folio" aria-hidden="true">{String(position + 1).padStart(2, '0')}</span>
         </article></>;
       })}
     </section>
@@ -71,7 +72,7 @@ const orderedEntries = [...labEntries].sort((a, b) => Number(b.category === feat
 
 .search { display: flex; align-items: center; gap: .65rem; padding: .4rem .75rem; border: 1px solid #30233833; border-radius: 3px; }
 .search input { width: 12rem; min-width: 0; background: transparent; color: inherit; border: 0; font: inherit; padding: .25rem 0; }
-.article-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 1rem; }
+.article-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75rem; }
 .collection-heading { grid-column: 1 / -1; display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
 .collection-heading[hidden] { display: none; }
 .collection-heading h2 { font: 650 1.1rem/1.4 var(--font); letter-spacing: -.025em; margin: 0; }
@@ -79,17 +80,20 @@ const orderedEntries = [...labEntries].sort((a, b) => Number(b.category === feat
 .collection-heading p { font-size: .75rem; color: #655a69; white-space: nowrap; }
 .more-heading { border-top: 1px solid #30233830; padding-top: .75rem; margin-top: .25rem; }
 @media(max-width: 550px) { .collection-heading h2 { font-size: .95rem; } .collection-heading h2 span { font-size: .55rem; margin-right: .4rem; } .collection-heading { gap: .4rem; } }
-.blog-card { position: relative; grid-column: span 2; display: flex; flex-direction: column; min-width: 0; container-type: inline-size; min-height: 15.4rem; padding: 1rem; background: #b4ccc3; overflow: hidden; }
+.blog-card { position: relative; display: flex; flex-direction: column; min-width: 0; height: 15.625rem; padding: 1rem; background: #b4ccc3; border: 1px solid #30233835; overflow: hidden; container-type: inline-size; }
 .blog-card[hidden] { display: none; }
-.blog-category { font: .65rem/1.5 var(--mono); letter-spacing: .13em; text-transform: uppercase; margin: 0 0 .6rem; }
-.blog-card h2 { font: 700 clamp(1.05rem, 6cqi, 1.8rem)/1.1 var(--font); letter-spacing: -.045em; text-wrap: balance; margin: 0; min-height: 2.2em; }
+.blog-category { position: relative; z-index: 2; font: .56rem/1.4 var(--mono); letter-spacing: .1em; text-transform: uppercase; margin: 0 0 .55rem; }
+.blog-card h2 { position: relative; z-index: 2; font: 700 clamp(1rem, 7.5cqi, 1.5rem)/1.08 var(--font); letter-spacing: -.05em; margin: 0; }
 .title-line { display: block; }
 .blog-card h2 a { color: inherit; text-decoration: none; }
 .blog-card h2 a:hover { text-decoration: underline; text-underline-offset: .1em; }
-.card-art { flex: 1; height: 3.5rem; min-height: 2.5rem; margin-block: .35rem; display: flex; align-items: center; }
-.card-art :global(svg) { max-height: 3.5rem; }
-.lab-read { display: inline-flex; align-items: center; gap: .35rem; align-self: flex-start; min-height: 2.75rem; color: inherit; text-decoration: none; font-size: .9rem; margin-top: .25rem; }
+.card-art { position: absolute; inset: 5.875rem .9rem 2.2rem; display: flex; align-items: center; justify-content: center; background-image: linear-gradient(#30233813 1px, transparent 1px), linear-gradient(90deg, #30233813 1px, transparent 1px); background-size: 1.5rem 1.5rem; border-block: 1px solid #30233825; }
+.card-art :global(svg) { display: block; width: 86%; height: 100%; transition: transform .3s ease; }
+.blog-card:hover .card-art :global(svg) { transform: translateY(-.2rem) scale(1.04); }
+.lab-read { position: absolute; z-index: 2; bottom: .2rem; left: 1rem; display: inline-flex; align-items: center; gap: .35rem; min-height: 2.75rem; color: inherit; text-decoration: none; font-size: .78rem; }
+.card-folio { position: absolute; z-index: 2; right: 1rem; bottom: .85rem; font: .6rem/1 var(--mono); letter-spacing: .06em; }
 .tone-0 { background: #302338; color: #f6f4ee; }
+.tone-0 .card-art { background-image: linear-gradient(#f6f4ee18 1px, transparent 1px), linear-gradient(90deg, #f6f4ee18 1px, transparent 1px); border-color: #f6f4ee35; }
 .tone-2 { background: #c8b8d5; }
 .tone-3 { background: #f6f4ee; border: 1px solid #30233830; }
 .tone-4 { background: #d9ed91; }
@@ -100,16 +104,15 @@ const orderedEntries = [...labEntries].sort((a, b) => Number(b.category === feat
 .blog-subscribe h2 { font: 700 clamp(1.6rem, 2.7vw, 2.5rem)/1.1 var(--font); letter-spacing: -.045em; }
 .blog-subscribe p { font-size: .95rem; color: #c8bdcd; margin-top: .55rem; }
 .blog-subscribe button { display: inline-flex; align-items: center; justify-content: center; gap: .75rem; flex-shrink: 0; background: #f6f4ee; color: #302338; border: 0; border-radius: 0; padding: 1rem 1.5rem; font: inherit; cursor: pointer; }
-@media(max-width: 1100px) { .blog-tools { flex-wrap: wrap; } .search { margin-left: auto; } }
-@media(max-width: 800px) { .article-grid { grid-template-columns: repeat(2,minmax(0,1fr)); } .blog-card { grid-column: span 1; } .blog-masthead { gap: 1rem; } }
-@media(max-width: 550px) { .blog-masthead { align-items: flex-start; flex-direction: column; gap: .75rem; } .blog-tools { align-items: stretch; } .search { margin-left: 0; width: 100%; } .search input { width: 100%; } .article-grid { grid-template-columns: 1fr; } .blog-card { min-height: 13.3rem; padding: .85rem; } .blog-card h2 { font-size: 1.4rem; } .blog-subscribe .editorial-wrap { flex-direction: column; align-items: flex-start; gap: 1rem; } .blog-subscribe { padding: 1.5rem; } }
+@media(max-width: 1100px) { .blog-tools { flex-wrap: wrap; } .search { margin-left: auto; } .article-grid { gap: .625rem; } .blog-card { height: 15rem; padding: .875rem; } .card-art { inset: 5.625rem .875rem 2.35rem; } .lab-read { left: .875rem; } .card-folio { right: .875rem; } }
+@media(max-width: 800px) { .blog-masthead { gap: 1rem; } }
+@media(max-width: 650px) { .blog-masthead { align-items: flex-start; flex-direction: column; gap: .75rem; } .blog-tools { align-items: stretch; } .search { margin-left: 0; width: 100%; } .search input { width: 100%; } .article-grid { grid-template-columns: 1fr; } .blog-card { height: 13.75rem; padding: .875rem; } .blog-card h2 { font-size: clamp(1.2rem, 7.2cqi, 1.45rem); } .card-art { inset: 5.3rem .875rem 2.3rem; background-size: 1.25rem 1.25rem; } .card-art :global(svg) { width: 80%; } .blog-subscribe .editorial-wrap { flex-direction: column; align-items: flex-start; gap: 1rem; } .blog-subscribe { padding: 1.5rem; } }
 @media(max-width: 550px) {
   .blog-masthead { gap: .4rem; padding-bottom: .75rem; }
   .blog-masthead h1 { font-size: 3.25rem; }
   .blog-masthead p { font-size: .9rem; }
   .blog-tools { gap: .5rem; padding-block: .5rem; }
   .article-grid { gap: .65rem; }
-  .card-art { height: 2rem; min-height: 1.5rem; margin-block: .2rem; }
-  .card-art :global(svg) { max-height: 2rem; }
 }
+@media(prefers-reduced-motion: reduce) { .card-art :global(svg) { transition: none; } .blog-card:hover .card-art :global(svg) { transform: none; } }
 </style>
