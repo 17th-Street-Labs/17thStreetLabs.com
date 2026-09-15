@@ -236,9 +236,16 @@ for (const width of [320, 390, 768, 900, 1440]) {
 
 
 test('newsletter handles invalid responses and permits retry without losing the email', async ({ page }) => {
+  // Exercise the real BotID interceptor without requiring Vercel's challenge server locally.
+  await page.route('**/a-4-a/c.js?*', route => route.fulfill({
+    contentType: 'application/javascript',
+    body: 'window.V_C.push({ b: 1, v: "test", e: "test", d: 0 });',
+  }));
   let attempts = 0;
   await page.route('**/api/lab-access/', async route => {
     if (route.request().method() === 'GET') return route.fulfill({ json: { unlocked: false } });
+    expect(route.request().headers()['x-is-human']).toBeTruthy();
+    expect(route.request().headers()['x-path']).toBe('/api/lab-access/');
     attempts++;
     if (attempts === 1) return route.fulfill({ status: 501, contentType: 'text/html', body: '<html>Unsupported method</html>' });
     if (attempts === 2) return route.abort('failed');
