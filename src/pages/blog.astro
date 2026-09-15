@@ -35,7 +35,7 @@ const orderedEntries = [...labEntries].sort((a, b) => Number(b.category === feat
           <p class="blog-category">{entry.category}</p>
           <h2><a href={entry.url}>{(titleLines[entry.slug] ?? [entry.title]).map((line, index) => <span class="title-line">{index > 0 ? ' ' : ''}{line}</span>)}</a></h2>
           <div class="card-art"><BlogArtwork index={index} /></div>
-          <a class="lab-read" href={entry.url}>Read <Icon name="ArrowUpRight" size={16} /><span class="sr-only">: {entry.title}</span></a>
+          <span class="lab-read" aria-hidden="true">Read <Icon name="ArrowUpRight" size={16} /></span>
           <span class="card-folio" aria-hidden="true">{String(position + 1).padStart(2, '0')}</span>
         </article></>;
       })}
@@ -83,14 +83,16 @@ const orderedEntries = [...labEntries].sort((a, b) => Number(b.category === feat
 .blog-card { position: relative; display: flex; flex-direction: column; min-width: 0; height: 15.625rem; padding: 1rem; background: #b4ccc3; border: 1px solid #30233835; overflow: hidden; container-type: inline-size; }
 .blog-card[hidden] { display: none; }
 .blog-category { position: relative; z-index: 2; font: .56rem/1.4 var(--mono); letter-spacing: .1em; text-transform: uppercase; margin: 0 0 .55rem; }
-.blog-card h2 { position: relative; z-index: 2; font: 700 clamp(1rem, 7.5cqi, 1.5rem)/1.08 var(--font); letter-spacing: -.05em; margin: 0; }
+.blog-card h2 { font: 700 clamp(1rem, 7.5cqi, 1.5rem)/1.08 var(--font); letter-spacing: -.05em; margin: 0; }
 .title-line { display: block; }
 .blog-card h2 a { color: inherit; text-decoration: none; }
+.blog-card h2 a::after { content: ''; position: absolute; inset: 0; z-index: 3; }
 .blog-card h2 a:hover { text-decoration: underline; text-underline-offset: .1em; }
+.blog-card h2 a:focus-visible::after { outline: 3px solid currentColor; outline-offset: -4px; }
 .card-art { position: absolute; inset: 5.875rem .9rem 2.2rem; display: flex; align-items: center; justify-content: center; background-image: linear-gradient(#30233813 1px, transparent 1px), linear-gradient(90deg, #30233813 1px, transparent 1px); background-size: 1.5rem 1.5rem; border-block: 1px solid #30233825; }
 .card-art :global(svg) { display: block; width: 86%; height: 100%; transition: transform .3s ease; }
 .blog-card:hover .card-art :global(svg) { transform: translateY(-.2rem) scale(1.04); }
-.lab-read { position: absolute; z-index: 2; bottom: .2rem; left: 1rem; display: inline-flex; align-items: center; gap: .35rem; min-height: 2.75rem; color: inherit; text-decoration: none; font-size: .78rem; }
+.lab-read { position: absolute; z-index: 2; bottom: .2rem; left: 1rem; display: inline-flex; align-items: center; gap: .35rem; min-height: 2.75rem; color: inherit; font-size: .78rem; }
 .card-folio { position: absolute; z-index: 2; right: 1rem; bottom: .85rem; font: .6rem/1 var(--mono); letter-spacing: .06em; }
 .tone-0 { background: #302338; color: #f6f4ee; }
 .tone-0 .card-art { background-image: linear-gradient(#f6f4ee18 1px, transparent 1px), linear-gradient(90deg, #f6f4ee18 1px, transparent 1px); border-color: #f6f4ee35; }

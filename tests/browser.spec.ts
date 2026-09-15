@@ -221,6 +221,10 @@ for (const width of [320, 390, 768, 900, 1440]) {
     expect(layout.cardHeight).toBeLessThanOrEqual(width <= 650 ? 221 : width <= 1100 ? 241 : 251);
     expect(layout.artworkHeight).toBeGreaterThan(90);
 
+    await page.locator('.blog-card').first().click();
+    await expect(page).toHaveURL(/\/blog\/continuous-security-testing\/$/);
+    await page.goBack();
+
     for (const headline of await page.locator('.blog-card h2').all()) {
       const size = await headline.evaluate(el => ({ height: el.getBoundingClientRect().height, line: parseFloat(getComputedStyle(el).lineHeight) }));
       expect(size.height).toBeLessThanOrEqual(size.line * 2 + 1);
