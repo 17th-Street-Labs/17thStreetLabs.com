@@ -4,7 +4,7 @@ slug: continuous-security-testing
 
 An attacker does not need a brilliant idea every time. Sometimes the advantage is having enough time to keep trying.
 
-Cheap AI models make it more affordable to generate and organize candidate approaches. Tools and available compute determine how much of that work can run. In Dan’s controlled security experiments, the volume of ideas a small model could produce was striking.
+Cheap AI models make it more affordable to generate and organize candidate approaches. Tools and available compute determine how much of that work can run. In our controlled security experiments, the volume of ideas a small model could produce was striking.
 
 That does not make every attempt effective, or defense impossible. It does make a security program built around occasional checks harder to justify.
 

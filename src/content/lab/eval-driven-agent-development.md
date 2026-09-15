@@ -8,7 +8,7 @@ That looks reassuring. It can also be two models agreeing about something neithe
 
 Eval-driven development means deciding what good behavior looks like, testing for it, and using the failures to guide the next change. For agents, the final answer is only part of the result. The steps taken to get there can matter just as much.
 
-Dan has been experimenting with a compact way to evaluate that journey: describe the expected shape of the work in an outline, then compare the recorded interaction against it.
+Our team has been experimenting with a compact way to evaluate that journey: describe the expected shape of the work in an outline, then compare the recorded interaction against it.
 
 ## Describe what must happen
 
@@ -36,7 +36,7 @@ Supply the task, the rubric, and the recorded interaction, including tool result
 
 If the judge claims that the fix passed its checks, its output should reference the recorded test results. If those results cannot be found, the verdict needs review.
 
-Dan’s early experience with this approach was promising. That is a reason to test it on more representative cases, rather than assume it generalizes to every workflow.
+Our early experience with this approach was promising. That is a reason to test it on more representative cases, rather than assume it generalizes to every workflow.
 
 ## Put exact checks in code
 
@@ -52,7 +52,7 @@ Build a set of human-reviewed examples: a valid run, a skipped dependency, an un
 
 Run identical examples repeatedly. Check both agreement with the reviewed labels and consistency across repeats. A judge can be consistently wrong; it can also be correct often enough on average while changing decisions on a critical case.
 
-Dan’s [Auto-Tune Your LLM Judge](https://danlevy.net/auto-tune-your-llm-judge/) goes deeper into measuring that variability and checking improvements against held-out cases.
+[Auto-Tune Your LLM Judge](https://danlevy.net/auto-tune-your-llm-judge/) goes deeper into measuring that variability and checking improvements against held-out cases.
 
 ## Let failures guide the next change
 

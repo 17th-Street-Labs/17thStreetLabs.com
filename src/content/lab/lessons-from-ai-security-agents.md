@@ -42,7 +42,7 @@ Compare complete workflows, including verification and recovery. A stronger mode
 
 A final answer tells you what the agent says happened. Tool results, saved artifacts, and browser recordings help you check what happened.
 
-Dan’s experiments with browser recordings were particularly useful: an agent could inspect behavior over time instead of relying only on HTML or a final image. That opened up a different way to look for visual regressions. It also created a new obligation to verify what the agent claimed to see.
+Our experiments with browser recordings were particularly useful: an agent could inspect behavior over time instead of relying only on HTML or a final image. That opened up a different way to look for visual regressions. It also created a new obligation to verify what the agent claimed to see.
 
 The same applies to an AI judge. Its verdict is another output to test.
 

@@ -4,7 +4,7 @@ slug: security-copilot-that-explains
 
 A terminal full of fast-moving commands can look impressive. To the person responsible for the system, it can also look like a very expensive way to lose track of what is happening.
 
-One idea from Dan’s experiments is a companion that watches the agent’s work and explains it as it happens: what the current step is trying to establish, what the result means, and which decision comes next.
+One idea from our team’s experiments is a companion that watches the agent’s work and explains it as it happens: what the current step is trying to establish, what the result means, and which decision comes next.
 
 The useful part is knowing when to let the work continue—and when to step in.
 

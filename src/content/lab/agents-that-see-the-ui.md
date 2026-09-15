@@ -6,7 +6,7 @@ The test clicked the button. The expected text appeared. Everything passed.
 
 Meanwhile, the interface flashed, jumped, and briefly showed the wrong state. The test had checked the destination. The user had experienced the journey.
 
-Dan has been experimenting with giving agents browser recordings as well as page structure. The useful surprise was that an agent could flag behavior he had not explicitly written a test for. That makes recordings an interesting source of evidence, especially for problems that disappear before the final screenshot.
+Our team has been experimenting with giving agents browser recordings as well as page structure. The useful surprise was that an agent could flag behavior we had not explicitly written a test for. That makes recordings an interesting source of evidence, especially for problems that disappear before the final screenshot.
 
 ## Show it what happened between screenshots
 

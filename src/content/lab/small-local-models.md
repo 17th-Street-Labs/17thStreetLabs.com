@@ -6,7 +6,7 @@ A small model running on a laptop does not look like an enterprise AI strategy.
 
 Give it the right job, and it might become part of one.
 
-While testing models for ExploitHunter, Dan found that smaller models could do useful work well beyond what their size suggested. The opportunity wasn’t to pretend they were interchangeable with every frontier model. It was to find the work they could do reliably—and stop paying more for that work by default.
+While testing models for ExploitHunter, our team found that smaller models could do useful work well beyond what their size suggested. The opportunity wasn’t to pretend they were interchangeable with every frontier model. It was to find the work they could do reliably—and stop paying more for that work by default.
 
 ## Give it one job you can check
 

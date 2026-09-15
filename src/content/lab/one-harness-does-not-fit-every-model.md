@@ -4,7 +4,7 @@ slug: one-harness-does-not-fit-every-model
 
 We made a task easier to manage. That did not always make it easier to solve.
 
-During Dan’s experiments, breaking work into tightly controlled steps helped some smaller models. Each worker received a focused assignment and returned a short update. A coordinator kept the job moving.
+During our experiments, breaking work into tightly controlled steps helped some smaller models. Each worker received a focused assignment and returned a short update. A coordinator kept the job moving.
 
 Apply the same approach to a more capable model, and something could go missing: the bigger picture. The structure that reduced confusion for one model could limit another model’s ability to connect evidence across the investigation.
 
