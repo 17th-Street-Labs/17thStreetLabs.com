@@ -20,11 +20,17 @@
   const status = form.querySelector<HTMLElement>('.lab-signup-status')!;
   const submit = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
   const article = document.querySelector<HTMLElement>('[data-lab-article]');
+  const title = modal.querySelector<HTMLElement>('#lab-signup-title')!;
+  const description = modal.querySelector<HTMLElement>('#lab-signup-description')!;
+  const fineprint = modal.querySelector<HTMLElement>('.lab-fineprint')!;
+  const skip = modal.querySelector<HTMLElement>('.lab-skip')!;
+  const accessTriggers = document.querySelectorAll<HTMLElement>('[data-lab-signup]');
+  const newsletterTriggers = document.querySelectorAll<HTMLElement>('[data-newsletter-signup]');
   let unlocked = false;
   let purpose: "article-access" | "newsletter" = "article-access";
   let opener: HTMLElement | null = null;
   function markUnlocked() {
-    document.querySelectorAll<HTMLElement>('[data-lab-signup]').forEach(el => {
+    accessTriggers.forEach(el => {
       el.innerHTML = 'Explore the articles <span aria-hidden="true">↗</span>';
     });
   }
@@ -32,12 +38,12 @@
     purpose = newsletter ? 'newsletter' : 'article-access';
     form.hidden = false;
     form.reset();
-    modal.querySelector<HTMLElement>('#lab-signup-title')!.textContent = newsletter ? 'The useful bits. In your inbox.' : 'There’s more where that came from.';
-    modal.querySelector<HTMLElement>('#lab-signup-description')!.textContent = newsletter ? 'Get practical AI lessons, experiments, and ideas from the people building the systems.' : 'Enjoying the useful bits? Pop in your email and explore the Blog.';
-    modal.querySelector<HTMLElement>('.lab-fineprint')!.textContent = newsletter ? 'By subscribing, you agree to receive the Blog newsletter by email.' : 'Free access, remembered in this browser. We use your email to register your access—not to sign you up for marketing.';
+    title.textContent = newsletter ? 'The useful bits. In your inbox.' : 'There’s more where that came from.';
+    description.textContent = newsletter ? 'Get practical AI lessons, experiments, and ideas from the people building the systems.' : 'Enjoying the useful bits? Pop in your email and explore the Blog.';
+    fineprint.textContent = newsletter ? 'By subscribing, you agree to receive the Blog newsletter by email.' : 'Free access, remembered in this browser. We use your email to register your access—not to sign you up for marketing.';
     submit.classList.toggle('newsletter-button', newsletter);
     submit.textContent = newsletter ? 'Send me the good stuff' : 'Keep reading';
-    modal.querySelector<HTMLElement>('.lab-skip')!.textContent = newsletter ? 'Not now' : 'Keep reading for now';
+    skip.textContent = newsletter ? 'Not now' : 'Keep reading for now';
     if (modal.open || document.querySelector('dialog[open]')) return;
     status.textContent = '';
     modal.showModal();
@@ -47,25 +53,15 @@
       const res = await fetch('/api/lab-access/', {cache: 'no-store'});
       if (res.ok) unlocked = (await res.json()).unlocked === true;
     } catch { /* Reading remains available when registration is offline. */ }
-    if (unlocked) { markUnlocked(); return; }
-    if (!article) return;
-    try {
-      const key = 'lab-reading-history';
-      const stored = JSON.parse(localStorage.getItem(key) || '[]');
-      const visited: string[] = Array.isArray(stored) ? stored.filter(value => typeof value === 'string') : [];
-      const slug = article.dataset.labArticle!;
-      const isNew = !visited.includes(slug);
-      if (isNew) localStorage.setItem(key, JSON.stringify([...visited, slug].slice(-100)));
-      if (isNew && visited.length >= 3 && Date.now() > Number(localStorage.getItem('lab-invite-after') || 0)) invite();
-    } catch { /* Without storage, use the voluntary footer invitation only. */ }
+    if (unlocked) markUnlocked();
   }
-  document.querySelectorAll<HTMLElement>('[data-lab-signup]').forEach(trigger => trigger.addEventListener('click', event => {
+  accessTriggers.forEach(trigger => trigger.addEventListener('click', event => {
     event.preventDefault();
     opener = trigger;
     if (unlocked) { window.location.assign('/lab/'); return; }
     invite();
   }));
-  document.querySelectorAll<HTMLElement>('[data-newsletter-signup]').forEach(trigger => trigger.addEventListener('click', () => {
+  newsletterTriggers.forEach(trigger => trigger.addEventListener('click', () => {
     opener = trigger;
     invite(true);
   }));
@@ -98,10 +94,12 @@
       unlocked = result.unlocked === true;
       if (unlocked) markUnlocked();
       if (purpose === 'newsletter') {
+        try { localStorage.setItem('lab-newsletter-subscribed', 'true'); } catch { /* Optional browser preference. */ }
+        window.dispatchEvent(new Event('lab-newsletter-subscribed'));
         form.hidden = true;
-        modal.querySelector<HTMLElement>('#lab-signup-title')!.textContent = 'You’re on the list.';
-        modal.querySelector<HTMLElement>('#lab-signup-description')!.textContent = 'Thanks for subscribing. In the meantime, there’s plenty to explore on the Blog.';
-        modal.querySelector<HTMLElement>('.lab-skip')!.textContent = 'Back to reading';
+        title.textContent = 'You’re on the list.';
+        description.textContent = 'Thanks for subscribing. In the meantime, there’s plenty to explore on the Blog.';
+        skip.textContent = 'Back to reading';
         return;
       }
       modal.close();

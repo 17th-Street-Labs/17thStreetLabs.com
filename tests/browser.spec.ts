@@ -266,3 +266,83 @@ test('newsletter handles invalid responses and permits retry without losing the 
   await expect(page.getByRole('heading', { name: 'You’re on the list.' })).toBeVisible();
   expect(attempts).toBe(3);
 });
+
+for (const width of [390, 1280]) {
+  test(`article prompts rotate at the prose midpoint and dismiss at ${width}px`, async ({ page }, testInfo) => {
+    await page.setViewportSize({ width, height: 850 });
+    const paths = ['small-local-models', 'local-ai-data-privacy', 'agents-that-see-the-ui'];
+    for (const [index, slug] of paths.entries()) {
+      await page.goto(`/lab/${slug}/`);
+      const prompt = page.locator('[data-reading-prompt]');
+      await expect(page.locator('[data-reading-midpoint]')).toHaveCount(1);
+      await expect(prompt).toBeHidden();
+      await expect(page.locator('.lab-dialog')).not.toBeVisible();
+      await page.locator('[data-reading-midpoint]').scrollIntoViewIfNeeded();
+      await expect(prompt).toBeVisible();
+      await expect(prompt).toHaveAttribute('data-variant', ['side', 'inline', 'slide'][index]);
+      const geometry = await prompt.evaluate(el => {
+        const r = el.getBoundingClientRect();
+        return { left: r.left, right: r.right, viewport: innerWidth, overflow: document.documentElement.scrollWidth > innerWidth };
+      });
+      expect(geometry.left).toBeGreaterThanOrEqual(0);
+      expect(geometry.right).toBeLessThanOrEqual(geometry.viewport);
+      expect(geometry.overflow).toBe(false);
+      await prompt.scrollIntoViewIfNeeded();
+      await page.screenshot({ path: testInfo.outputPath(`prompt-${index}.png`) });
+      await prompt.getByRole('button', { name: 'Keep reading' }).click();
+      await expect(prompt).toBeHidden();
+      await page.locator('[data-reading-midpoint]').scrollIntoViewIfNeeded();
+      await expect(prompt).toBeHidden();
+    }
+  });
+}
+
+test('article prompt retries failed delivery and remembers only confirmed newsletter signup', async ({ page }) => {
+  await page.route('**/a-4-a/c.js?*', route => route.fulfill({ contentType: 'application/javascript', body: 'window.V_C.push({ b: 1, v: "test", e: "test", d: 0 });' }));
+  let attempts = 0;
+  await page.route('**/api/lab-access/', route => {
+    if (route.request().method() === 'GET') return route.fulfill({ json: { unlocked: true } });
+    const data = route.request().postDataJSON();
+    expect(data.purpose).toBe('newsletter');
+    expect(data.page).toBe('/lab/small-local-models/');
+    expect(data.email).toBe('reader@example.com');
+    attempts++;
+    return attempts === 1
+      ? route.fulfill({ status: 503, contentType: 'text/html', body: 'Unavailable' })
+      : route.fulfill({ json: { saved: true, unlocked: true } });
+  });
+  await page.goto('/lab/small-local-models/');
+  await page.locator('[data-reading-midpoint]').scrollIntoViewIfNeeded();
+  const prompt = page.locator('[data-reading-prompt]');
+  await prompt.getByLabel('Email for new articles').fill('reader@example.com');
+  await prompt.getByRole('button', { name: 'Send me more reads' }).click();
+  await expect(prompt.getByRole('status')).toContainText('Please try again');
+  await expect(prompt.getByLabel('Email for new articles')).toHaveValue('reader@example.com');
+  expect(await page.evaluate(() => localStorage.getItem('lab-newsletter-subscribed'))).toBeNull();
+  await prompt.getByRole('button', { name: 'Send me more reads' }).click();
+  await expect(prompt.getByRole('status')).toContainText('You’re on the list');
+  await page.goto('/lab/local-ai-data-privacy/');
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+  await expect(page.locator('[data-reading-prompt]')).toBeHidden();
+  expect(attempts).toBe(2);
+});
+
+test('every published article supports a midpoint prompt with blocked storage', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 740 });
+  await page.addInitScript(() => {
+    Storage.prototype.getItem = () => { throw new Error('Storage blocked'); };
+    Storage.prototype.setItem = () => { throw new Error('Storage blocked'); };
+  });
+  const slugs = ['small-local-models', 'cost-per-completed-task', 'renting-vs-buying-gpus', 'one-harness-does-not-fit-every-model', 'continuous-security-testing', 'eval-driven-agent-development', 'agents-that-see-the-ui', 'local-ai-data-privacy', 'security-copilot-that-explains'];
+  for (const slug of slugs) {
+    await page.goto(`/lab/${slug}/`);
+    await page.locator('[data-reading-midpoint]').scrollIntoViewIfNeeded();
+    await expect(page.locator('[data-reading-prompt]')).toBeVisible();
+    expect(await page.locator('[data-reading-prompt]').evaluate(el => getComputedStyle(el).animationName)).toBe('none');
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    await page.locator('[data-reading-prompt] input[type=email]').focus();
+    await page.keyboard.press('Escape');
+    await expect(page.locator('[data-reading-prompt]')).toBeHidden();
+    await expect(page.locator('[data-lab-article]')).toBeFocused();
+  }
+});

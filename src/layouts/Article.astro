@@ -1,5 +1,6 @@
 ---
 import Layout from './Layout.astro';
+import ArticleReadingPrompt from '../components/ArticleReadingPrompt.astro';
 import { labEntries } from '../data/lab';
 interface Props { frontmatter: { slug: string }; }
 const { frontmatter } = Astro.props;
@@ -30,6 +31,7 @@ const next = labEntries[(index + 1) % labEntries.length];
     <div class="article-wrap article-reading">
       <aside class="takeaway" aria-label="The takeaway"><span>The takeaway</span><p>{entry.takeaway}</p></aside>
       <div class="article-prose" data-lab-article={entry.slug} tabindex="-1"><slot /></div>
+      <ArticleReadingPrompt />
     </div>
   </article>
   <section class="article-newsletter" aria-labelledby="newsletter-heading">
@@ -79,7 +81,7 @@ const next = labEntries[(index + 1) % labEntries.length];
   .takeaway { background: #e9e1ef; padding: 1.5rem 1.75rem; border-left: 3px solid #302338; margin-bottom: 2.5rem; }
   .takeaway span { font: .65rem var(--mono); text-transform: uppercase; letter-spacing: .08em; }
   .takeaway p { margin-top: .6rem; font-size: 1.15rem; line-height: 1.5; }
-  .article-prose { font-size: 1.05rem; line-height: 1.8; overflow-wrap: anywhere; }
+  .article-prose { display: flow-root; font-size: 1.05rem; line-height: 1.8; overflow-wrap: anywhere; }
   .article-prose :global(p) { margin-block: 0 1.3rem; }
   .article-prose :global(h2) { font-weight: 600; font-size: clamp(1.5rem, 3vw, 2rem); letter-spacing: -.035em; line-height: 1.2; margin: 2.75rem 0 1rem; }
   .article-prose :global(a) { text-decoration: underline; text-underline-offset: .2em; text-decoration-color: #8b7b93; }

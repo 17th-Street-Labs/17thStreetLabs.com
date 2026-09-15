@@ -1,0 +1,139 @@
+<aside class="reading-prompt" data-reading-prompt hidden aria-label="Get new articles by email">
+  <h2 data-prompt-heading>Good read? There’s more where that came from.</h2>
+  <form>
+    <label for="reading-prompt-email">Email for new articles</label>
+    <input id="reading-prompt-email" name="email" type="email" autocomplete="email" maxlength="160" placeholder="Email address" required />
+    <div hidden><input name="company" tabindex="-1" autocomplete="off" aria-hidden="true" /></div>
+    <button type="submit">Send me more reads <span aria-hidden="true">↗</span></button>
+  </form>
+  <button class="keep-reading" type="button">Keep reading <span aria-hidden="true">→</span></button>
+  <p class="prompt-status" role="status" aria-live="polite"></p>
+</aside>
+<script>
+  import '../lib/botid-client';
+  const prompt = document.querySelector<HTMLElement>('[data-reading-prompt]');
+  const prose = document.querySelector<HTMLElement>('[data-lab-article]');
+  if (prompt && prose) {
+    const heading = prompt.querySelector<HTMLElement>('[data-prompt-heading]')!;
+    const consentKey = 'lab-newsletter-subscribed';
+    const subscribed = () => { try { return localStorage.getItem(consentKey) === 'true'; } catch { return false; } };
+    const variants = [
+      ['side', 'Good read? There’s more where that came from.'],
+      ['inline', 'Enjoying the rabbit hole? We’ll email you the next one.'],
+      ['slide', 'One more read? We’ll let you know when it’s ready.'],
+    ];
+    // Choose a boundary between complete prose blocks, never inside a list or code sample.
+    const blocks = Array.from(prose.children).filter(el => el.textContent?.trim());
+    const lengths = blocks.map(el => el.textContent?.trim().split(/\s+/).length || 0);
+    const halfway = lengths.reduce((sum, length) => sum + length, 0) / 2;
+    let words = 0;
+    let boundary = blocks[0];
+    for (let index = 0; index < blocks.length - 1; index++) {
+      words += lengths[index];
+      boundary = blocks[index];
+      if (words >= halfway && !/^H[1-6]$/.test(boundary.tagName)) break;
+    }
+    if (boundary && !subscribed()) {
+      const marker = document.createElement('span');
+      marker.dataset.readingMidpoint = '';
+      marker.setAttribute('aria-hidden', 'true');
+      boundary.after(marker);
+      marker.after(prompt);
+      let shown = false;
+      const show = () => {
+        if (shown || subscribed() || document.querySelector('dialog[open]')) return;
+        shown = true;
+        let variant: number;
+        try {
+          const raw = Number(localStorage.getItem('lab-prompt-rotation') || 0);
+          variant = Number.isInteger(raw) && raw >= 0 ? raw % variants.length : 0;
+          localStorage.setItem('lab-prompt-rotation', String((variant + 1) % variants.length));
+        } catch {
+          variant = Array.from(prose.dataset.labArticle || '').reduce((sum, char) => sum + char.charCodeAt(0), 0) % variants.length;
+        }
+        prompt.dataset.variant = variants[variant][0];
+        heading.textContent = variants[variant][1];
+        prompt.hidden = false;
+      };
+      const checkMidpoint = () => {
+        if (marker.getBoundingClientRect().top <= window.innerHeight * .8) show();
+        if (shown || subscribed()) window.removeEventListener('scroll', checkMidpoint);
+      };
+      window.addEventListener('scroll', checkMidpoint, { passive: true });
+      window.addEventListener('load', checkMidpoint, { once: true });
+      checkMidpoint();
+      const dismiss = () => {
+        prompt.hidden = true;
+        // Return keyboard focus to the prose without jumping the page.
+        prose.focus({ preventScroll: true });
+      };
+      prompt.querySelector('.keep-reading')!.addEventListener('click', dismiss);
+      prompt.addEventListener('keydown', event => { if (event.key === 'Escape') dismiss(); });
+      prompt.addEventListener('pointerdown', () => prompt.classList.add('settled'));
+      const form = prompt.querySelector<HTMLFormElement>('form')!;
+      const submit = form.querySelector<HTMLButtonElement>('button[type=submit]')!;
+      const status = prompt.querySelector<HTMLElement>('.prompt-status')!;
+      form.addEventListener('submit', async event => {
+        event.preventDefault();
+        if (submit.disabled || !form.reportValidity()) return;
+        submit.disabled = true;
+        status.textContent = 'Saving…';
+        try {
+          const data = new FormData(form);
+          const response = await fetch('/api/lab-access/', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: data.get('email'), company: data.get('company'), purpose: 'newsletter', page: location.pathname }),
+          });
+          const result = await response.json().catch(() => null);
+          if (!response.ok || result?.saved !== true) {
+            status.textContent = typeof result?.error === 'string' ? result.error : 'Couldn’t save your email. Please try again.';
+            return;
+          }
+          try { localStorage.setItem(consentKey, 'true'); } catch { /* This page still remembers success. */ }
+          form.hidden = true;
+          status.textContent = 'You’re on the list. Happy reading!';
+          window.dispatchEvent(new Event('lab-newsletter-subscribed'));
+        } catch { status.textContent = 'Couldn’t connect. Please try again.'; }
+        finally { submit.disabled = false; }
+      });
+      window.addEventListener('lab-newsletter-subscribed', () => {
+        window.removeEventListener('scroll', checkMidpoint);
+        if (!form.hidden) prompt.hidden = true;
+      });
+      window.addEventListener('storage', event => {
+        if (event.key === consentKey && subscribed()) {
+          prompt.hidden = true;
+          window.removeEventListener('scroll', checkMidpoint);
+        }
+      });
+    }
+  }
+</script>
+<style>
+  .reading-prompt[hidden], .reading-prompt form[hidden] { display: none; }
+  .reading-prompt { position: relative; margin: 2rem 0; padding: 1.35rem; max-width: 32rem; background: #dce6dd; color: #302338; line-height: 1.4; overflow-wrap: normal; }
+  .reading-prompt[data-variant=side] { background: #e2d7e9; }
+  .reading-prompt[data-variant=slide] { background: #deeea1; margin-left: auto; }
+  .reading-prompt h2[data-prompt-heading] { margin: 0 0 1rem; font-size: 1.3rem; letter-spacing: -.035em; line-height: 1.15; font-weight: 650; }
+  .reading-prompt form { display: block; margin: 0; }
+  .reading-prompt label { display: block; font-size: .75rem; margin-bottom: .4rem; }
+  .reading-prompt input[type=email] { width: 100%; min-width: 0; padding: .7rem; background: #f6f4ee; color: #302338; border: 1px solid #8b7b93; border-radius: 0; font-size: 1rem; }
+  .reading-prompt button { cursor: pointer; min-height: 44px; font-size: .85rem; }
+  .reading-prompt button[type=submit] { display: flex; justify-content: space-between; gap: 1rem; width: 100%; margin-top: .6rem; padding: .75rem; background: #302338; color: #f6f4ee; border: 0; }
+  .reading-prompt button:disabled { opacity: .65; cursor: wait; }
+  .keep-reading { background: transparent; color: inherit; border: 0; padding: .7rem 0 0; text-decoration: underline; text-underline-offset: .2em; }
+  .reading-prompt p.prompt-status { font-size: .8rem; line-height: 1.5; margin: .6rem 0 0; }
+  .prompt-status:empty { display: none; }
+  @media(min-width:900px) {
+    .reading-prompt[data-variant=side], .reading-prompt[data-variant=slide] { float: right; width: 17rem; margin: .6rem 0 1.5rem 2rem; }
+    .reading-prompt[data-variant=side] { transform: rotate(-1deg); transition: transform 180ms ease; }
+    .reading-prompt[data-variant=side]:focus-within, .reading-prompt[data-variant=side].settled { transform: none; }
+  }
+  @media(prefers-reduced-motion:no-preference) {
+    .reading-prompt { animation: note-arrive 350ms ease-out; }
+    .reading-prompt[data-variant=slide] { animation-name: note-slide; }
+    @keyframes note-arrive { from { opacity: 0; translate: 0 .5rem; } to { opacity: 1; translate: 0 0; } }
+    @keyframes note-slide { from { opacity: 0; translate: 1.25rem 0; } to { opacity: 1; translate: 0 0; } }
+  }
+  @media(prefers-reduced-motion:reduce) { .reading-prompt[data-variant=side] { transform: none; transition: none; } }
+</style>
