@@ -1,4 +1,5 @@
-import { spawnSync } from 'node:child_process';
+import { spawn } from 'node:child_process';
+import { setTimeout as delay } from 'node:timers/promises';
 import { createServer } from "node:http";
 import { readFile, stat } from "node:fs/promises";
 import { extname, join, normalize } from "node:path";
@@ -79,8 +80,24 @@ const server = createServer(async (req, res) => {
 try {
   await fetch('http://127.0.0.1:4350/api/lab-access/', {signal: AbortSignal.timeout(1000)});
 } catch {
-  const started = spawnSync(process.execPath, ['node_modules/astro/bin/astro.mjs', 'dev', '--host', '127.0.0.1', '--port', '4350'], {cwd: join(import.meta.dirname, '..'), stdio: 'inherit'});
-  if (started.status !== 0) throw new Error('Could not start the local reader backend.');
+  const started = spawn(process.execPath, ['node_modules/astro/bin/astro.mjs', 'dev', '--host', '127.0.0.1', '--port', '4350'], {cwd: join(import.meta.dirname, '..'), stdio: 'inherit'});
+  process.on('exit', () => started.kill());
+  for (const signal of ['SIGINT', 'SIGTERM']) {
+    process.on(signal, () => { started.kill(); server.close(); process.exit(0); });
+  }
+  started.on('error', error => { console.error(error); process.exit(1); });
+  let ready = false;
+  for (let attempt = 0; attempt < 100; attempt++) {
+    if (started.exitCode !== null) throw new Error('Local reader backend exited before startup.');
+    try {
+      await fetch('http://127.0.0.1:4350/api/lab-access/', { signal: AbortSignal.timeout(1000) });
+      ready = true;
+      break;
+    } catch {
+      await delay(200);
+    }
+  }
+  if (!ready) throw new Error('Local reader backend did not become ready.');
 }
 server.listen(port, host, () => {
   console.log(`Serving dist/client at http://${host}:${port}`);
