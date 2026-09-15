@@ -12,7 +12,7 @@ export const services = [
     "slug": "agents",
     "title": "Agentic Systems",
     "summary": "We build the tools, context, and checks that keep agents doing the right work.",
-    "outcome": "Give it a job. Expect it finished.",
+    "outcome": "Give us a job.",
     "paragraphs": [
       "Tools, permissions, and recovery. Agents that work. You stay in control."
     ]
