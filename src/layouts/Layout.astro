@@ -168,6 +168,7 @@ const isCurrent = (href: string) =>
       </form>
     </dialog>
     <script>
+      import "../lib/botid-client";
       const menu = document.querySelector<HTMLButtonElement>(".menu-button");
       const nav = document.querySelector<HTMLElement>("#primary-navigation");
       const setMenu = (open: boolean) => {
@@ -246,6 +247,7 @@ const isCurrent = (href: string) =>
 
           form.addEventListener("submit", async (event) => {
             event.preventDefault();
+            if (button?.disabled) return;
             const data = new FormData(form);
             if (button) button.disabled = true;
             say("Sending…", "");
@@ -264,7 +266,7 @@ const isCurrent = (href: string) =>
                 say("Received. We will reply within a business day.", "ok");
                 return;
               }
-              if (response.status === 400 || response.status === 429) {
+              if (response.status === 400 || response.status === 403 || response.status === 429) {
                 say(result.error || "Please check the form and try again.", "error");
                 return;
               }

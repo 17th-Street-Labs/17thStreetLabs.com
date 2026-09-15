@@ -111,6 +111,7 @@ if (!(await backendReady())) {
     throw new Error('Could not start the local signup backend.');
   }
 }
+process.on('exit', () => backend?.kill());
 for (const signal of ['SIGINT', 'SIGTERM']) process.on(signal, () => {
   backend?.kill();
   server.close();

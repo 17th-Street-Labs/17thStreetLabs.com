@@ -1,11 +1,15 @@
+import { protectSubmission } from '../../lib/bot-protection';
 import type { APIRoute } from 'astro';
 import { COOKIE, MAX_AGE, createAccessToken, validAccessToken, validEmail } from '../../lib/lab-access';
 import { labSecret } from '../../lib/lab-secret';
+import { sendTelegramMessage } from '../../lib/telegram-delivery';
 export const prerender = false;
 const response = (body: unknown, status = 200) => new Response(JSON.stringify(body), { status, headers: {'Content-Type': 'application/json', 'Cache-Control': 'no-store'} });
 const attempts = new Map<string, { count: number; until: number }>();
 export const GET: APIRoute = ({ cookies }) => response({ unlocked: validAccessToken(cookies.get(COOKIE)?.value, labSecret()) });
 export const POST: APIRoute = async ({ request, cookies, clientAddress }) => {
+  const denied = await protectSubmission(request);
+  if (denied) return denied;
   if (request.headers.get('origin') !== new URL(request.url).origin) return response({ error: 'Please submit from this website.' }, 403);
   const key = clientAddress || 'unknown';
   const now = Date.now();
@@ -25,9 +29,6 @@ export const POST: APIRoute = async ({ request, cookies, clientAddress }) => {
   if (!['article-access', 'newsletter'].includes(purpose)) return response({error: 'Please choose a valid signup.'}, 400);
   const secret = labSecret();
   if (purpose === 'article-access' && !secret) return response({ error: 'Reader access is unavailable right now. Please try again later.' }, 503);
-  const token = import.meta.env.TELEGRAM_BOT_TOKEN || process.env.TELEGRAM_BOT_TOKEN;
-  const chatId = import.meta.env.TELEGRAM_CHAT_ID || process.env.TELEGRAM_CHAT_ID;
-  if (!token || !chatId) return response({error: 'Signup is unavailable right now. Please try again later.'}, 503);
   const page = typeof data.page === 'string' ? data.page.slice(0, 300) : '';
   const registeredAt = new Date().toISOString();
   const lines = [
@@ -41,12 +42,12 @@ export const POST: APIRoute = async ({ request, cookies, clientAddress }) => {
       : 'Article access only; no marketing subscription.',
   ];
   try {
-    const delivery = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-      method: 'POST', headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({chat_id: chatId, text: lines.join('\n'), disable_web_page_preview: true}),
-      signal: AbortSignal.timeout(8000),
-    });
-    if (!delivery.ok || !(await delivery.json()).ok) throw new Error('registration delivery failed');
+    const delivery = await sendTelegramMessage({ text: lines.join('\n') });
+    if (!delivery.delivered) {
+      return response({ error: delivery.reason === 'unconfigured'
+        ? 'Signup is unavailable right now. Please try again later.'
+        : 'We couldn’t save your email. Please try again.' }, 503);
+    }
     if (secret) cookies.set(COOKIE, createAccessToken(secret), { httpOnly: true, secure: new URL(request.url).protocol === 'https:', sameSite: 'lax', path: '/', maxAge: MAX_AGE });
     return response({ saved: true, unlocked: Boolean(secret) });
   } catch {

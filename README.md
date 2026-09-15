@@ -134,3 +134,38 @@ and newsletter consent version. Article-access requests remain labeled separatel
 The form confirms success only after Telegram accepts the message; failed
 submissions show a retry message. `LAB_ACCESS_SECRET` is required for remembering
 reader access in production, but newsletter collection works without it.
+
+## Vercel BotID
+
+Contact, reader registration, and newsletter submissions use
+[Vercel BotID](https://vercel.com/docs/botid/get-started) in **Basic** mode.
+The browser initializes protection before the form handlers, and both POST routes
+verify requests before validation, Telegram delivery, or reader-cookie changes.
+Bots receive HTTP 403; verification errors receive HTTP 503. Public pages and
+reader recognition GET requests are unaffected. JavaScript is required to submit.
+
+Client and server explicitly select `basic`, keeping the check level consistent
+and avoiding paid Deep Analysis. `vercel.json` includes the package's challenge
+and proxy rewrites, plus its framing restrictions. Tests compare these rules
+against the installed BotID package so upgrades cannot silently drift.
+
+### Deployment
+
+Deploy to Vercel with **OIDC enabled** in the project settings. BotID uses Vercel's
+request context and OIDC token; no CAPTCHA secret, Redis store, or separate BotID
+API key is required. This checkout is not linked to a Vercel project, so the
+project setting and live classification still need verification when deployed.
+Do not enable Deep Analysis unless you intend to use its paid checks.
+
+### Testing
+
+`pnpm test` covers allowed, blocked, and failed verification through the submission
+routes, with BotID verdicts and Telegram transport mocked. `pnpm exec playwright
+test --config playwright.botid.config.ts` checks browser initialization, protected
+request headers, and success/error form behavior with a mocked provider challenge and no Telegram messages.
+Astro dev mirrors the SDK proxy rewrites because it does not read `vercel.json`.
+
+In `astro dev`, the SDK's explicit development bypass permits requests. Production
+builds disable that bypass. Passing local tests does **not** establish production
+bot detection: verify a real browser submission and blocked automated request on
+a Vercel deployment, then inspect BotID events in the project's Firewall tab.
