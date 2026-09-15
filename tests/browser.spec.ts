@@ -192,8 +192,9 @@ test("missing routes return a branded 404 and a usable home link", async ({ page
     page.on('pageerror', error => errors.push(error.message));
     for (const route of ['/', '/services/', '/proof/', '/about/', '/lab/', '/lab/small-local-models/']) {
       await page.goto(route);
-      await page.locator('.footer-reading').scrollIntoViewIfNeeded();
-      await expect.poll(() => page.locator('.footer-reading').evaluate(el => el.getAnimations().length)).toBe(0);
+      const closing = page.locator('.blog-subscribe, .footer-reading').filter({ visible: true }).first();
+      await closing.scrollIntoViewIfNeeded();
+      await expect.poll(() => closing.evaluate(el => el.getAnimations().length)).toBe(0);
       expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
     }
     await page.goto('/');
@@ -203,3 +204,64 @@ test("missing routes return a branded 404 and a usable home link", async ({ page
     expect(errors).toEqual([]);
   });
  }
+
+for (const width of [320, 390, 768, 900, 1440]) {
+  test(`editorial Blog preserves reading and signup at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto('/lab/');
+    await expect(page.getByRole('heading', { name: 'Blog', exact: true })).toBeVisible();
+    await expect(page.locator('.article-grid article')).toHaveCount(9);
+    await expect(page.locator('.category-filters button')).toHaveCount(0);
+    await expect(page.locator('.collection-heading').first()).toContainText('Featured category Security & Privacy');
+    expect(await page.locator('.blog-card').evaluateAll(cards => cards.slice(0, 3).map(card => card.getAttribute('data-category')))).toEqual(['Security & Privacy', 'Security & Privacy', 'Security & Privacy']);
+    await expect(page.locator('.blog-category', { hasText: 'Costs and Optimization' })).toHaveCount(2);
+    await expect(page.locator('.blog-category', { hasText: 'Testing & Evaluation' })).toHaveCount(2);
+
+    for (const headline of await page.locator('.blog-card h2').all()) {
+      const size = await headline.evaluate(el => ({ height: el.getBoundingClientRect().height, line: parseFloat(getComputedStyle(el).lineHeight) }));
+      expect(size.height).toBeLessThanOrEqual(size.line * 2 + 1);
+    }
+    await expect(page.getByRole('heading', { name: 'What Is Your Agent Actually Doing?', exact: true })).toBeVisible();
+    await page.getByRole('searchbox', { name: 'Search articles' }).fill('GPU');
+    await expect(page.locator('.blog-card:visible')).toHaveCount(1);
+    await page.getByRole('searchbox', { name: 'Search articles' }).fill('nothing-matches-this-query');
+    await expect(page.getByRole('status')).toHaveText('0 articles found.');
+    await page.getByRole('searchbox', { name: 'Search articles' }).fill('');
+    await expect(page.locator('.blog-card:visible')).toHaveCount(9);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+    await page.getByRole('button', { name: 'Subscribe', exact: true }).click();
+    await expect(page.locator('.lab-dialog')).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(page.getByRole('button', { name: 'Subscribe', exact: true })).toBeFocused();
+    await page.getByRole('heading', { name: 'Small Models. Serious Work.', exact: true }).getByRole('link').click();
+    await expect(page).toHaveURL(/\/lab\/small-local-models\/$/);
+    await page.getByRole('link', { name: '← Blog', exact: true }).click();
+    await expect(page.getByRole('heading', { name: 'Blog', exact: true })).toBeVisible();
+  });
+}
+
+
+test('newsletter handles invalid responses and permits retry without losing the email', async ({ page }) => {
+  let attempts = 0;
+  await page.route('**/api/lab-access/', async route => {
+    if (route.request().method() === 'GET') return route.fulfill({ json: { unlocked: false } });
+    attempts++;
+    if (attempts === 1) return route.fulfill({ status: 501, contentType: 'text/html', body: '<html>Unsupported method</html>' });
+    if (attempts === 2) return route.abort('failed');
+    return route.fulfill({ json: { saved: true, unlocked: false } });
+  });
+  await page.goto('/lab/');
+  await page.getByRole('button', { name: 'Subscribe', exact: true }).click();
+  await page.getByLabel('Email address').fill('reader@example.com');
+  const submit = page.getByRole('button', { name: 'Send me the good stuff' });
+  await submit.click();
+  await expect(page.locator('.lab-signup-status')).toHaveText('We couldn’t save your signup right now. Please try again in a moment.');
+  await expect(page.getByLabel('Email address')).toHaveValue('reader@example.com');
+  await expect(submit).toBeEnabled();
+  await submit.click();
+  await expect(page.locator('.lab-signup-status')).toContainText('Please check your connection');
+  await expect(submit).toBeEnabled();
+  await submit.click();
+  await expect(page.getByRole('heading', { name: 'You’re on the list.' })).toBeVisible();
+  expect(attempts).toBe(3);
+});

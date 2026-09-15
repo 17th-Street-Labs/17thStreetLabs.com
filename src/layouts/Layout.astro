@@ -7,15 +7,16 @@ interface Props {
   title: string;
   description: string;
   noindex?: boolean;
+  editorial?: boolean;
 }
-const { title, description, noindex = false } = Astro.props;
+const { title, description, noindex = false, editorial = false } = Astro.props;
 const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
 const links = [
   { name: "Home", href: "/" },
   { name: "What We Do", href: "/services/" },
   { name: "Proof", href: "/proof/" },
   { name: "About", href: "/about/" },
-  { name: "From the Lab", href: "/lab/" },
+  { name: "Blog", href: "/lab/" },
   { name: "Contact", href: "/contact/" },
 ];
 const canonical = new URL(
@@ -46,7 +47,7 @@ const isCurrent = (href: string) =>
     <meta property="og:url" content={canonical} />
     <meta name="theme-color" content="#302338" />
   </head>
-  <body>
+  <body class:list={{ "editorial-page": editorial }}>
     <a class="skip-link" href="#main-content">Skip to content</a>
     <header class="topbar">
       <div class="topbar-inner">
@@ -111,7 +112,7 @@ const isCurrent = (href: string) =>
           </a>
         </nav>
         <div class="footer-reading">
-          <div><span class="footer-col-title">From the Lab</span><p>Our newsletter: the experiments, the surprises, the useful bits.</p></div>
+          <div><span class="footer-col-title">Blog</span><p>Our newsletter: the experiments, the surprises, the useful bits.</p></div>
           <button class="newsletter-button" data-newsletter-signup>Send me the good stuff</button>
         </div>
         <p class="footer-legal">

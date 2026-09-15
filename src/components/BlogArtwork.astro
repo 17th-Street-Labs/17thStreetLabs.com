@@ -1,0 +1,32 @@
+---
+interface Props { index: number }
+const { index } = Astro.props;
+const kind = index % 5;
+---
+<svg viewBox="0 0 600 360" fill="none" aria-hidden="true">
+  {kind === 0 ? <>
+    <circle cx="180" cy="185" r="132" fill="#daf28f"/><circle cx="347" cy="188" r="105" fill="#bbaaCA" fill-opacity=".9"/>
+    <path d="M455 130h112v52H455z" fill="#b4cdc2"/><path d="M455 240h112v65H455z" fill="#beadce"/>
+    <path d="M22 185h560M180 20v322M347 38v295M455 12v322M45 310h530M75 55v275M380 48h195M555 48v265" stroke="#f6f4ee" stroke-opacity=".55"/>
+  </> : kind === 1 ? <>
+    <path d="m170 170 115-60 115 60-115 60z" fill="#f6f4ee"/><path d="m170 170 115 60v125l-115-65z" fill="#adc8bd"/><path d="m285 230 115-60v120l-115 65z" fill="#302338"/>
+    <path d="m210 85 80-42 80 42-80 42z" fill="#f6f4ee"/><path d="m210 85 80 42v87l-80-43z" fill="#c4b0d4"/><path d="m290 127 80-42v87l-80 42z" fill="#302338"/>
+    <path d="m420 228 34-18 34 18-34 18z" fill="#f6f4ee"/><path d="m420 228 34 18v40l-34-18z" fill="#c4b0d4"/><path d="m454 246 34-18v40l-34 18z" fill="#302338"/>
+    <path d="M110 80v250M85 80h80M85 305h90M430 65h40M450 45v40" stroke="#302338" stroke-opacity=".45"/>
+  </> : kind === 2 ? <>
+    <path d="m300 210-80 120h160z" fill="#302338"/><path d="M80 209h445" stroke="#302338" stroke-width="5"/>
+    <circle cx="155" cy="135" r="70" fill="#302338"/><circle cx="460" cy="163" r="45" fill="#daf28f"/>
+    <path d="M70 40h125M100 20v220M300 50v290M270 90h220M460 70v200M95 330h405" stroke="#302338" stroke-opacity=".45" stroke-dasharray="3 4"/>
+  </> : kind === 3 ? <>
+    <path d="m120 225 185-90 185 90-185 90z" fill="#302338"/><path d="m120 225 185 90v35l-185-90z" fill="#302338"/><path d="m305 315 185-90v35l-185 90z" fill="#4a3955"/>
+    <path d="m155 164 150-74 150 74-150 74z" fill="#daf28f"/><path d="m155 164 150 74v50l-150-74z" fill="#c7e480"/><path d="m305 238 150-74v50l-150 74z" fill="#dceeab"/>
+    <path d="m150 116 155-76 155 76-155 76z" fill="#b4cdc2"/><path d="m150 116 155 76v25l-155-76z" fill="#302338"/><path d="m305 192 155-76v25l-155 76z" fill="#493652"/>
+    <path d="M110 55v250l195 50 200-110V60L305 5zM305 5v350" stroke="#302338" stroke-opacity=".5" stroke-dasharray="3 5"/>
+  </> : <>
+    <path d="m300 55 175 40v230l-175-40z" fill="#f6f4ee" stroke="#aebbad"/><path d="m125 90 185 43v225l-185-43z" fill="#302338"/>
+    <path d="m145 113 143 34v181l-143-34z" stroke="#baa9c6"/><path d="m320 76 135 32v185l-135-32z" stroke="#302338" stroke-opacity=".5"/>
+    <circle cx="215" cy="215" r="35" stroke="#c4b0d4"/><circle cx="390" cy="180" r="35" stroke="#302338"/>
+    <path d="M85 280h425M190 60v280M360 40v300M95 180h200M345 180h135" stroke="#302338" stroke-opacity=".5" stroke-dasharray="3 4"/>
+  </>}
+</svg>
+<style>svg { display: block; width: 100%; height: 100%; }</style>

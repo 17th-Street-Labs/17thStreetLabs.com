@@ -2466,3 +2466,18 @@ body:has(.contact-dialog[open]) { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) {
   :root :is(.button, .newsletter-button, .lab-closing a, .dialog-close, .edition-contact, a.card, .card.hover):is(:hover, :focus-visible) { transform: none; transition: none; }
 }
+
+/* The Blog's paper masthead shares the site navigation and its mobile behavior. */
+.editorial-page .topbar { position: relative; background: #f6f4ee; color: #302338; border: 0; }
+.editorial-page .topbar-inner { width: min(calc(100% - 2 * clamp(1.25rem, 3vw, 3rem)), 82rem); padding-block: 1.5rem; }
+.editorial-page .topbar .brand-mark { filter: brightness(0) saturate(100%); width: 2rem; height: 2rem; }
+.editorial-page .topbar .brand-name { font: 750 1.5rem/1.1 var(--font); letter-spacing: -.05em; }
+.editorial-page .topbar nav a { color: #302338; }
+.editorial-page .topbar nav a::after { background: #a6b862; }
+.editorial-page .topbar .menu-button { color: #302338; border-color: #30233850; }
+.editorial-page .header-cta { display: inline-flex; background: #dcec91; color: #302338; border: 0; border-radius: 0; font-size: .8rem; padding: .7rem 1rem; min-height: 2.75rem; }
+.editorial-page .site-footer .footer-reading { display: none; }
+@media (max-width: 1100px) { .editorial-page .header-cta { display: none; } }
+@media (max-width: 900px) { .editorial-page .topbar nav { background: #f6f4ee; } }
+
+.editorial-page { background: #f6f4ee; }

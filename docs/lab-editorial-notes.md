@@ -1,4 +1,4 @@
-# From the Lab: editorial provenance
+# Blog: editorial provenance
 
 ## Brief and scope
 
@@ -39,7 +39,7 @@ Article text: `src/content/lab/*.md`. Each Markdown file supplies its slug and u
 
 All ten complete article bodies are now rendered in public HTML. No article is restricted by its position in the collection; all index links say Read. BlogPosting metadata marks the articles as freely accessible, with authors, descriptions, canonical URLs, and sitemap entries. No article dates were added. Search engines receive the same full content as everyone else; indexing is not guaranteed.
 
-A browser-local meter records distinct article visits. The first three distinct articles do not trigger an invitation; a fourth new article opens a dismissible email dialog. Reopening an already visited article does not consume another read. Dismissing with the close button, Escape, backdrop, or Keep reading for now snoozes automatic invitations for 24 hours. Full reading remains available without registering, including without JavaScript. The footer has a voluntary Join the Lab button. Registered browsers skip automatic prompts.
+A browser-local meter records distinct article visits. The first three distinct articles do not trigger an invitation; a fourth new article opens a dismissible email dialog. Reopening an already visited article does not consume another read. Dismissing with the close button, Escape, backdrop, or Keep reading for now snoozes automatic invitations for 24 hours. Full reading remains available without registering, including without JavaScript. The footer has a voluntary newsletter invitation. Registered browsers skip automatic prompts.
 
 The obsolete private article endpoint was removed. The signed cookie now remembers registration rather than protecting article content. The API sends registrations to the existing Telegram chat in all environments, and uses `.local/lab-access-secret` for persistent local signing. No marketing subscription is implied or created.
 
@@ -50,3 +50,7 @@ Reference consulted: https://developers.google.com/search/docs/appearance/struct
 ## Newsletter invitations
 
 Footer and article-end invitations open a separate newsletter mode in the shared dialog. Submitting explicitly agrees to newsletter emails; records have purpose=newsletter and consentVersion=from-the-lab-newsletter-v1. Article-access registrations remain separate and do not acquire newsletter consent. Telegram messages include the email, signup page, UTC timestamp, purpose, and consent version. Success is shown only after Telegram accepts delivery. There is no local-file fallback or email delivery service. Delivery success and failures are tested with a mocked Telegram transport.
+
+## Blog naming
+
+The public label is now Blog across navigation, metadata, article backlinks, and signup copy. Existing `/lab/` URLs remain stable. New Telegram messages use the Blog name and `blog-newsletter-v1`; historical `from-the-lab-newsletter-v1` records keep their original meaning.

@@ -1,8 +1,8 @@
 <dialog class="lab-dialog" aria-labelledby="lab-signup-title" aria-describedby="lab-signup-description">
   <button class="lab-close" aria-label="Close reader signup">×</button>
-  <p class="lab-eyebrow">From the Lab</p>
+  <p class="lab-eyebrow">Blog</p>
   <h2 id="lab-signup-title">There’s more where<br />that came from.</h2>
-  <p id="lab-signup-description">Enjoying the useful bits? Pop in your email and make yourself at home in the Lab.</p>
+  <p id="lab-signup-description">Enjoying the useful bits? Pop in your email and explore the Blog.</p>
   <form id="lab-signup-form">
     <label for="lab-email">Email address</label>
     <input id="lab-email" type="email" name="email" autocomplete="email" maxlength="160" required placeholder="you@company.com" />
@@ -32,8 +32,8 @@
     form.hidden = false;
     form.reset();
     modal.querySelector<HTMLElement>('#lab-signup-title')!.textContent = newsletter ? 'The useful bits. In your inbox.' : 'There’s more where that came from.';
-    modal.querySelector<HTMLElement>('#lab-signup-description')!.textContent = newsletter ? 'Get practical AI lessons, experiments, and ideas from the people building the systems.' : 'Enjoying the useful bits? Pop in your email and make yourself at home in the Lab.';
-    modal.querySelector<HTMLElement>('.lab-fineprint')!.textContent = newsletter ? 'By subscribing, you agree to receive the From the Lab newsletter by email.' : 'Free access, remembered in this browser. We use your email to register your access—not to sign you up for marketing.';
+    modal.querySelector<HTMLElement>('#lab-signup-description')!.textContent = newsletter ? 'Get practical AI lessons, experiments, and ideas from the people building the systems.' : 'Enjoying the useful bits? Pop in your email and explore the Blog.';
+    modal.querySelector<HTMLElement>('.lab-fineprint')!.textContent = newsletter ? 'By subscribing, you agree to receive the Blog newsletter by email.' : 'Free access, remembered in this browser. We use your email to register your access—not to sign you up for marketing.';
     submit.classList.toggle('newsletter-button', newsletter);
     submit.textContent = newsletter ? 'Send me the good stuff' : 'Keep reading';
     modal.querySelector<HTMLElement>('.lab-skip')!.textContent = newsletter ? 'Not now' : 'Keep reading for now';
@@ -88,21 +88,25 @@
     try {
       const data = new FormData(form);
       const res = await fetch('/api/lab-access/', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({email:data.get('email'), company:data.get('company'), purpose, page:window.location.pathname})});
-      const result = await res.json();
-      if (!res.ok || !result.saved) throw new Error(result.error || 'Please try again.');
+      const fallback = 'We couldn’t save your signup right now. Please try again in a moment.';
+      const result = await res.json().catch(() => null);
+      if (!res.ok || result?.saved !== true) {
+        status.textContent = typeof result?.error === 'string' ? result.error : fallback;
+        return;
+      }
       unlocked = result.unlocked === true;
       if (unlocked) markUnlocked();
       if (purpose === 'newsletter') {
         form.hidden = true;
         modal.querySelector<HTMLElement>('#lab-signup-title')!.textContent = 'You’re on the list.';
-        modal.querySelector<HTMLElement>('#lab-signup-description')!.textContent = 'Thanks for subscribing. In the meantime, there’s plenty to explore in the Lab.';
+        modal.querySelector<HTMLElement>('#lab-signup-description')!.textContent = 'Thanks for subscribing. In the meantime, there’s plenty to explore on the Blog.';
         modal.querySelector<HTMLElement>('.lab-skip')!.textContent = 'Back to reading';
         return;
       }
       modal.close();
       if (article) article.focus({preventScroll: true});
       else window.location.assign('/lab/');
-    } catch (error) { status.textContent = error instanceof Error ? error.message : 'Please try again.'; }
+    } catch { status.textContent = 'We couldn’t connect to save your signup. Please check your connection and try again.'; }
     finally { submit.disabled = false; }
   });
   recognizeReader();

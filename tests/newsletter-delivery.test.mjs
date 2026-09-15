@@ -42,7 +42,7 @@ test('newsletter reaches the existing Telegram chat without a reader secret', as
   assert.equal(cookies.length, 0);
   assert.equal(messages[0].url, 'https://api.telegram.org/bottest-token/sendMessage');
   assert.equal(messages[0].body.chat_id, 'test-chat');
-  for (const text of ['reader@example.com', 'newsletter', '/lab/example/', 'Registered at:', 'from-the-lab-newsletter-v1']) {
+  for (const text of ['reader@example.com', 'newsletter', '/lab/example/', 'Registered at:', 'blog-newsletter-v1']) {
     assert.ok(messages[0].body.text.includes(text));
   }
 });
@@ -62,5 +62,5 @@ test('reader access remains distinct from newsletter consent', async () => {
   assert.equal((await submit('article-access')).status, 200);
   assert.equal(cookies.length, 1);
   assert.match(messages[0].body.text, /no marketing subscription/);
-  assert.ok(!messages[0].body.text.includes('from-the-lab-newsletter-v1'));
+  assert.ok(!messages[0].body.text.includes('blog-newsletter-v1'));
 });

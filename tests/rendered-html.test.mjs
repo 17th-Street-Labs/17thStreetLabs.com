@@ -1,3 +1,4 @@
+import { allLabEntries, labEntries } from "../src/data/lab.ts";
 import assert from "node:assert/strict";
 import { access, readFile, readdir } from "node:fs/promises";
 import path from "node:path";
@@ -8,7 +9,7 @@ import { fileURLToPath } from "node:url";
 const output = fileURLToPath(new URL("../dist/client/", import.meta.url));
 const origin = "https://17thstreetlabs.com";
 const navigationRoutes = [
-  { route: "/lab", heading: /What we’re learning.*while building it\./, content: /Inside the experiments/ },
+  { route: "/lab", heading: /Blog/, content: /Experiments. Tradeoffs. Things that work./ },
   { route: "/", heading: /Send us.*the hard one\./, content: /The work makes the case\./ },
   { route: "/services", heading: /Serious engineering\..*A little imagination helps\./, content: /How we work/ },
   { route: "/proof", heading: /Trusted by people.*who set the standard\./, content: /ExploitHunter/ },
@@ -16,8 +17,8 @@ const navigationRoutes = [
 ];
 
 const articleFiles = (await readdir(new URL("../src/content/lab/", import.meta.url))).filter(name => name.endsWith(".md"));
-const articleRoutes = articleFiles.map(name => ({
-  route: `/lab/${name.replace(/\.md$/, "")}`,
+const articleRoutes = labEntries.map(entry => ({
+  route: `/lab/${entry.slug}`,
   heading: /\S/,
   content: /Marina Levy and Dan Levy/,
 }));
@@ -126,8 +127,9 @@ test("old contact links redirect to the homepage conversation dialog", async () 
 });
 
 
-test("all ten articles are complete, undated, and discoverable from the lab", async () => {
-  assert.equal(articleRoutes.length, 10);
+test("published articles are complete, undated, and discoverable from the lab", async () => {
+  assert.equal(articleRoutes.length, 9);
+  assert.equal(articleFiles.length, 10);
   const index = await readPage("/lab");
   assert.doesNotMatch(index, /Coming soon/);
   for (const { route } of articleRoutes) {
@@ -142,5 +144,23 @@ test("all ten articles are complete, undated, and discoverable from the lab", as
     assert.doesNotMatch(main, /data-protected-article|data-lab-gate/);
     const structured = [...main.matchAll(/<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)].map(match => JSON.parse(match[1]));
     assert.ok(structured.some(item => item['@type'] === 'BlogPosting' && item.isAccessibleForFree === true));
+  }
+});
+
+
+test("draft content is retained but excluded from routes, links, and sitemap", async () => {
+  const drafts = allLabEntries.filter(entry => entry.draft);
+  assert.ok(drafts.some(entry => entry.slug === 'lessons-from-ai-security-agents'));
+  const sitemap = await readFile(path.join(output, 'sitemap-0.xml'), 'utf8');
+  for (const draft of drafts) {
+    const source = await readFile(new URL(`../src/content/lab/${draft.slug}.md`, import.meta.url), 'utf8');
+    assert.match(source, /The bill was also a research budget/);
+    await assert.rejects(access(path.join(output, 'lab', draft.slug, 'index.html')), { code: 'ENOENT' });
+    assert.ok(!sitemap.includes(draft.url));
+    for (const { route } of routes) {
+      const html = await readPage(route);
+      assert.ok(!html.includes(draft.url), `${route} must not link to drafts`);
+      assert.ok(!html.includes(draft.title), `${route} must not expose draft titles`);
+    }
   }
 });

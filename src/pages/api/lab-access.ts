@@ -31,13 +31,13 @@ export const POST: APIRoute = async ({ request, cookies, clientAddress }) => {
   const page = typeof data.page === 'string' ? data.page.slice(0, 300) : '';
   const registeredAt = new Date().toISOString();
   const lines = [
-    purpose === 'newsletter' ? 'New From the Lab newsletter signup' : 'New From the Lab reader',
+    purpose === 'newsletter' ? 'New Blog newsletter signup' : 'New Blog reader',
     `Email: ${email}`,
     `Purpose: ${purpose}`,
     ...(page ? [`Page: ${page}`] : []),
     `Registered at: ${registeredAt}`,
     purpose === 'newsletter'
-      ? 'Consent: Agreed to receive the From the Lab newsletter by email. Version: from-the-lab-newsletter-v1.'
+      ? 'Consent: Agreed to receive the Blog newsletter by email. Version: blog-newsletter-v1.'
       : 'Article access only; no marketing subscription.',
   ];
   try {
