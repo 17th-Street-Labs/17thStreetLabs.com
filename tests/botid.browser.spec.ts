@@ -44,7 +44,7 @@ test('BotID protects newsletter signup without a visible challenge', async ({ pa
     expect(route.request().postDataJSON().purpose).toBe('newsletter');
     await route.fulfill({ json: { saved: true, unlocked: false } });
   });
-  await page.goto('/lab/');
+  await page.goto('/blog/');
   await page.locator('[data-newsletter-signup]').first().click();
   const dialog = page.locator('.lab-dialog');
   await dialog.getByLabel('Email address').fill('browser@example.com');
@@ -63,7 +63,7 @@ test('reader registration retains BotID protection', async ({ page }) => {
     await route.fulfill({ json: { saved: true, unlocked: true } });
   });
   await page.addInitScript(() => localStorage.setItem('lab-reading-history', JSON.stringify(['one', 'two', 'three'])));
-  await page.goto('/lab/cost-per-completed-task/');
+  await page.goto('/blog/cost-per-completed-task/');
   const dialog = page.locator('.lab-dialog');
   await expect(dialog).toBeVisible();
   await dialog.getByLabel('Email address').fill('browser@example.com');

@@ -58,7 +58,7 @@
   accessTriggers.forEach(trigger => trigger.addEventListener('click', event => {
     event.preventDefault();
     opener = trigger;
-    if (unlocked) { window.location.assign('/lab/'); return; }
+    if (unlocked) { window.location.assign('/blog/'); return; }
     invite();
   }));
   newsletterTriggers.forEach(trigger => trigger.addEventListener('click', () => {
@@ -104,7 +104,7 @@
       }
       modal.close();
       if (article) article.focus({preventScroll: true});
-      else window.location.assign('/lab/');
+      else window.location.assign('/blog/');
     } catch { status.textContent = 'We couldn’t connect to save your signup. Please check your connection and try again.'; }
     finally { submit.disabled = false; }
   });

@@ -125,7 +125,7 @@ These are proposed primary categories, not changes to the published articles. Se
 
 The immediate code change replaces the public-facing name with Blog in navigation, footer, article backlinks, page metadata, signup copy, and new Telegram notification text. New signup records use `blog-newsletter-v1` to match the displayed wording; historical consent records are not rewritten.
 
-Existing `/lab/` and article URLs remain intact. A name change does not require breaking links or introducing a route migration. If `/blog/` becomes the preferred address later, migrate with permanent redirects and updated canonicals, internal links, and sitemap entries as one coordinated change.
+`/blog/` is now the preferred address for the index and every article. Existing `/lab/` URLs redirect permanently, while canonicals, internal links, and sitemap entries use `/blog/`.
 
 The three images are concept mockups only. None of the proposed page structures has replaced the existing blog layout. Newsletter collection continues to use the configured Telegram destination; the research does not propose adopting a mailing platform.
 
@@ -151,4 +151,4 @@ All accessed September 14, 2026. Dates below identify project years where explic
 10. deepsense.ai. [Applied AI Experts Blog](https://deepsense.ai/blog/). Continuously updated. Applied-AI content coverage and archive taxonomy.
 11. Koto. [De-extinction](https://koto.com/projects/de-extinction). Project dated 2023. Additional contrast reference: expressive category differentiation; its provocative illustration approach was not adopted for the senior engineering audience.
 
-The local implementation and article inventory were reviewed in `src/pages/lab.astro`, `src/data/lab.ts`, `src/layouts/Article.astro`, and the shared layout and signup components.
+The local implementation and article inventory were reviewed in `src/pages/blog.astro`, `src/data/lab.ts`, `src/layouts/Article.astro`, and the shared layout and signup components.

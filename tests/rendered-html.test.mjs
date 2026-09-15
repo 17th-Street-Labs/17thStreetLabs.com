@@ -9,7 +9,7 @@ import { fileURLToPath } from "node:url";
 const output = fileURLToPath(new URL("../dist/client/", import.meta.url));
 const origin = "https://17thstreetlabs.com";
 const navigationRoutes = [
-  { route: "/lab", heading: /Blog/, content: /Experiments. Tradeoffs. Things that work./ },
+  { route: "/blog", heading: /Blog/, content: /Experiments. Tradeoffs. Things that work./ },
   { route: "/", heading: /Send us.*the hard one\./, content: /The work makes the case\./ },
   { route: "/services", heading: /Serious engineering\..*A little imagination helps\./, content: /How we work/ },
   { route: "/proof", heading: /Trusted by people.*who set the standard\./, content: /ExploitHunter/ },
@@ -18,7 +18,7 @@ const navigationRoutes = [
 
 const articleFiles = (await readdir(new URL("../src/content/lab/", import.meta.url))).filter(name => name.endsWith(".md"));
 const articleRoutes = labEntries.map(entry => ({
-  route: `/lab/${entry.slug}`,
+  route: `/blog/${entry.slug}`,
   heading: /\S/,
   content: /Marina Levy and Dan Levy/,
 }));
@@ -126,11 +126,21 @@ test("old contact links redirect to the homepage conversation dialog", async () 
   assert.match(html, /url=\/\?contact/);
 });
 
+test("old lab links redirect permanently to the blog", async () => {
+  const index = await readPage("/lab");
+  assert.match(index, /http-equiv="refresh"/i);
+  assert.match(index, /url=\/blog\//);
+  for (const entry of labEntries) {
+    const html = await readPage(`/lab/${entry.slug}`);
+    assert.match(html, /http-equiv="refresh"/i);
+    assert.ok(html.includes(entry.url));
+  }
+});
 
-test("published articles are complete, undated, and discoverable from the lab", async () => {
+test("published articles are complete, undated, and discoverable from the blog", async () => {
   assert.equal(articleRoutes.length, 9);
   assert.equal(articleFiles.length, 10);
-  const index = await readPage("/lab");
+  const index = await readPage("/blog");
   assert.doesNotMatch(index, /Coming soon/);
   for (const { route } of articleRoutes) {
     assert.ok(tags(index, "a").some(tag => attribute(tag, "href") === `${route}/`), `${route} appears in index`);
@@ -155,6 +165,7 @@ test("draft content is retained but excluded from routes, links, and sitemap", a
   for (const draft of drafts) {
     const source = await readFile(new URL(`../src/content/lab/${draft.slug}.md`, import.meta.url), 'utf8');
     assert.match(source, /The bill was also a research budget/);
+    await assert.rejects(access(path.join(output, 'blog', draft.slug, 'index.html')), { code: 'ENOENT' });
     await assert.rejects(access(path.join(output, 'lab', draft.slug, 'index.html')), { code: 'ENOENT' });
     assert.ok(!sitemap.includes(draft.url));
     for (const { route } of routes) {

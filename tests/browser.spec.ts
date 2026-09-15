@@ -100,7 +100,7 @@ for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844
     await page.setViewportSize(viewport);
     const errors: string[] = [];
     page.on("pageerror", (error) => errors.push(error.message));
-    for (const route of ["/", "/services/", "/about/", "/proof/", "/lab/"]) {
+    for (const route of ["/", "/services/", "/about/", "/proof/", "/blog/"]) {
       await page.goto(route);
       await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
       expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(viewport.width);
@@ -184,7 +184,7 @@ test("missing routes return a branded 404 and a usable home link", async ({ page
     await page.emulateMedia({ reducedMotion: 'no-preference' });
     const errors: string[] = [];
     page.on('pageerror', error => errors.push(error.message));
-    for (const route of ['/', '/services/', '/proof/', '/about/', '/lab/', '/lab/small-local-models/']) {
+    for (const route of ['/', '/services/', '/proof/', '/about/', '/blog/', '/blog/small-local-models/']) {
       await page.goto(route);
       const closing = page.locator('.blog-subscribe, .footer-reading').filter({ visible: true }).first();
       await closing.scrollIntoViewIfNeeded();
@@ -202,7 +202,7 @@ test("missing routes return a branded 404 and a usable home link", async ({ page
 for (const width of [320, 390, 768, 900, 1440]) {
   test(`editorial Blog preserves reading and signup at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
-    await page.goto('/lab/');
+    await page.goto('/blog/');
     await expect(page.getByRole('heading', { name: 'Blog', exact: true })).toBeVisible();
     await expect(page.locator('.article-grid article')).toHaveCount(9);
     await expect(page.locator('.category-filters button')).toHaveCount(0);
@@ -228,7 +228,7 @@ for (const width of [320, 390, 768, 900, 1440]) {
     await page.keyboard.press('Escape');
     await expect(page.getByRole('button', { name: 'Subscribe', exact: true })).toBeFocused();
     await page.getByRole('heading', { name: 'Small Models. Serious Work.', exact: true }).getByRole('link').click();
-    await expect(page).toHaveURL(/\/lab\/small-local-models\/$/);
+    await expect(page).toHaveURL(/\/blog\/small-local-models\/$/);
     await page.getByRole('link', { name: '← Blog', exact: true }).click();
     await expect(page.getByRole('heading', { name: 'Blog', exact: true })).toBeVisible();
   });
@@ -251,7 +251,7 @@ test('newsletter handles invalid responses and permits retry without losing the 
     if (attempts === 2) return route.abort('failed');
     return route.fulfill({ json: { saved: true, unlocked: false } });
   });
-  await page.goto('/lab/');
+  await page.goto('/blog/');
   await page.getByRole('button', { name: 'Subscribe', exact: true }).click();
   await page.getByLabel('Email address').fill('reader@example.com');
   const submit = page.getByRole('button', { name: 'Send me the good stuff' });
@@ -272,7 +272,7 @@ for (const width of [390, 1280]) {
     await page.setViewportSize({ width, height: 850 });
     const paths = ['small-local-models', 'local-ai-data-privacy', 'agents-that-see-the-ui'];
     for (const [index, slug] of paths.entries()) {
-      await page.goto(`/lab/${slug}/`);
+      await page.goto(`/blog/${slug}/`);
       const prompt = page.locator('[data-reading-prompt]');
       await expect(page.locator('[data-reading-midpoint]')).toHaveCount(1);
       await expect(prompt).toBeHidden();
@@ -304,14 +304,14 @@ test('article prompt retries failed delivery and remembers only confirmed newsle
     if (route.request().method() === 'GET') return route.fulfill({ json: { unlocked: true } });
     const data = route.request().postDataJSON();
     expect(data.purpose).toBe('newsletter');
-    expect(data.page).toBe('/lab/small-local-models/');
+    expect(data.page).toBe('/blog/small-local-models/');
     expect(data.email).toBe('reader@example.com');
     attempts++;
     return attempts === 1
       ? route.fulfill({ status: 503, contentType: 'text/html', body: 'Unavailable' })
       : route.fulfill({ json: { saved: true, unlocked: true } });
   });
-  await page.goto('/lab/small-local-models/');
+  await page.goto('/blog/small-local-models/');
   await page.locator('[data-reading-midpoint]').scrollIntoViewIfNeeded();
   const prompt = page.locator('[data-reading-prompt]');
   await prompt.getByLabel('Email for new articles').fill('reader@example.com');
@@ -321,7 +321,7 @@ test('article prompt retries failed delivery and remembers only confirmed newsle
   expect(await page.evaluate(() => localStorage.getItem('lab-newsletter-subscribed'))).toBeNull();
   await prompt.getByRole('button', { name: 'Send me more reads' }).click();
   await expect(prompt.getByRole('status')).toContainText('You’re on the list');
-  await page.goto('/lab/local-ai-data-privacy/');
+  await page.goto('/blog/local-ai-data-privacy/');
   await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
   await expect(page.locator('[data-reading-prompt]')).toBeHidden();
   expect(attempts).toBe(2);
@@ -335,7 +335,7 @@ test('every published article supports a midpoint prompt with blocked storage', 
   });
   const slugs = ['small-local-models', 'cost-per-completed-task', 'renting-vs-buying-gpus', 'one-harness-does-not-fit-every-model', 'continuous-security-testing', 'eval-driven-agent-development', 'agents-that-see-the-ui', 'local-ai-data-privacy', 'security-copilot-that-explains'];
   for (const slug of slugs) {
-    await page.goto(`/lab/${slug}/`);
+    await page.goto(`/blog/${slug}/`);
     await page.locator('[data-reading-midpoint]').scrollIntoViewIfNeeded();
     await expect(page.locator('[data-reading-prompt]')).toBeVisible();
     expect(await page.locator('[data-reading-prompt]').evaluate(el => getComputedStyle(el).animationName)).toBe('none');

@@ -22,7 +22,7 @@ Every invitation offers three legitimate choices: get occasional updates, read s
 
 **Side note:** We’re here in the margin. Your article is still yours.
 
-**Read first:** [Read how we test security](https://www.17thstreetlabs.com/lab/continuous-security-testing/)
+**Read first:** [Read how we test security](https://www.17thstreetlabs.com/blog/continuous-security-testing/)
 
 **Placement:** Security and agent-oversight articles. The money example is explicitly hypothetical, not a reported customer incident.
 
@@ -44,7 +44,7 @@ Every invitation offers three legitimate choices: get occasional updates, read s
 
 **Close:** Get the important findings when we have them. No calendar-filling dispatches.
 
-**Read first:** [Read how we evaluate agents](https://www.17thstreetlabs.com/lab/eval-driven-agent-development/)
+**Read first:** [Read how we evaluate agents](https://www.17thstreetlabs.com/blog/eval-driven-agent-development/)
 
 **Placement:** Testing and evaluation articles. The animated note changes “It seems fine.” into “Here’s the evidence.” It edits the note, never deletes actual article content.
 
@@ -56,7 +56,7 @@ Every invitation offers three legitimate choices: get occasional updates, read s
 
 **Close:** Fewer guesses. A clearer next step.
 
-**Read first:** [What is your agent actually doing?](https://www.17thstreetlabs.com/lab/security-copilot-that-explains/)
+**Read first:** [What is your agent actually doing?](https://www.17thstreetlabs.com/blog/security-copilot-that-explains/)
 
 **Placement:** Oversight, logs, and incident review. Do not label a user an attacker just because an outcome is wrong.
 
@@ -76,7 +76,7 @@ Every invitation offers three legitimate choices: get occasional updates, read s
 
 **Copy:** Did the task finish correctly, or did the user just leave? We check the steps and the result, so silence doesn’t get mistaken for success.
 
-**Read first:** [What a browser recording can reveal](https://www.17thstreetlabs.com/lab/agents-that-see-the-ui/)
+**Read first:** [What a browser recording can reveal](https://www.17thstreetlabs.com/blog/agents-that-see-the-ui/)
 
 **Placement:** Interface testing. A question to investigate, not a claim about a particular customer's churn.
 
@@ -86,7 +86,7 @@ Every invitation offers three legitimate choices: get occasional updates, read s
 
 **Copy:** Your AI can sound certain and still cross a boundary. We test what it can do, what it should refuse, and how to tell the difference. You can read about that without giving us anything.
 
-**Read first:** [Start with the security checks](https://www.17thstreetlabs.com/lab/continuous-security-testing/)
+**Read first:** [Start with the security checks](https://www.17thstreetlabs.com/blog/continuous-security-testing/)
 
 **Placement:** The side note, anywhere the security topic is relevant. Straightens on pointer or keyboard engagement; no pulsing, repeated wobble, scroll lock, or countdown.
 
@@ -96,7 +96,7 @@ Every invitation offers three legitimate choices: get occasional updates, read s
 
 **Copy:** Our New Year’s list includes starting a newsletter. Before we negotiate with the calendar, we’re sticking to important updates about AI failures, fixes, and the evidence that matters. Perhaps a couple a year.
 
-**Read first:** [Browse the Blog](https://www.17thstreetlabs.com/lab/)
+**Read first:** [Browse the Blog](https://www.17thstreetlabs.com/blog/)
 
 **Placement:** Late December through early January only, reviewed before reuse. Not active in the September mockups. No gym joke, abandoned-resolution guilt, or promise of monthly delivery.
 

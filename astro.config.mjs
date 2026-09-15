@@ -22,7 +22,10 @@ export default defineConfig({
   output: "static",
   adapter: vercel(),
   trailingSlash: "always",
-  integrations: [sitemap({ filter: (page) => !new URL(page).pathname.startsWith("/contact") })],
+  integrations: [sitemap({ filter: (page) => {
+    const pathname = new URL(page).pathname;
+    return !pathname.startsWith("/contact") && !pathname.startsWith("/lab");
+  } })],
   vite: {
     plugins: [tailwindcss()],
     server: { proxy: botIdProxy },

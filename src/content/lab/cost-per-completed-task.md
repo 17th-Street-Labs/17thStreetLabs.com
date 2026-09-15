@@ -50,7 +50,7 @@ When you pay a provider for model access through an API, the bill is relatively 
 
 Hosted compute adds its own questions: startup time, storage, data transfer, and whether resources remain billable between runs. Price the actual operating pattern, not a best-case hour on a product page.
 
-Our companion piece on [renting versus buying GPUs](/lab/renting-vs-buying-gpus/) explains how to test that decision without committing too early.
+Our companion piece on [renting versus buying GPUs](/blog/renting-vs-buying-gpus/) explains how to test that decision without committing too early.
 
 ## Keep the evidence behind the number
 

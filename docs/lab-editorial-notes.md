@@ -53,4 +53,4 @@ Footer and article-end invitations open a separate newsletter mode in the shared
 
 ## Blog naming
 
-The public label is now Blog across navigation, metadata, article backlinks, and signup copy. Existing `/lab/` URLs remain stable. New Telegram messages use the Blog name and `blog-newsletter-v1`; historical `from-the-lab-newsletter-v1` records keep their original meaning.
+The public label and preferred URL are now Blog across navigation, metadata, article backlinks, and signup copy. Existing `/lab/` URLs redirect permanently to `/blog/`. New Telegram messages use the Blog name and `blog-newsletter-v1`; historical `from-the-lab-newsletter-v1` records keep their original meaning.

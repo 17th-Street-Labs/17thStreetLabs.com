@@ -41,7 +41,7 @@ function setup({ isBot = false, verificationFails = false, secret = '', accepted
   const submit = async (purpose = 'newsletter') => exports.POST({
     request: new Request('https://example.com/api/lab-access/', {
       method: 'POST', headers: { origin: 'https://example.com' },
-      body: JSON.stringify({ email: 'reader@example.com', purpose, page: '/lab/example/' }),
+      body: JSON.stringify({ email: 'reader@example.com', purpose, page: '/blog/example/' }),
     }),
     cookies: { set: (...args) => cookies.push(args) }, clientAddress: '127.0.0.1',
   });
@@ -56,7 +56,7 @@ test('newsletter reaches the existing Telegram chat without a reader secret', as
   assert.equal(cookies.length, 0);
   assert.equal(messages[0].url, 'https://api.telegram.org/bottest-token/sendMessage');
   assert.equal(messages[0].body.chat_id, 'test-chat');
-  for (const text of ['reader@example.com', 'newsletter', '/lab/example/', 'Registered at:', 'blog-newsletter-v1']) {
+  for (const text of ['reader@example.com', 'newsletter', '/blog/example/', 'Registered at:', 'blog-newsletter-v1']) {
     assert.ok(messages[0].body.text.includes(text));
   }
 });

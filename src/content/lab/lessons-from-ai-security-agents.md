@@ -22,7 +22,7 @@ Here are the lessons that stayed with us.
 
 A model does not need to solve an entire investigation to be valuable inside one. Bounded tasks—organizing observations, extracting facts, or proposing a next check for review—can be useful places to test smaller models.
 
-The important word is *test*. A fluent answer is not proof that the work was done correctly. Decide what a correct result must include, then check for it. We explore that distinction in [Small Models. Serious Work.](/lab/small-local-models/).
+The important word is *test*. A fluent answer is not proof that the work was done correctly. Decide what a correct result must include, then check for it. We explore that distinction in [Small Models. Serious Work.](/blog/small-local-models/).
 
 ## The harness changes the result
 
@@ -30,7 +30,7 @@ The harness is the software around the model: its tools, instructions, memory, p
 
 Breaking work into smaller steps helped in some of our experiments. But that same structure could withhold the wider context a more capable model needed. We could improve the parts and make the overall result worse.
 
-That’s why swapping models without testing the surrounding architecture can be misleading. [One harness does not fit every model.](/lab/one-harness-does-not-fit-every-model/)
+That’s why swapping models without testing the surrounding architecture can be misleading. [One harness does not fit every model.](/blog/one-harness-does-not-fit-every-model/)
 
 ## Cheap attempts are not the same as cheap outcomes
 
