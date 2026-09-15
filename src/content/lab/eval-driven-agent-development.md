@@ -14,27 +14,27 @@ Dan has been experimenting with a compact way to evaluate that journey: describe
 
 A trajectory is the sequence of actions, observations, and decisions during a run. You do not always need one rigid sequence. You do need to identify dependencies and conditions that cannot be skipped.
 
-Here is an illustrative rubric for reviewing a finding in an authorized test environment:
+Here is an illustrative rubric for fixing a bug without creating another:
 
 ```text
-Confirm the permitted scope.
-Gather evidence. These checks may happen in either order:
-  Inspect the relevant configuration.
-  Review the supplied execution trace.
-Assess whether the evidence supports the finding.
-If evidence is missing, mark the finding unresolved.
-Report the conclusion with references to the evidence.
+Reproduce the reported failure.
+Inspect the relevant code and tests in either order.
+Use the evidence to identify the cause.
+Make a targeted fix.
+Check that the original failure is resolved
+and nearby behavior still works.
+If verification is blocked, report what remains untested.
 ```
 
-The wording makes the allowed parallelism explicit. It also distinguishes an unresolved result from a successful finding. A system should not need to invent an answer to finish the task.
+The agent can inspect code and tests in either order, but it must check the fix before calling the task complete. If verification is blocked, the rubric gives it a way to report the gap without claiming success.
 
-This outline is a grading aid. It is not the mechanism that enforces authorization.
+This outline is a grading aid. The tests still need to run.
 
 ## Give the judge something to inspect
 
 Supply the task, the rubric, and the recorded interaction, including tool results. Ask the judge to identify which requirements were met and point to the supporting events. Allow “uncertain” when the record is insufficient.
 
-If the judge claims that approval happened, its output should reference the recorded approval event. If that event cannot be found, the verdict needs review.
+If the judge claims that the fix passed its checks, its output should reference the recorded test results. If those results cannot be found, the verdict needs review.
 
 Dan’s early experience with this approach was promising. That is a reason to test it on more representative cases, rather than assume it generalizes to every workflow.
 
